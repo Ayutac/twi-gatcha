@@ -5,6 +5,7 @@
 
 ## Game Designers
 * Ayutac
+* Bookwhyrm
 * Congra
 * Thundersnow
 
