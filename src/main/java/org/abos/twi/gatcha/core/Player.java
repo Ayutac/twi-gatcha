@@ -4,7 +4,10 @@ import org.abos.common.Named;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -13,9 +16,14 @@ import java.util.Objects;
  */
 public class Player implements Named {
 
+    /**
+     * @see #getName()
+     */
     protected String name;
 
     protected Map<InventoryKind, Integer> inventory = new EnumMap<>(InventoryKind.class);
+
+    protected Map<CharacterBase, Character> rooster = new HashMap<>();
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);
@@ -85,6 +93,10 @@ public class Player implements Named {
      */
     public void decreaseInventoryCount(final @NotNull InventoryKind kind, final @Range(from = 0, to = Integer.MAX_VALUE) int amount) {
         increaseInventoryCount(kind, -amount);
+    }
+
+    public List<Character> getCharacters() {
+        return new ArrayList<>(rooster.values());
     }
 
 }
