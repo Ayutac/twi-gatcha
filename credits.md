@@ -10,4 +10,5 @@
 * [character] by [artist]
 
 ## Special Thanks To
-* [your name here]
+* Congra
+* Thundersnow
