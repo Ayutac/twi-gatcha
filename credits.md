@@ -3,6 +3,11 @@
 ## Project Lead
 * Ayutac
 
+## Game Designers
+* Ayutac
+* Congra
+* Thundersnow
+
 ## Software Developer
 * Ayutac
 
@@ -10,6 +15,4 @@
 * [character] by [artist]
 
 ## Special Thanks To
-* Congra
 * Pänguini
-* Thundersnow
