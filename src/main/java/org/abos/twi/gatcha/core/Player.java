@@ -23,7 +23,7 @@ public class Player implements Named {
 
     protected Map<InventoryKind, Integer> inventory = new EnumMap<>(InventoryKind.class);
 
-    protected Map<CharacterBase, Character> rooster = new HashMap<>();
+    protected Map<CharacterBase, CharacterModified> rooster = new HashMap<>();
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);
@@ -95,7 +95,7 @@ public class Player implements Named {
         increaseInventoryCount(kind, -amount);
     }
 
-    public List<Character> getCharacters() {
+    public List<CharacterModified> getCharacters() {
         return new ArrayList<>(rooster.values());
     }
 
