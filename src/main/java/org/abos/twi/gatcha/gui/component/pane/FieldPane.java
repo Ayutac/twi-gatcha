@@ -32,7 +32,9 @@ public class FieldPane extends Pane {
         var children = getChildren();
         for (int y = 0; y < field.getHeight(); y++) {
             for (int x = 0; x < field.getWidth(); x++) {
-                children.add(new Hexagon(radius, new Vec2d(offsetX + radius + 2 * radius * x + (y % 2 == 0 ? 0 : radius), offsetY + radius + yOffset * y)));
+                children.add(new Hexagon(radius, new Vec2d(
+                        offsetX + radius + 2 * radius * x + (y % 2 == 0 ? 0 : radius),
+                        offsetY + radius + yOffset * y)));
             }
         }
     }
