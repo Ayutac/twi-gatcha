@@ -7,6 +7,7 @@
 * Ayutac
 * Bookwhyrm
 * Congra
+* Pänguini
 * Thundersnow
 
 ## Software Developer
@@ -16,4 +17,4 @@
 * [character] by [artist]
 
 ## Special Thanks To
-* Pänguini
+* [your name here]
