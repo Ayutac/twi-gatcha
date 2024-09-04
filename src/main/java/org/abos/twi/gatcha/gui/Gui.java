@@ -11,7 +11,7 @@ import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.battle.Wave;
 import org.abos.twi.gatcha.core.battle.ai.SlowWanderer;
 import org.abos.twi.gatcha.data.Characters;
-import org.abos.twi.gatcha.gui.component.pane.BattlePane;
+import org.abos.twi.gatcha.gui.component.pane.BattlefieldPane;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 
 import java.util.List;
@@ -37,8 +37,8 @@ public final class Gui extends Application {
         final Battle battle = new Battle(10, 10, List.of());
         battle.addWave(new Wave(0, List.of(new SlowWanderer(new CharacterModified(Characters.ERIN), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
         battle.startPlacement();
-        final BattlePane battlePane = new BattlePane(battle, 30);
-        stage.setScene(new Scene(battlePane, DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        final BattlefieldPane battlefieldPane = new BattlefieldPane(battle, 30);
+        stage.setScene(new Scene(battlefieldPane, DEFAULT_WIDTH, DEFAULT_HEIGHT));
     }
 
     public static void main(String[] args) {

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class BattlePane extends Pane {
+public class BattlefieldPane extends Pane {
 
     protected BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
 
@@ -27,7 +27,7 @@ public class BattlePane extends Pane {
     protected double offsetX;
     protected double offsetY;
 
-    public BattlePane(final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
+    public BattlefieldPane(final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
         this.battle = Objects.requireNonNull(battle);
         if (radius < 1) {
             throw new IllegalArgumentException("Radius must be positive!");
