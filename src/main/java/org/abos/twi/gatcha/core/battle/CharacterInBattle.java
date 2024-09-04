@@ -13,8 +13,8 @@ public abstract class CharacterInBattle implements Named, Describable {
 
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Battle battle;
-    protected final @NotNull Vec2i position;
 
+    protected @NotNull Vec2i position;
     protected int health;
     protected int moved;
 
