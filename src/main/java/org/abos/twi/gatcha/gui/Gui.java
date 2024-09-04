@@ -4,8 +4,11 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.Player;
+import org.abos.twi.gatcha.core.battle.Field;
 import org.abos.twi.gatcha.gui.component.pane.FieldPane;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
+
+import java.util.List;
 
 public final class Gui extends Application {
 
@@ -25,7 +28,7 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        stage.setScene(new Scene(new FieldPane()));
+        stage.setScene(new Scene(new FieldPane(new Field(10, 10, List.of()), 30, 5, 5)));
     }
 
     public static void main(String[] args) {
