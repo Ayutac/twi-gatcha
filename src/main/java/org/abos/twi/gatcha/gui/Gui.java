@@ -11,7 +11,7 @@ import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.battle.Wave;
 import org.abos.twi.gatcha.core.battle.ai.SlowWanderer;
 import org.abos.twi.gatcha.data.Characters;
-import org.abos.twi.gatcha.gui.component.pane.BattlefieldPane;
+import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 
 import java.util.List;
@@ -22,6 +22,8 @@ public final class Gui extends Application {
     public static final int DEFAULT_HEIGHT = 720;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final BattleScreen battleScreen = new BattleScreen(this);
+    private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
 
     private Player player;
@@ -41,8 +43,8 @@ public final class Gui extends Application {
         battle.addPlayerSpawn(new Vec2i(1, 0));
         battle.addPlayerSpawn(new Vec2i(1, 1));
         battle.startPlacement(List.of(new CharacterModified(Characters.ERIN)));
-        final BattlefieldPane battlefieldPane = new BattlefieldPane(battle, 30);
-        stage.setScene(new Scene(battlefieldPane, DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        stage.setScene(battleScreenScene);
+        battleScreen.setBattle(battle);
     }
 
     public static void main(String[] args) {

@@ -11,12 +11,17 @@ import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 public class Battle {
@@ -31,8 +36,11 @@ public class Battle {
     protected final @NotNull Set<Vec2i> playerSpawns = new HashSet<>();
     protected final @NotNull Set<Wave> waves = new HashSet<>();
     protected final @NotNull Queue<CharacterModified> placementParty = new LinkedList<>();
+    protected final @NotNull Map<CharacterInBattle, Double> initiativeRolls = new HashMap<>();
+    protected final @NotNull List<CharacterInBattle> characterOrder = new ArrayList<>();
 
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
+    protected @NotNull Random random;
 
     public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int width,
@@ -72,6 +80,7 @@ public class Battle {
                 }
             }
         }
+        random = new Random((long) size * (1 + terrainList.size()));
     }
 
     @Range(from = 1, to = Integer.MAX_VALUE)
@@ -168,5 +177,23 @@ public class Battle {
 
     public void start() {
         phase = BattlePhase.IN_PROGRESS;
+        rollForInitiative();
+    }
+
+    public void rollForInitiative() {
+        for (final CharacterInBattle character : characters) {
+            initiativeRolls.put(character, character.getInitiative());
+        }
+        // sort distinct values starting with the greatest
+        final List<Double> values = initiativeRolls.values().stream().sorted((d1, d2) -> Double.compare(d2, d1)).distinct().toList();
+        for (double init : values) { // the order will be preserved in this for-loop
+            // get all characters with the same initiative
+            final List<CharacterInBattle> allWithInit = new ArrayList<>(initiativeRolls.entrySet().stream().filter(entry -> entry.getValue() == init).map(Map.Entry::getKey).toList());
+            if (allWithInit.isEmpty()) {
+                throw new AssertionError("Character vanished from the list!"); // shouldn't happen
+            }
+            Collections.shuffle(allWithInit, random);
+            characterOrder.addAll(allWithInit);
+        }
     }
 }

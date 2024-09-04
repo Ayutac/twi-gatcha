@@ -9,7 +9,6 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
-import org.abos.twi.gatcha.gui.Gui;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -26,8 +25,6 @@ public class BattlefieldPane extends Pane {
 
     protected final @NotNull Battle battle;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
-    protected double offsetX;
-    protected double offsetY;
 
     public BattlefieldPane(final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
         this.battle = Objects.requireNonNull(battle);
@@ -37,8 +34,6 @@ public class BattlefieldPane extends Pane {
         this.radius = radius;
         final double width = 2 * radius * this.battle.getWidth() + (this.battle.getHeight() > 1 ? radius : 0);
         final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
-        this.offsetX = (Gui.DEFAULT_WIDTH - width) / 2;
-        this.offsetY = (Gui.DEFAULT_HEIGHT - height) / 2;
         addHexagons();
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
@@ -66,8 +61,8 @@ public class BattlefieldPane extends Pane {
         for (int y = 0; y < battle.getHeight(); y++) {
             for (int x = 0; x < battle.getWidth(); x++) {
                 final Hexagon hexagon = new Hexagon(radius, new Vec2d(
-                        offsetX + radius + 2 * radius * x + (y % 2 == 0 ? 0 : radius),
-                        offsetY + radius + yOffset * y));
+                        radius + 2 * radius * x + (y % 2 == 0 ? 0 : radius),
+                        radius + yOffset * y));
                 hexagons.put(new Vec2i(x, y), hexagon);
                 children.add(hexagon);
             }
