@@ -6,6 +6,6 @@ public interface Effect {
 
     EffectType getEffectType();
 
-    void apply(final CharacterInBattle from, final Vec2i target, final Field field);
+    void apply(final CharacterInBattle from, final Vec2i target, final Level level);
 
 }

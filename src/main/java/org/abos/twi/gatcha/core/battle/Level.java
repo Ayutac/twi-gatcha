@@ -9,11 +9,14 @@ import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
-public class Field {
+public class Level {
 
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int height;
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int width;
@@ -22,8 +25,11 @@ public class Field {
     protected final List<CharacterInBattle> characters = new LinkedList<>();
     protected final List<Terrain> terrainList;
     protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
+    protected final Set<Wave> waves = new HashSet<>();
 
-    public Field(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
+    protected @NotNull LevelPhase phase = LevelPhase.INACTIVE;
+
+    public Level(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
                  final @NotNull List<Terrain> terrainList) {
         if (height < 1 || width < 1) {
@@ -78,6 +84,10 @@ public class Field {
         return size;
     }
 
+    public @NotNull LevelPhase getPhase() {
+        return phase;
+    }
+
     public boolean contains(final Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }
@@ -106,5 +116,12 @@ public class Field {
             result.removeVertex(other.getPosition());
         }
         return result;
+    }
+
+    public void addWave(final @NotNull Wave wave) {
+        if (phase != LevelPhase.INACTIVE) {
+            throw new IllegalStateException("No more waves can be added!");
+        }
+        waves.add(Objects.requireNonNull(wave));
     }
 }
