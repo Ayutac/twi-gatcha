@@ -28,7 +28,7 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        stage.setScene(new Scene(new FieldPane(new Field(10, 10, List.of()), 30, 5, 5)));
+        stage.setScene(new Scene(new FieldPane(new Field(10, 10, List.of()), 30, 50, 50), DEFAULT_WIDTH, DEFAULT_HEIGHT));
     }
 
     public static void main(String[] args) {

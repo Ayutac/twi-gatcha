@@ -22,6 +22,8 @@ public class FieldPane extends Pane {
             throw new IllegalArgumentException("Radius must be positive!");
         }
         this.radius = radius;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         addHexagons();
     }
 
