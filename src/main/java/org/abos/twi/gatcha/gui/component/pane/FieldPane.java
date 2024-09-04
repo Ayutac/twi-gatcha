@@ -40,8 +40,10 @@ public class FieldPane extends Pane {
                         continue;
                     }
                     other.setFill(Color.TRANSPARENT);
+                    other.setStrokeWidth(1d);
                 }
                 hexagon.get().setFill(Color.BEIGE);
+                hexagon.get().setStrokeWidth(4d);
             }
         });
     }
