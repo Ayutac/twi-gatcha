@@ -4,6 +4,6 @@ public enum InventoryKind {
 
     GOLD,
     MAGICORE,
-    MRSHABUX
+    FAERIE_FLOWERS
 
 }
