@@ -1,6 +1,6 @@
 package org.abos.twi.gatcha.core.battle;
 
-public enum LevelPhase {
+public enum BattlePhase {
 
     INACTIVE,
     PLACEMENT,

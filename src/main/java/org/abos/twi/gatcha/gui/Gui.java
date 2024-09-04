@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.Player;
-import org.abos.twi.gatcha.core.battle.Level;
-import org.abos.twi.gatcha.gui.component.pane.LevelPane;
+import org.abos.twi.gatcha.core.battle.Battle;
+import org.abos.twi.gatcha.gui.component.pane.BattlePane;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        stage.setScene(new Scene(new LevelPane(new Level(10, 10, List.of()), 30, 50, 50), DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        stage.setScene(new Scene(new BattlePane(new Battle(10, 10, List.of()), 30, 50, 50), DEFAULT_WIDTH, DEFAULT_HEIGHT));
     }
 
     public static void main(String[] args) {

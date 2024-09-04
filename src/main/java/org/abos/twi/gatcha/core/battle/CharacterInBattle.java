@@ -12,15 +12,15 @@ import java.util.Objects;
 public abstract class CharacterInBattle implements Named, Describable {
 
     protected final @NotNull CharacterModified modified;
-    protected final @NotNull Level level;
+    protected final @NotNull Battle battle;
     protected final @NotNull Vec2i position;
 
     protected int health;
     protected int moved;
 
-    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Level level, final @NotNull Vec2i position) {
+    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull Vec2i position) {
         this.modified = Objects.requireNonNull(modified);
-        this.level = Objects.requireNonNull(level);
+        this.battle = Objects.requireNonNull(battle);
         this.position = Objects.requireNonNull(position);
         this.health = modified.getMaxHealth();
     }
@@ -73,7 +73,7 @@ public abstract class CharacterInBattle implements Named, Describable {
         }
         health = health <= amount ? 0 : health - amount;
         if (health == 0) {
-            level.removeCharacter(this);
+            battle.removeCharacter(this);
         }
     }
 

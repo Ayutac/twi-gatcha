@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Range;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +25,8 @@ public class Player implements Named {
     protected Map<InventoryKind, Integer> inventory = new EnumMap<>(InventoryKind.class);
 
     protected Map<CharacterBase, CharacterModified> rooster = new HashMap<>();
+
+    protected List<List<CharacterModified>> parties = new LinkedList<>();
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);

@@ -23,8 +23,8 @@ public record SimpleEffect(EffectType type, int power) implements Effect {
     }
 
     @Override
-    public void apply(final CharacterInBattle from, final Vec2i target, final Level level) {
-        final Optional<CharacterInBattle> to = level.getCharacterAt(target);
+    public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
+        final Optional<CharacterInBattle> to = battle.getCharacterAt(target);
         if (to.isEmpty()) {
             return;
         }

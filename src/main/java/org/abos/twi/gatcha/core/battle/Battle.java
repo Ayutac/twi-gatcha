@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-public class Level {
+public class Battle {
 
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int height;
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int width;
@@ -27,11 +27,11 @@ public class Level {
     protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
     protected final Set<Wave> waves = new HashSet<>();
 
-    protected @NotNull LevelPhase phase = LevelPhase.INACTIVE;
+    protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
 
-    public Level(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
-                 final @Range(from = 1, to = Integer.MAX_VALUE) int width,
-                 final @NotNull List<Terrain> terrainList) {
+    public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
+                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
+                  final @NotNull List<Terrain> terrainList) {
         if (height < 1 || width < 1) {
             throw new IllegalArgumentException("Dimensions must be positive!");
         }
@@ -84,7 +84,7 @@ public class Level {
         return size;
     }
 
-    public @NotNull LevelPhase getPhase() {
+    public @NotNull BattlePhase getPhase() {
         return phase;
     }
 
@@ -119,7 +119,7 @@ public class Level {
     }
 
     public void addWave(final @NotNull Wave wave) {
-        if (phase != LevelPhase.INACTIVE) {
+        if (phase != BattlePhase.INACTIVE) {
             throw new IllegalStateException("No more waves can be added!");
         }
         waves.add(Objects.requireNonNull(wave));
