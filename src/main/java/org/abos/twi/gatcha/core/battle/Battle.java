@@ -2,11 +2,13 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.battle.ai.AiCharacter;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
 import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class Battle {
 
@@ -38,9 +41,13 @@ public class Battle {
     protected final @NotNull Queue<CharacterModified> placementParty = new LinkedList<>();
     protected final @NotNull Map<CharacterInBattle, Double> initiativeRolls = new HashMap<>();
     protected final @NotNull List<CharacterInBattle> characterOrder = new ArrayList<>();
+    protected final @NotNull Map<Vec2i, Double> possiblePlayerFields = new HashMap<>();
 
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
     protected @NotNull Random random;
+    protected @Nullable CharacterInBattle currentCharacter = null;
+    protected boolean playerMoveDone = true;
+    protected boolean playerAttackDone = true;
 
     public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int width,
@@ -110,6 +117,14 @@ public class Battle {
         return characterOrder;
     }
 
+    public @NotNull Map<Vec2i, Double> getPossiblePlayerFields() {
+        return possiblePlayerFields;
+    }
+
+    public @Nullable CharacterInBattle getCurrentCharacter() {
+        return currentCharacter;
+    }
+
     public boolean contains(final @NotNull Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }
@@ -163,8 +178,9 @@ public class Battle {
         return Optional.empty();
     }
 
-    public boolean removeCharacter(final CharacterInBattle character) {
-        return characters.remove(character);
+    public void removeCharacter(final CharacterInBattle character) {
+        characters.remove(character);
+        characterOrder.remove(character);
     }
 
     public AbstractBaseGraph<Vec2i, DefaultEdge> getCharacterMovementGraph(final @Nullable CharacterInBattle character) {
@@ -182,6 +198,12 @@ public class Battle {
     public void start() {
         phase = BattlePhase.IN_PROGRESS;
         rollForInitiative();
+        // TODO use an ExecutionService
+        new Thread(() -> {
+            while (!checkDone()) {
+                turn();
+            }
+        }).start();
     }
 
     public void rollForInitiative() {
@@ -199,5 +221,97 @@ public class Battle {
             Collections.shuffle(allWithInit, random);
             characterOrder.addAll(allWithInit);
         }
+    }
+
+    protected void turn() {
+        currentCharacter = characterOrder.getFirst();
+        while (currentCharacter != null) {
+            currentCharacter.startTurn();
+            if (currentCharacter instanceof AiCharacter) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    Logger.getGlobal().warning(ex.getMessage());
+                }
+                currentCharacter.turn();
+            }
+            else {
+                waitForPlayer(currentCharacter);
+            }
+            currentCharacter.endTurn();
+            // next character
+            final int index = characterOrder.indexOf(currentCharacter) + 1;
+            if (index == characterOrder.size()) {
+                currentCharacter = null;
+            }
+            else {
+                currentCharacter = characterOrder.get(index);
+            }
+        }
+        // TODO introduce new waves
+    }
+
+    public void waitForPlayer(final @NotNull CharacterInBattle character) {
+        playerMoveDone = false;
+        playerAttackDone = false;
+        possiblePlayerFields.clear();
+        final var moveGraph = getCharacterMovementGraph(character);
+        final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(character.position);
+        for (final Vec2i position : moveGraph.vertexSet()) {
+            double weight = paths.getPath(position).getWeight();
+            if (weight <= character.getMovement()) {
+                possiblePlayerFields.put(position, weight);
+            }
+        }
+        while (!playerMoveDone) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+//        while (!playerAttackDone) {
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+    }
+
+    public boolean isPlayerMove() {
+        return !playerMoveDone;
+    }
+
+    public boolean isPlayerAttack() {
+        return !playerAttackDone;
+    }
+
+    public boolean isPlayerTurn() {
+        return !playerMoveDone || !playerAttackDone;
+    }
+
+    public void playerMoveIsDone() {
+        playerMoveDone = true;
+    }
+
+    public void setPlayerAttackIsDone() {
+        playerAttackDone = true;
+    }
+
+    /**
+     * Checks if the battle is over.
+     * @return {@code true} if the battle is over, else {@code false}
+     */
+    public boolean checkDone() {
+        if (phase == BattlePhase.DONE) {
+            return true;
+        }
+        // game is over if there are no player characters or no enemies anymore
+        if (characters.stream().noneMatch(character -> character.getTeam() == TeamKind.PLAYER) ||
+                characters.stream().noneMatch(character -> character.getTeam() == TeamKind.ENEMY)) {
+            phase = BattlePhase.DONE;
+        }
+        return phase == BattlePhase.DONE;
     }
 }

@@ -54,6 +54,12 @@ public class BattlefieldPane extends Pane {
                         screen.update();
                     }
                 }
+                else if (battle.getPhase() == BattlePhase.IN_PROGRESS && battle.isPlayerMove() && battle.getPossiblePlayerFields().containsKey(position)) {
+                    // move the player figure
+                    battle.getCurrentCharacter().setMoved((int)Math.round(battle.getPossiblePlayerFields().get(position)));
+                    battle.getCurrentCharacter().setPosition(position);
+                    battle.playerMoveIsDone();
+                }
                 updateGrid(mouseEvent.getX(), mouseEvent.getY());
             }
         });
@@ -84,6 +90,9 @@ public class BattlefieldPane extends Pane {
             if (character.isEmpty()) {
                 if (battle.getPhase() == BattlePhase.PLACEMENT && battle.isPlayerSpawnAt(other.getKey())) {
                     other.getValue().setFill(Color.AQUA);
+                }
+                else if (battle.isPlayerMove() && battle.getPossiblePlayerFields().containsKey(other.getKey())) {
+                    other.getValue().setFill(Color.LIGHTBLUE);
                 }
                 else {
                     other.getValue().setFill(Color.TRANSPARENT);

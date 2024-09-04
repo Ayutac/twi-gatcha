@@ -73,8 +73,23 @@ public class CharacterInBattle implements Named, Describable {
         return modified.getMovement();
     }
 
+    public int getMoved() {
+        return moved;
+    }
+
+    public void setMoved(final @Range(from = 0, to = Integer.MAX_VALUE) int moved) {
+        if (moved < 0) {
+            throw new IllegalArgumentException("Moved cannot be negative!");
+        }
+        this.moved = moved;
+    }
+
     public @NotNull Vec2i getPosition() {
         return position;
+    }
+
+    public void setPosition(final @NotNull Vec2i position) {
+        this.position = Objects.requireNonNull(position);
     }
 
     public boolean isAt(final Vec2i position) {
@@ -99,7 +114,7 @@ public class CharacterInBattle implements Named, Describable {
     }
 
     public void startTurn() {
-        moved = 0;
+        setMoved(0);
     }
 
     public void turn() {
