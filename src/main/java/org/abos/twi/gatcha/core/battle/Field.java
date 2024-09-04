@@ -46,6 +46,21 @@ public class Field {
         terrainGraph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
         terrainGraph.setVertexSupplier(new GridSupplier(height, width));
         new HexaGridGraphGenerator<Vec2i, DefaultEdge>(height, width).generateGraph(terrainGraph);
+        // set default weight
+        for (final DefaultEdge e : terrainGraph.edgeSet()) {
+            terrainGraph.setEdgeWeight(e, 1d);
+        }
+        // set terrain weight
+        for (final Terrain terrain : terrainList) {
+            if (terrain.type().isBlocked()) {
+                terrainGraph.removeVertex(terrain.position());
+            }
+            else {
+                for (final DefaultEdge e : terrainGraph.incomingEdgesOf(terrain.position())) {
+                    terrainGraph.setEdgeWeight(e, terrain.type().getMovementCost());
+                }
+            }
+        }
     }
 
     @Range(from = 1, to = Integer.MAX_VALUE)
@@ -79,5 +94,17 @@ public class Field {
 
     public boolean removeCharacter(final CharacterInBattle character) {
         return characters.remove(character);
+    }
+
+    public AbstractBaseGraph<Vec2i, DefaultEdge> getCharacterMovementGraph(final CharacterInBattle character) {
+        AbstractBaseGraph<Vec2i, DefaultEdge> result = (AbstractBaseGraph<Vec2i, DefaultEdge>)terrainGraph.clone();
+        for (final CharacterInBattle other : characters) {
+            if (other == character) {
+                continue;
+            }
+            // we can't move onto another character
+            result.removeVertex(other.getPosition());
+        }
+        return result;
     }
 }
