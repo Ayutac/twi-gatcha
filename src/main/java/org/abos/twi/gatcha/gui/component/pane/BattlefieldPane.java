@@ -45,12 +45,14 @@ public class BattlefieldPane extends Pane {
             final Optional<Hexagon> hexagon = findHexagonAt(mouseEvent.getX(), mouseEvent.getY());
             if (hexagon.isPresent()) {
                 final Vec2i position = hexagons.getKey(hexagon.get());
-                if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty()) {
-                    battle.placePlayerCharacterAt(battle.getPlacementParty().poll(), position);
-                }
-                if (battle.getPlacementParty().isEmpty()) {
-                    battle.start();
-                    screen.update();
+                if (battle.getPhase() == BattlePhase.PLACEMENT) {
+                    if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty()) {
+                        battle.placePlayerCharacterAt(battle.getPlacementParty().poll(), position);
+                    }
+                    if (battle.getPlacementParty().isEmpty()) {
+                        battle.start();
+                        screen.update();
+                    }
                 }
                 updateGrid(mouseEvent.getX(), mouseEvent.getY());
             }
