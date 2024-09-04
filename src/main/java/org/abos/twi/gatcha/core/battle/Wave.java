@@ -1,6 +1,5 @@
 package org.abos.twi.gatcha.core.battle;
 
-import org.abos.common.Vec2i;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 

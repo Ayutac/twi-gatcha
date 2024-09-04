@@ -14,15 +14,17 @@ public abstract class CharacterInBattle implements Named, Describable {
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Battle battle;
 
+    protected @NotNull TeamKind team;
     protected @NotNull Vec2i position;
     protected int health;
     protected int moved;
 
-    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull Vec2i position) {
+    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull TeamKind team, final @NotNull Vec2i position) {
         this.modified = Objects.requireNonNull(modified);
         this.battle = Objects.requireNonNull(battle);
+        this.team = Objects.requireNonNull(team);
         this.position = Objects.requireNonNull(position);
-        this.health = modified.getMaxHealth();
+        this.health = getMaxHealth();
     }
 
     @Override
