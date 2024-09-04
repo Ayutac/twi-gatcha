@@ -1,5 +1,6 @@
 package org.abos.twi.gatcha.core.battle;
 
+import org.abos.common.Vec2d;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -14,9 +15,11 @@ public class Field {
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int size;
 
     protected final List<CharacterInBattle> characters = new LinkedList<>();
+    protected final List<Terrain> terrainList;
 
     public Field(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
-                 final @Range(from = 1, to = Integer.MAX_VALUE) int width) {
+                 final @Range(from = 1, to = Integer.MAX_VALUE) int width,
+                 final @NotNull List<Terrain> terrainList) {
         if (height < 1 || width < 1) {
             throw new IllegalArgumentException("Dimensions must be positive!");
         }
@@ -28,6 +31,12 @@ public class Field {
         catch (ArithmeticException ex) {
             throw new IllegalArgumentException("Dimensions are too big!");
         }
+        for (final Terrain terrain : terrainList) {
+            if (!contains(terrain.position())) {
+                throw new IllegalArgumentException("Terrain must be within field!");
+            }
+        }
+        this.terrainList = List.copyOf(terrainList);
     }
 
     @Range(from = 1, to = Integer.MAX_VALUE)
@@ -45,8 +54,12 @@ public class Field {
         return size;
     }
 
+    public boolean contains(final Vec2d position) {
+        return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
+    }
+
     @NotNull
-    public Optional<CharacterInBattle> getCharacterAt(final Position position) {
+    public Optional<CharacterInBattle> getCharacterAt(final Vec2d position) {
         for (final CharacterInBattle character : characters) {
             if (character.isAt(position)) {
                 return Optional.of(character);

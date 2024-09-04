@@ -1,5 +1,6 @@
 package org.abos.twi.gatcha.core.battle;
 
+import org.abos.common.Vec2d;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -22,7 +23,7 @@ public record SimpleEffect(EffectType type, int power) implements Effect {
     }
 
     @Override
-    public void apply(final CharacterInBattle from, final Position target, final Field field) {
+    public void apply(final CharacterInBattle from, final Vec2d target, final Field field) {
         final Optional<CharacterInBattle> to = field.getCharacterAt(target);
         if (to.isEmpty()) {
             return;
