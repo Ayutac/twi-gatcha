@@ -9,6 +9,7 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
+import org.abos.twi.gatcha.core.battle.Effect;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -54,11 +55,22 @@ public class BattlefieldPane extends Pane {
                         screen.update();
                     }
                 }
-                else if (battle.getPhase() == BattlePhase.IN_PROGRESS && battle.isPlayerMove() && battle.getPossiblePlayerFields().containsKey(position)) {
-                    // move the player figure
-                    battle.getCurrentCharacter().setMoved((int)Math.round(battle.getPossiblePlayerFields().get(position)));
-                    battle.getCurrentCharacter().setPosition(position);
-                    battle.playerMoveIsDone();
+                else if (battle.getPhase() == BattlePhase.IN_PROGRESS) {
+                    // move with the player character
+                    if (battle.isPlayerMove() && battle.getCurrentCharacter() != null && battle.getPossiblePlayerFields().containsKey(position)) {
+                        battle.getCurrentCharacter().setMoved((int) Math.round(battle.getPossiblePlayerFields().get(position)));
+                        battle.getCurrentCharacter().setPosition(position);
+                        battle.playerMoveIsDone();
+                        screen.update();
+                    }
+                    // attack with the player character
+                    else if (battle.isPlayerAttack() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
+                        for (final Effect effect : battle.getSelectedAttack().effects()) {
+                            effect.apply(battle.getCurrentCharacter(), position, battle);
+                        }
+                        battle.playerAttackIsDone();
+                        screen.update();
+                    }
                 }
                 updateGrid(mouseEvent.getX(), mouseEvent.getY());
             }
@@ -88,11 +100,17 @@ public class BattlefieldPane extends Pane {
             }
             final Optional<CharacterInBattle> character = battle.getCharacterAt(other.getKey());
             if (character.isEmpty()) {
+                // show possible spawn fields
                 if (battle.getPhase() == BattlePhase.PLACEMENT && battle.isPlayerSpawnAt(other.getKey())) {
                     other.getValue().setFill(Color.AQUA);
                 }
+                // show possible move fields
                 else if (battle.isPlayerMove() && battle.getPossiblePlayerFields().containsKey(other.getKey())) {
                     other.getValue().setFill(Color.LIGHTBLUE);
+                }
+                // show possible attack fields
+                else if (battle.isPlayerAttack() && !battle.isPlayerMove() && battle.getPossibleAttackFields().contains(other.getKey())) {
+                    other.getValue().setFill(Color.MISTYROSE);
                 }
                 else {
                     other.getValue().setFill(Color.TRANSPARENT);

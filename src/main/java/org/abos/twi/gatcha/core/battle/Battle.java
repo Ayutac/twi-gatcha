@@ -8,6 +8,7 @@ import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -42,10 +43,12 @@ public class Battle {
     protected final @NotNull Map<CharacterInBattle, Double> initiativeRolls = new HashMap<>();
     protected final @NotNull List<CharacterInBattle> characterOrder = new ArrayList<>();
     protected final @NotNull Map<Vec2i, Double> possiblePlayerFields = new HashMap<>();
+    protected final @NotNull List<Vec2i> possibleAttackFields = new LinkedList<>();
 
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
     protected @NotNull Random random;
     protected @Nullable CharacterInBattle currentCharacter = null;
+    protected @Nullable Attack selectedAttack = null;
     protected boolean playerMoveDone = true;
     protected boolean playerAttackDone = true;
 
@@ -121,8 +124,31 @@ public class Battle {
         return possiblePlayerFields;
     }
 
+    public @NotNull List<Vec2i> getPossibleAttackFields() {
+        return possibleAttackFields;
+    }
+
     public @Nullable CharacterInBattle getCurrentCharacter() {
         return currentCharacter;
+    }
+
+    public @Nullable Attack getSelectedAttack() {
+        return selectedAttack;
+    }
+
+    public void setSelectedAttack(@Nullable Attack selectedAttack) {
+        this.selectedAttack = selectedAttack;
+        possibleAttackFields.clear();
+        if (currentCharacter == null || selectedAttack == null) {
+            return;
+        }
+        var paths = new BFSShortestPath<>(terrainGraph).getPaths(currentCharacter.getPosition());
+        for (final Vec2i position : terrainGraph.vertexSet()) {
+            final int length = paths.getPath(position).getLength();
+            if (selectedAttack.rangeMin() <= length && length <= selectedAttack.rangeMax()) {
+                possibleAttackFields.add(position);
+            }
+        }
     }
 
     public boolean contains(final @NotNull Vec2i position) {
@@ -270,13 +296,13 @@ public class Battle {
                 throw new RuntimeException(e);
             }
         }
-//        while (!playerAttackDone) {
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        while (!playerAttackDone) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public boolean isPlayerMove() {
@@ -295,7 +321,7 @@ public class Battle {
         playerMoveDone = true;
     }
 
-    public void setPlayerAttackIsDone() {
+    public void playerAttackIsDone() {
         playerAttackDone = true;
     }
 

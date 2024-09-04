@@ -23,7 +23,7 @@ public interface Attacks {
     Attack PASTA = new Attack(
             "Erin's lunch special",
             "Pasta with a glass of Blue Fruit Juice.",
-            3, 5, 2,
+            1, 1, 2,
             List.of(new SimpleEffect(EffectType.HEALING, 2)));
 
     Attack ZOMBIE_PUNCH = new Attack(
