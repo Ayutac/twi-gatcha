@@ -1,8 +1,13 @@
 package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Vec2i;
+import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
+import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
+import org.jgrapht.graph.AbstractBaseGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +21,7 @@ public class Field {
 
     protected final List<CharacterInBattle> characters = new LinkedList<>();
     protected final List<Terrain> terrainList;
+    protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
 
     public Field(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
@@ -37,6 +43,9 @@ public class Field {
             }
         }
         this.terrainList = List.copyOf(terrainList);
+        terrainGraph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
+        terrainGraph.setVertexSupplier(new GridSupplier(height, width));
+        new HexaGridGraphGenerator<Vec2i, DefaultEdge>(height, width).generateGraph(terrainGraph);
     }
 
     @Range(from = 1, to = Integer.MAX_VALUE)

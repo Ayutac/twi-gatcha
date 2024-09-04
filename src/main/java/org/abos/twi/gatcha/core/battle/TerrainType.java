@@ -5,8 +5,7 @@ import org.jetbrains.annotations.Range;
 public enum TerrainType {
 
     BLOCKED(Integer.MAX_VALUE),
-    PLAINS(1),
-    ROCK(Integer.MAX_VALUE);
+    DEFAULT(1);
 
     final @Range(from = 1, to = Integer.MAX_VALUE) int movementCost;
 
@@ -17,4 +16,12 @@ public enum TerrainType {
         this.movementCost = movementCost;
     }
 
+    @Range(from = 1, to = Integer.MAX_VALUE)
+    public int getMovementCost() {
+        return movementCost;
+    }
+
+    public boolean isBlocked() {
+        return movementCost == Integer.MAX_VALUE;
+    }
 }
