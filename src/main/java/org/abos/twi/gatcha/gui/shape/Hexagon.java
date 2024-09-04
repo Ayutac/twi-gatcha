@@ -21,13 +21,13 @@ public class Hexagon extends Polyline {
         this.radius = radius;
         this.center = Objects.requireNonNull(center);
         final Double[] points = new Double[] {
-                (double)center.x(), center.y() - RADII_FACTOR * radius,
-                (double)center.x() + radius, center.y() - radius / 2d,
-                (double)center.x() + radius, center.y() + radius / 2d,
-                (double)center.x(), center.y() + RADII_FACTOR * radius,
-                (double)center.x() - radius, center.y() + radius / 2d,
-                (double)center.x() - radius, center.y() - radius / 2d,
-                (double)center.x(), center.y() - RADII_FACTOR * radius
+                center.x(), center.y() - RADII_FACTOR * radius,
+                center.x() + radius, center.y() - radius / 2d,
+                center.x() + radius, center.y() + radius / 2d,
+                center.x(), center.y() + RADII_FACTOR * radius,
+                center.x() - radius, center.y() + radius / 2d,
+                center.x() - radius, center.y() - radius / 2d,
+                center.x(), center.y() - RADII_FACTOR * radius
         };
         getPoints().addAll(points);
     }
