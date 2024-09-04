@@ -12,9 +12,6 @@ public record Wave(int turn, List<CharacterInBattle> characters) {
             throw new IllegalArgumentException("Turn cannot be negative!");
         }
         this.turn = turn;
-        if (characters.contains(null)) {
-            throw new NullPointerException("null is not allowed as a character!");
-        }
         if (characters.isEmpty()) {
             throw new IllegalArgumentException("Wave must contain at least one character!");
         }

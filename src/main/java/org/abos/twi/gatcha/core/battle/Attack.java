@@ -26,9 +26,6 @@ public record Attack(String name, String description, int rangeMin, int rangeMax
         this.rangeMin = rangeMin;
         this.rangeMax = rangeMax;
         this.cooldown = cooldown;
-        if (effects.contains(null)) {
-            throw new NullPointerException("List cannot contain null!");
-        }
         this.effects = List.copyOf(effects);
     }
 

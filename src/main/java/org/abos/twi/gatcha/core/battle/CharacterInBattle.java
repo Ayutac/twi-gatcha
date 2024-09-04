@@ -41,6 +41,10 @@ public abstract class CharacterInBattle implements Named, Describable {
         return modified;
     }
 
+    public @NotNull TeamKind getTeam() {
+        return team;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -59,6 +63,14 @@ public abstract class CharacterInBattle implements Named, Describable {
 
     public int getDefense() {
         return modified.getDefense();
+    }
+
+    public double getInitiative() {
+        return modified.getInitiative();
+    }
+
+    public int getMovement() {
+        return modified.getMovement();
     }
 
     public @NotNull Vec2i getPosition() {

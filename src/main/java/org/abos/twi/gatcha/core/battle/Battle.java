@@ -92,6 +92,23 @@ public class Battle {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }
 
+    public void addWave(final @NotNull Wave wave) {
+        if (phase != BattlePhase.INACTIVE) {
+            throw new IllegalStateException("No more waves can be added!");
+        }
+        if (waves.stream().anyMatch(w -> wave.turn() == w.turn())) {
+            throw new IllegalArgumentException("Each turn can at most have one wave!");
+        }
+        waves.add(wave);
+    }
+
+    public void startPlacement() {
+        final Optional<Wave> firstWave = waves.stream().filter(w -> w.turn() == 0).findFirst();
+        // TODO avoid character collision
+        firstWave.ifPresent(wave -> characters.addAll(wave.characters()));
+        phase = BattlePhase.PLACEMENT;
+    }
+
     @NotNull
     public Optional<CharacterInBattle> getCharacterAt(final Vec2i position) {
         for (final CharacterInBattle character : characters) {
@@ -116,12 +133,5 @@ public class Battle {
             result.removeVertex(other.getPosition());
         }
         return result;
-    }
-
-    public void addWave(final @NotNull Wave wave) {
-        if (phase != BattlePhase.INACTIVE) {
-            throw new IllegalStateException("No more waves can be added!");
-        }
-        waves.add(Objects.requireNonNull(wave));
     }
 }
