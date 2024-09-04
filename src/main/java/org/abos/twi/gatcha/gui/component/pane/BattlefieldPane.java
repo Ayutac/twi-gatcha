@@ -1,11 +1,13 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.abos.common.Vec2d;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
+import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.gui.Gui;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
@@ -39,6 +41,22 @@ public class BattlefieldPane extends Pane {
         this.offsetY = (Gui.DEFAULT_HEIGHT - height) / 2;
         addHexagons();
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
+        addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (mouseEvent.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            final Optional<Hexagon> hexagon = findHexagonAt(mouseEvent.getX(), mouseEvent.getY());
+            if (hexagon.isPresent()) {
+                final Vec2i position = hexagons.getKey(hexagon.get());
+                if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty()) {
+                    battle.placePlayerCharacterAt(battle.getPlacementParty().poll(), position);
+                }
+                if (battle.getPlacementParty().isEmpty()) {
+                    battle.start();
+                }
+                updateGrid(mouseEvent.getX(), mouseEvent.getY());
+            }
+        });
         updateGrid(0d, 0d);
     }
 
@@ -64,7 +82,12 @@ public class BattlefieldPane extends Pane {
             }
             final Optional<CharacterInBattle> character = battle.getCharacterAt(other.getKey());
             if (character.isEmpty()) {
-                other.getValue().setFill(Color.TRANSPARENT);
+                if (battle.getPhase() == BattlePhase.PLACEMENT && battle.isPlayerSpawnAt(other.getKey())) {
+                    other.getValue().setFill(Color.AQUA);
+                }
+                else {
+                    other.getValue().setFill(Color.TRANSPARENT);
+                }
             }
             else {
                 switch (character.get().getTeam()) {
@@ -73,11 +96,9 @@ public class BattlefieldPane extends Pane {
                     default -> throw new IllegalStateException("Unhandled enum encountered!");
                 }
             }
-            other.getValue().setStrokeWidth(1d);
         }
         if (hexagon.isPresent()) {
-            hexagon.get().setFill(Color.BEIGE);
-            hexagon.get().setStrokeWidth(4d);
+            hexagon.get().setFill(Color.ORANGE);
         }
     }
 

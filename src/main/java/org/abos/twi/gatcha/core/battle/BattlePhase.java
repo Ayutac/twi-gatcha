@@ -4,6 +4,7 @@ public enum BattlePhase {
 
     INACTIVE,
     PLACEMENT,
+    IN_PROGRESS,
     DONE
 
 }

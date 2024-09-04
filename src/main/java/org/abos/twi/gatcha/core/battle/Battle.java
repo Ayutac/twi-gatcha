@@ -1,9 +1,11 @@
 package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Vec2i;
+import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
 import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -12,7 +14,9 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 
 public class Battle {
@@ -24,7 +28,9 @@ public class Battle {
     protected final List<CharacterInBattle> characters = new LinkedList<>();
     protected final List<Terrain> terrainList;
     protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
-    protected final Set<Wave> waves = new HashSet<>();
+    protected final @NotNull Set<Vec2i> playerSpawns = new HashSet<>();
+    protected final @NotNull Set<Wave> waves = new HashSet<>();
+    protected final @NotNull Queue<CharacterModified> placementParty = new LinkedList<>();
 
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
 
@@ -87,8 +93,23 @@ public class Battle {
         return phase;
     }
 
-    public boolean contains(final Vec2i position) {
+    public @NotNull Queue<CharacterModified> getPlacementParty() {
+        return placementParty;
+    }
+
+    public boolean contains(final @NotNull Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
+    }
+
+    public boolean isPlayerSpawnAt(final @NotNull Vec2i position) {
+        return playerSpawns.contains(position);
+    }
+
+    public void addPlayerSpawn(final @NotNull Vec2i playerSpawn) {
+        if (phase != BattlePhase.INACTIVE) {
+            throw new IllegalStateException("No more player spawns can be added!");
+        }
+        playerSpawns.add(Objects.requireNonNull(playerSpawn));
     }
 
     public void addWave(final @NotNull Wave wave) {
@@ -101,11 +122,22 @@ public class Battle {
         waves.add(wave);
     }
 
-    public void startPlacement() {
+    public void startPlacement(final @NotNull List<CharacterModified> party) {
         final Optional<Wave> firstWave = waves.stream().filter(w -> w.turn() == 0).findFirst();
         // TODO avoid character collision
         firstWave.ifPresent(wave -> characters.addAll(wave.characters()));
         phase = BattlePhase.PLACEMENT;
+        this.placementParty.addAll(party);
+    }
+
+    public void placePlayerCharacterAt(final @NotNull CharacterModified character, final @NotNull Vec2i position) {
+        if (!isPlayerSpawnAt(position)) {
+            throw new IllegalArgumentException("Position cannot be used!");
+        }
+        if (!getCharacterMovementGraph(null).containsVertex(position)) {
+            throw new IllegalArgumentException("Position is already taken!");
+        }
+        characters.add(new CharacterInBattle(character, this, TeamKind.PLAYER, position));
     }
 
     @NotNull
@@ -122,7 +154,7 @@ public class Battle {
         return characters.remove(character);
     }
 
-    public AbstractBaseGraph<Vec2i, DefaultEdge> getCharacterMovementGraph(final CharacterInBattle character) {
+    public AbstractBaseGraph<Vec2i, DefaultEdge> getCharacterMovementGraph(final @Nullable CharacterInBattle character) {
         AbstractBaseGraph<Vec2i, DefaultEdge> result = (AbstractBaseGraph<Vec2i, DefaultEdge>)terrainGraph.clone();
         for (final CharacterInBattle other : characters) {
             if (other == character) {
@@ -132,5 +164,9 @@ public class Battle {
             result.removeVertex(other.getPosition());
         }
         return result;
+    }
+
+    public void start() {
+        phase = BattlePhase.IN_PROGRESS;
     }
 }

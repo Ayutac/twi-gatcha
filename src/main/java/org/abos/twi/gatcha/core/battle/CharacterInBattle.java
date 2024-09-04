@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Range;
 
 import java.util.Objects;
 
-public abstract class CharacterInBattle implements Named, Describable {
+public class CharacterInBattle implements Named, Describable {
 
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Battle battle;
@@ -102,7 +102,9 @@ public abstract class CharacterInBattle implements Named, Describable {
         moved = 0;
     }
 
-    public abstract void turn();
+    public void turn() {
+        // intentionally left empty
+    }
 
     public void endTurn() {
         // intentionally left empty
