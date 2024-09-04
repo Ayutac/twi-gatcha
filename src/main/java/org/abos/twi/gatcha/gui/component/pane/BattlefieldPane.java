@@ -21,12 +21,14 @@ import java.util.Optional;
 
 public class BattlefieldPane extends Pane {
 
-    protected BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
+    protected final @NotNull BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
+    protected final @NotNull BattleScreen screen;
 
     protected final @NotNull Battle battle;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
 
-    public BattlefieldPane(final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
+    public BattlefieldPane(final @NotNull BattleScreen screen, final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
+        this.screen = Objects.requireNonNull(screen);
         this.battle = Objects.requireNonNull(battle);
         if (radius < 1) {
             throw new IllegalArgumentException("Radius must be positive!");
@@ -48,6 +50,7 @@ public class BattlefieldPane extends Pane {
                 }
                 if (battle.getPlacementParty().isEmpty()) {
                     battle.start();
+                    screen.update();
                 }
                 updateGrid(mouseEvent.getX(), mouseEvent.getY());
             }

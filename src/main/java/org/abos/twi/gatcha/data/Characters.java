@@ -16,4 +16,12 @@ public interface Characters {
             new CharacterAttacks(Attacks.MINOTAUR_PUNCH, Attacks.UNERRING_KNIFE_THROW, Attacks.PASTA),
             Rarity.RARE);
 
+    CharacterBase ZOMBIE = new CharacterBase(
+            "Zombie",
+            "This was once a person…",
+            CharacterClass.MELEE,
+            new CharacterStats(10, 5, 5, 2),
+            new CharacterAttacks(Attacks.ZOMBIE_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
+            Rarity.COMMON);
+
 }

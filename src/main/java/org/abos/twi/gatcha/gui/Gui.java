@@ -37,7 +37,7 @@ public final class Gui extends Application {
 
     public void newGame() {
         final Battle battle = new Battle(10, 10, List.of());
-        battle.addWave(new Wave(0, List.of(new SlowWanderer(new CharacterModified(Characters.ERIN), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
+        battle.addWave(new Wave(0, List.of(new SlowWanderer(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
         battle.addPlayerSpawn(new Vec2i(0, 0));
         battle.addPlayerSpawn(new Vec2i(0, 1));
         battle.addPlayerSpawn(new Vec2i(1, 0));

@@ -106,6 +106,10 @@ public class Battle {
         return placementParty;
     }
 
+    public @NotNull List<CharacterInBattle> getCharacterOrder() {
+        return characterOrder;
+    }
+
     public boolean contains(final @NotNull Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }

@@ -26,4 +26,22 @@ public interface Attacks {
             3, 5, 2,
             List.of(new SimpleEffect(EffectType.HEALING, 2)));
 
+    Attack ZOMBIE_PUNCH = new Attack(
+            "Punch",
+            "Punch like a zombie.",
+            1, 1, 1,
+            List.of(new SimpleEffect(EffectType.DAMAGE, 2)));
+
+    Attack UNDEAD_CLAW = new Attack(
+            "Claw",
+            "Attack with a foul claw.",
+            1, 1, 2,
+            List.of(new SimpleEffect(EffectType.DAMAGE, 3)));
+
+    Attack UNDEAD_BITE = new Attack(
+            "Bite",
+            "A foul bite.",
+            1, 1, 3,
+            List.of(new SimpleEffect(EffectType.DAMAGE, 4)));
+
 }
