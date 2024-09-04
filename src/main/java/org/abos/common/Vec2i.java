@@ -1,5 +1,5 @@
 package org.abos.common;
 
-public record Vec2d(double x, double y) {
+public record Vec2i(int x, int y) {
     // intentionally left empty
 }

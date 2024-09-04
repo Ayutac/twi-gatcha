@@ -2,7 +2,7 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Describable;
 import org.abos.common.Named;
-import org.abos.common.Vec2d;
+import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -13,12 +13,12 @@ public abstract class CharacterInBattle implements Named, Describable {
 
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Field field;
-    protected final @NotNull Vec2d position;
+    protected final @NotNull Vec2i position;
 
     protected int health;
     protected int moved;
 
-    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Field field, final Vec2d position) {
+    public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Field field, final Vec2i position) {
         this.modified = Objects.requireNonNull(modified);
         this.field = Objects.requireNonNull(field);
         this.position = Objects.requireNonNull(position);
@@ -59,11 +59,11 @@ public abstract class CharacterInBattle implements Named, Describable {
         return modified.getDefense();
     }
 
-    public @NotNull Vec2d getPosition() {
+    public @NotNull Vec2i getPosition() {
         return position;
     }
 
-    public boolean isAt(final Vec2d position) {
+    public boolean isAt(final Vec2i position) {
         return position.equals(this.position);
     }
 

@@ -1,6 +1,6 @@
 package org.abos.twi.gatcha.core.battle;
 
-import org.abos.common.Vec2d;
+import org.abos.common.Vec2i;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -54,12 +54,12 @@ public class Field {
         return size;
     }
 
-    public boolean contains(final Vec2d position) {
+    public boolean contains(final Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }
 
     @NotNull
-    public Optional<CharacterInBattle> getCharacterAt(final Vec2d position) {
+    public Optional<CharacterInBattle> getCharacterAt(final Vec2i position) {
         for (final CharacterInBattle character : characters) {
             if (character.isAt(position)) {
                 return Optional.of(character);
