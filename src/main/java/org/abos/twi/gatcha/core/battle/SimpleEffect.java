@@ -29,7 +29,7 @@ public record SimpleEffect(EffectType type, int power) implements Effect {
             return;
         }
         switch (type) {
-            case DAMAGE -> {
+            case DAMAGE_BLUNT, DAMAGE_SLASH, DAMAGE_PIERCE -> {
                 int dmg = Math.min(1, from.getAttack() - to.get().getDefense() + power);
                 to.get().takeDamage(dmg);
             }

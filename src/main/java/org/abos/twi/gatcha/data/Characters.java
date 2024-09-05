@@ -21,7 +21,23 @@ public interface Characters {
             "This was once a person…",
             CharacterClass.MELEE,
             new CharacterStats(10, 5, 5, 2),
-            new CharacterAttacks(Attacks.ZOMBIE_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
+            new CharacterAttacks(Attacks.MEDIUM_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
+            Rarity.COMMON);
+
+    CharacterBase SKELETON = new CharacterBase(
+            "Skeleton",
+            "All that's left is bones and rage.",
+            CharacterClass.MELEE,
+            new CharacterStats(13, 5, 3, 1),
+            new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.QUICK_SLASH, Attacks.UNDEAD_BITE),
+            Rarity.COMMON);
+
+    CharacterBase SKELETON_ARCHER = new CharacterBase(
+            "Skeleton Archer",
+            "All that's left is bones and rage.",
+            CharacterClass.RANGED,
+            new CharacterStats(7, 2, 8, 1),
+            new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
             Rarity.COMMON);
 
 }
