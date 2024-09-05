@@ -9,8 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
+/**
+ * A {@link CharacterInBattle} that holds a {@link Random} instance seeded with its base.
+ * <p>
+ * This class also serves as a marker which characters should move automatically in {@link Battle}.
+ */
 public abstract class AiCharacter extends CharacterInBattle {
 
+    /**
+     * A randomizer for the character's movement and attack pattern.
+     */
     protected @NotNull Random random;
 
     public AiCharacter(@NotNull CharacterModified modified, @NotNull Battle battle, @NotNull TeamKind team, @NotNull Vec2i position) {

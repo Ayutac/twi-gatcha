@@ -5,6 +5,11 @@ import org.jetbrains.annotations.Range;
 
 import java.util.function.Supplier;
 
+/**
+ * A {@link Vec2i} supplier that delivers its elements in a grid form.
+ *
+ * @see #get()
+ */
 public class GridSupplier implements Supplier<Vec2i> {
 
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int rows;
@@ -12,6 +17,12 @@ public class GridSupplier implements Supplier<Vec2i> {
     protected @Range(from = 1, to = Integer.MAX_VALUE) int x = 0;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int y = 0;
 
+    /**
+     * Constructs a new {@link GridSupplier} in the specified size.
+     * @param rows the number of rows, at least 1
+     * @param cols the number of columns, at least 1
+     * @throws IllegalArgumentException If the size constraints are violated.
+     */
     public GridSupplier(final @Range(from = 1, to = Integer.MAX_VALUE) int rows,
                         final @Range(from = 1, to = Integer.MAX_VALUE) int cols) {
         if (rows < 1 || cols < 1) {
@@ -21,6 +32,12 @@ public class GridSupplier implements Supplier<Vec2i> {
         this.cols = cols;
     }
 
+    /**
+     * Returns points in the plane starting with (0,0), (0,1), …, (0,cols-1), (1,0), (1,1), … in this order until
+     * the number of columns and rows are depleted.
+     * @return a {@link Vec2i} with {@code 0 <= x < cols} and {@code 0 <= y < rows}
+     * @throws IllegalStateException If all grid elements have been supplied and this method is called again.
+     */
     @Override
     public Vec2i get() {
         if (y == rows) {

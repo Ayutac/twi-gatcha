@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * An AI that always moves one tile if possible.
+ * An {@link AiCharacter} that always moves one tile if possible.
  */
 public class SlowWanderer extends AiCharacter {
     public SlowWanderer(@NotNull CharacterModified modified, @NotNull Battle battle, @NotNull TeamKind team, @NotNull Vec2i position) {
@@ -24,7 +24,7 @@ public class SlowWanderer extends AiCharacter {
         // move one tile
         final var movementGraph = battle.getCharacterMovementGraph(this);
         final List<DefaultEdge> directions = new LinkedList<>(movementGraph.outgoingEdgesOf(position));
-        directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMovement());
+        directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMoved());
         if (!directions.isEmpty()) {
             final DefaultEdge e = CollectionUtil.getRandomEntry(directions, random);
             setMoved(getMoved() + (int)Math.round(movementGraph.getEdgeWeight(e)));

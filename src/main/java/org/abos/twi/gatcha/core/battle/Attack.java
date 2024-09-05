@@ -8,8 +8,22 @@ import org.jetbrains.annotations.Range;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Representation of an attack a {@link CharacterInBattle} can do. The attacks are already saved with {@link org.abos.twi.gatcha.core.CharacterBase}.
+ */
 public record Attack(String name, String description, int rangeMin, int rangeMax, int cooldown, List<Effect> effects) implements Named, Describable {
 
+    /**
+     * Constructs a new {@link Attack} instance,
+     * @param name the name of the attack, not {@code null}
+     * @param description the name of the attack, not {@code null}
+     * @param rangeMin the minimum range of the attack, not negative
+     * @param rangeMax the maximum range of the attack, not negative
+     * @param cooldown how many turns are needed to use the attack again, positive
+     * @param effects a non-{@code null} list of effects this attack has, not {@code null} and shouldn't contain {@code null}
+     * @throws NullPointerException If {@code name}, {@code description} or {@code effects} is {@code null}.
+     * @throws IllegalArgumentException If any int parameter is out of range or if {@code rangeMin > rangeMax}
+     */
     public Attack(final @NotNull String name, final @NotNull String description,
                   final @Range(from = 0, to = Integer.MAX_VALUE) int rangeMin,
                   final @Range(from = 0, to = Integer.MAX_VALUE) int rangeMax,
