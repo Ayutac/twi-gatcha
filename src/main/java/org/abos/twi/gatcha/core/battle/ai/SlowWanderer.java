@@ -24,7 +24,7 @@ public class SlowWanderer extends AiCharacter {
         // move one tile
         final var movementGraph = battle.getCharacterMovementGraph(this);
         final List<DefaultEdge> directions = new LinkedList<>(movementGraph.outgoingEdgesOf(position));
-        directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMoved());
+        directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMovement());
         if (!directions.isEmpty()) {
             final DefaultEdge e = CollectionUtil.getRandomEntry(directions, random);
             setMoved(getMoved() + (int)Math.round(movementGraph.getEdgeWeight(e)));
