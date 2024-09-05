@@ -9,9 +9,9 @@ import org.jetbrains.annotations.Range;
 import java.util.Objects;
 import java.util.Optional;
 
-public record SimpleEffect(EffectType type, int power) implements Effect {
+public record SimpleAttackEffect(EffectType type, int power) implements AttackEffect {
 
-    public SimpleEffect(final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int power) {
+    public SimpleAttackEffect(final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int power) {
         this.type = Objects.requireNonNull(type);
         if (power < 0) {
             throw new IllegalArgumentException("Power cannot be negative!");
@@ -39,7 +39,7 @@ public record SimpleEffect(EffectType type, int power) implements Effect {
                 int heal = from.getAttack() + power;
                 to.get().heal(heal);
             }
-            default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + SimpleEffect.class.getSimpleName() + "!");
+            default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + SimpleAttackEffect.class.getSimpleName() + "!");
         }
     }
 }

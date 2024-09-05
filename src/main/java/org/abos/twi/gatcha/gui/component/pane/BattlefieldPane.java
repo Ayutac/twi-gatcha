@@ -9,7 +9,7 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
-import org.abos.twi.gatcha.core.effect.Effect;
+import org.abos.twi.gatcha.core.effect.AttackEffect;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -65,7 +65,7 @@ public class BattlefieldPane extends Pane {
                     }
                     // attack with the player character
                     else if (battle.isPlayerAttack() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
-                        for (final Effect effect : battle.getSelectedAttack().effects()) {
+                        for (final AttackEffect effect : battle.getSelectedAttack().effects()) {
                             effect.apply(battle.getCurrentCharacter(), position, battle);
                         }
                         battle.playerAttackIsDone();

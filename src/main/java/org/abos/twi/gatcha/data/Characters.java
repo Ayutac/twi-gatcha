@@ -6,6 +6,8 @@ import org.abos.twi.gatcha.core.CharacterClass;
 import org.abos.twi.gatcha.core.CharacterStats;
 import org.abos.twi.gatcha.core.Rarity;
 
+import java.util.List;
+
 public interface Characters {
 
     CharacterBase ERIN = new CharacterBase(
@@ -14,6 +16,7 @@ public interface Characters {
             CharacterClass.SUPPORT,
             new CharacterStats(10, 8, 4, 3),
             new CharacterAttacks(Attacks.MINOTAUR_PUNCH, Attacks.UNERRING_KNIFE_THROW, Attacks.PASTA),
+            List.of(),
             Rarity.RARE);
 
     CharacterBase ZOMBIE = new CharacterBase(
@@ -22,6 +25,7 @@ public interface Characters {
             CharacterClass.MELEE,
             new CharacterStats(10, 5, 5, 2),
             new CharacterAttacks(Attacks.MEDIUM_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
+            List.of(),
             Rarity.COMMON);
 
     CharacterBase SKELETON = new CharacterBase(
@@ -30,6 +34,7 @@ public interface Characters {
             CharacterClass.MELEE,
             new CharacterStats(13, 5, 3, 1),
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.QUICK_SLASH, Attacks.UNDEAD_BITE),
+            List.of(),
             Rarity.COMMON);
 
     CharacterBase SKELETON_ARCHER = new CharacterBase(
@@ -38,6 +43,7 @@ public interface Characters {
             CharacterClass.RANGED,
             new CharacterStats(7, 2, 8, 1),
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
+            List.of(),
             Rarity.COMMON);
 
 }
