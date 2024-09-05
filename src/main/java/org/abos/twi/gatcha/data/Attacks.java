@@ -1,8 +1,8 @@
 package org.abos.twi.gatcha.data;
 
 import org.abos.twi.gatcha.core.battle.Attack;
-import org.abos.twi.gatcha.core.battle.effect.EffectType;
-import org.abos.twi.gatcha.core.battle.effect.SimpleEffect;
+import org.abos.twi.gatcha.core.effect.EffectType;
+import org.abos.twi.gatcha.core.effect.SimpleEffect;
 
 import java.util.List;
 

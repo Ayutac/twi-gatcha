@@ -2,7 +2,7 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Describable;
 import org.abos.common.Named;
-import org.abos.twi.gatcha.core.battle.effect.Effect;
+import org.abos.twi.gatcha.core.effect.Effect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 

@@ -1,4 +1,4 @@
-package org.abos.twi.gatcha.core.battle.effect;
+package org.abos.twi.gatcha.core.effect;
 
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
