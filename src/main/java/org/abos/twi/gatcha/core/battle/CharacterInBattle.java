@@ -16,8 +16,8 @@ public class CharacterInBattle implements Named, Describable {
 
     protected @NotNull TeamKind team;
     protected @NotNull Vec2i position;
-    protected int health;
-    protected int moved;
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int health;
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int moved;
 
     public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull TeamKind team, final @NotNull Vec2i position) {
         this.modified = Objects.requireNonNull(modified);
@@ -45,23 +45,23 @@ public class CharacterInBattle implements Named, Describable {
         return team;
     }
 
-    public int getHealth() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getHealth() {
         return health;
     }
 
-    public int getMaxHealth() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getMaxHealth() {
         return modified.getMaxHealth();
     }
 
-    public int getSpeed() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getSpeed() {
         return modified.getSpeed();
     }
 
-    public int getAttack() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack() {
         return modified.getAttack();
     }
 
-    public int getDefense() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense() {
         return modified.getDefense();
     }
 
@@ -69,11 +69,11 @@ public class CharacterInBattle implements Named, Describable {
         return modified.getInitiative();
     }
 
-    public int getMovement() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getMovement() {
         return modified.getMovement();
     }
 
-    public int getMoved() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getMoved() {
         return moved;
     }
 
