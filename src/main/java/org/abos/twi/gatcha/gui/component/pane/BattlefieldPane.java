@@ -9,7 +9,7 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
-import org.abos.twi.gatcha.core.battle.Effect;
+import org.abos.twi.gatcha.core.battle.effect.Effect;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;

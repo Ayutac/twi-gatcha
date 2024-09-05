@@ -1,6 +1,8 @@
-package org.abos.twi.gatcha.core.battle;
+package org.abos.twi.gatcha.core.battle.effect;
 
 import org.abos.common.Vec2i;
+import org.abos.twi.gatcha.core.battle.Battle;
+import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 
 public interface Effect {
 

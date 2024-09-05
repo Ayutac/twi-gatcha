@@ -1,4 +1,4 @@
-package org.abos.twi.gatcha.core.battle;
+package org.abos.twi.gatcha.core.battle.effect;
 
 public enum EffectType {
 
