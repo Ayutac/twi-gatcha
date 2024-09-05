@@ -34,7 +34,7 @@ public interface Characters {
 
     CharacterBase SKELETON_ARCHER = new CharacterBase(
             "Skeleton Archer",
-            "All that's left is bones and rage.",
+            "A skeleton, but look out for arrows.",
             CharacterClass.RANGED,
             new CharacterStats(7, 2, 8, 1),
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
