@@ -39,6 +39,9 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
                 int heal = from.getAttack() + power;
                 to.get().heal(heal);
             }
+            case INVISIBILITY -> {
+                to.get().getActiveEffects().add(new SimpleDurationEffect(EffectType.INVISIBILITY, power));
+            }
             default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + SimpleAttackEffect.class.getSimpleName() + "!");
         }
     }

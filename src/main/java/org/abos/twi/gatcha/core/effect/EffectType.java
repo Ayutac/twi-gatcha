@@ -5,6 +5,7 @@ public enum EffectType {
     DAMAGE_BLUNT,
     DAMAGE_SLASH,
     DAMAGE_PIERCE,
-    HEALING
+    HEALING,
+    INVISIBILITY
 
 }
