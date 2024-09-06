@@ -155,6 +155,15 @@ public class Battle {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
     }
 
+    public boolean isCharacterAt(final @NotNull Vec2i position) {
+        for (final CharacterInBattle character : characters) {
+            if (character.isAt(position)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isPlayerSpawnAt(final @NotNull Vec2i position) {
         return playerSpawns.contains(position);
     }
@@ -207,6 +216,10 @@ public class Battle {
     public void removeCharacter(final CharacterInBattle character) {
         characters.remove(character);
         characterOrder.remove(character);
+    }
+
+    public AbstractBaseGraph<Vec2i, DefaultEdge> getTerrainGraph() {
+        return terrainGraph;
     }
 
     public AbstractBaseGraph<Vec2i, DefaultEdge> getCharacterMovementGraph(final @Nullable CharacterInBattle character) {

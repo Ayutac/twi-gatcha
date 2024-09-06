@@ -27,7 +27,7 @@ public class SlowWanderer extends AiCharacter {
         directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMovement());
         if (!directions.isEmpty()) {
             final DefaultEdge e = CollectionUtil.getRandomEntry(directions, random);
-            setMoved(getMoved() + (int)Math.round(movementGraph.getEdgeWeight(e)));
+            setMoved((int)Math.round(movementGraph.getEdgeWeight(e)));
             setPosition(movementGraph.getEdgeTarget(e));
         }
     }

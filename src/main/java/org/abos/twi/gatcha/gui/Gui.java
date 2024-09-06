@@ -9,7 +9,7 @@ import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.battle.Wave;
-import org.abos.twi.gatcha.core.battle.ai.SlowWanderer;
+import org.abos.twi.gatcha.core.battle.ai.DirectRandomAttacker;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
@@ -37,7 +37,7 @@ public final class Gui extends Application {
 
     public void newGame() {
         final Battle battle = new Battle(10, 10, List.of());
-        battle.addWave(new Wave(0, List.of(new SlowWanderer(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
+        battle.addWave(new Wave(0, List.of(new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
         battle.addPlayerSpawn(new Vec2i(0, 0));
         battle.addPlayerSpawn(new Vec2i(0, 1));
         battle.addPlayerSpawn(new Vec2i(1, 0));
