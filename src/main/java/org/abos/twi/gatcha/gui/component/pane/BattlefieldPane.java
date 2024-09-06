@@ -1,5 +1,6 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -24,6 +25,7 @@ public class BattlefieldPane extends Pane {
 
     protected final @NotNull BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
     protected final @NotNull BattleScreen screen;
+    protected final @NotNull Tooltip tooltip = new Tooltip();
 
     protected final @NotNull Battle battle;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
@@ -38,6 +40,7 @@ public class BattlefieldPane extends Pane {
         final double width = 2 * radius * this.battle.getWidth() + (this.battle.getHeight() > 1 ? radius : 0);
         final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
         addHexagons();
+        Tooltip.install(this, tooltip);
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() != MouseButton.PRIMARY) {
@@ -115,6 +118,7 @@ public class BattlefieldPane extends Pane {
                 else {
                     other.getValue().setFill(Color.TRANSPARENT);
                 }
+                tooltip.hide();
             }
             else {
                 switch (character.get().getTeam()) {
@@ -126,6 +130,13 @@ public class BattlefieldPane extends Pane {
         }
         if (hexagon.isPresent()) {
             hexagon.get().setFill(Color.ORANGE);
+            final Optional<CharacterInBattle> character = battle.getCharacterAt(hexagons.getKey(hexagon.get()));
+            if (character.isPresent()) {
+                tooltip.setText(String.format("%s (%d/%d)", character.get().getName(), character.get().getHealth(), character.get().getMaxHealth()));
+            }
+            else {
+                tooltip.hide();
+            }
         }
     }
 
