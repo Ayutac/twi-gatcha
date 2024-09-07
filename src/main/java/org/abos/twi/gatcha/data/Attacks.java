@@ -59,6 +59,12 @@ public interface Attacks {
             2, 4, 1,
             List.of(new SimpleAttackEffect(EffectType.DAMAGE_SLASH, 2)));
 
+    Attack BONE_FRACTURE = new Attack(
+            "Bone Fracture",
+            "Directly damages the bones, bypassing armor.",
+            1, 1, 5,
+            List.of(new SimpleAttackEffect(EffectType.DAMAGE_IGNORES_ARMOR, 5)));
+
     Attack ICE_SHARD = new Attack(
             "[Ice Shard]",
             "Shoot a frozen bit of water at your target.",
@@ -70,7 +76,7 @@ public interface Attacks {
             "Frost Armor",
             "Cover yourself in a layer of ice.",
             0, 0, 5,
-            List.of(new DurationAttackEffect(EffectType.BUFF_ARMOR, 5, 3)));
+            List.of(new DurationAttackEffect(EffectType.BUFF_DEFENSE, 5, 3)));
 
     Attack FROZEN_WIND = new Attack(
             "Frozen Wind",
@@ -78,6 +84,18 @@ public interface Attacks {
             2, 4, 5,
             List.of(new AoeAttackEffect(EffectType.DAMAGE_FROST, 2, 0, 1),
                     new AoeDurationAttackEffect(EffectType.DEBUFF_SPEED, 2, 3, 0, 1)));
+
+    Attack QUICK_MOVEMENT = new Attack(
+            "Quick Movement",
+            "Be faster for a while.",
+            0, 0, 5,
+            List.of(new DurationAttackEffect(EffectType.BUFF_SPEED, 7, 3)));
+
+    Attack SIDE_STEP = new Attack(
+            "Side Step",
+            "Dodge the next enemy attack.",
+            0, 0, 5,
+            List.of(new SimpleAttackEffect(EffectType.INVULNERABILITY, 3)));
 
     Attack UNDEAD_CLAW = new Attack(
             "Claw",

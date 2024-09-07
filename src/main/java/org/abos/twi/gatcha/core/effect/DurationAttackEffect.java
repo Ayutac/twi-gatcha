@@ -38,7 +38,7 @@ public class DurationAttackEffect extends SimpleAttackEffect {
         }
         // changes here should be reflected in AoeDurationAttackEffect
         switch (type) {
-            case BUFF_ARMOR, DEBUFF_SPEED -> {
+            case BUFF_DEFENSE, BUFF_ATTACK, BUFF_SPEED, DEBUFF_SPEED -> {
                 to.get().getActiveEffects().add(new DurationEffect(type, power, duration));
             }
             default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + DurationAttackEffect.class.getSimpleName() + "!");

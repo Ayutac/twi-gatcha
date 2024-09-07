@@ -60,6 +60,10 @@ public class AoeAttackEffect extends SimpleAttackEffect {
                     final int dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power) * 2;
                     aoeTarget.takeDamage(dmg);
                 }
+                case DAMAGE_IGNORES_ARMOR -> {
+                    final int dmg = from.getAttack() + power;
+                    aoeTarget.takeDamage(dmg);
+                }
                 case DAMAGE_FROST -> {
                     final int dmg = Math.max(1, (from.getAttack() + power) / 3);
                     aoeTarget.takeDamage(dmg);
@@ -70,6 +74,9 @@ public class AoeAttackEffect extends SimpleAttackEffect {
                 }
                 case INVISIBILITY -> {
                     aoeTarget.getActiveEffects().add(new SimpleDurationEffect(EffectType.INVISIBILITY, power));
+                }
+                case INVULNERABILITY -> {
+                    aoeTarget.getActiveEffects().add(new SimpleDurationEffect(EffectType.INVULNERABILITY, power));
                 }
                 default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + AoeAttackEffect.class.getSimpleName() + "!");
             }

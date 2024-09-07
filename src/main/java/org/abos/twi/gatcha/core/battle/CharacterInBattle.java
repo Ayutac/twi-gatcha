@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Range;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CharacterInBattle implements Named, Describable {
 
@@ -72,13 +73,19 @@ public class CharacterInBattle implements Named, Describable {
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack() {
-        return modified.getAttack();
+        int attack = modified.getAttack();
+        for (final Effect effect : activeEffects) {
+            if (effect.getEffectType() == EffectType.BUFF_ATTACK && effect instanceof DurationEffect buff) {
+                attack += buff.getPower();
+            }
+        }
+        return attack;
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense() {
         int defense = modified.getDefense();
         for (final Effect effect : activeEffects) {
-            if (effect.getEffectType() == EffectType.BUFF_ARMOR && effect instanceof DurationEffect buff) {
+            if (effect.getEffectType() == EffectType.BUFF_DEFENSE && effect instanceof DurationEffect buff) {
                 defense += buff.getPower();
             }
         }
@@ -123,6 +130,11 @@ public class CharacterInBattle implements Named, Describable {
     public void takeDamage(final @Range(from = 0, to = Integer.MAX_VALUE) int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount of damage must be positive!");
+        }
+        Optional<Effect> invulnerability = activeEffects.stream().filter(effect -> effect.getEffectType() == EffectType.INVULNERABILITY).findFirst();
+        if (invulnerability.isPresent()) {
+            activeEffects.remove(invulnerability.get());
+            return;
         }
         health = health <= amount ? 0 : health - amount;
         if (health == 0) {

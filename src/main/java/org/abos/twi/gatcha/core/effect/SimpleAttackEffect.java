@@ -43,6 +43,10 @@ public class SimpleAttackEffect implements AttackEffect {
                 final int dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power) * 2;
                 to.get().takeDamage(dmg);
             }
+            case DAMAGE_IGNORES_ARMOR -> {
+                final int dmg = from.getAttack() + power;
+                to.get().takeDamage(dmg);
+            }
             case DAMAGE_FROST -> {
                 final int dmg = Math.max(1, (from.getAttack() + power) / 3);
                 to.get().takeDamage(dmg);
@@ -53,6 +57,9 @@ public class SimpleAttackEffect implements AttackEffect {
             }
             case INVISIBILITY -> {
                 to.get().getActiveEffects().add(new SimpleDurationEffect(EffectType.INVISIBILITY, power));
+            }
+            case INVULNERABILITY -> {
+                to.get().getActiveEffects().add(new SimpleDurationEffect(EffectType.INVULNERABILITY, power));
             }
             default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + SimpleAttackEffect.class.getSimpleName() + "!");
         }
