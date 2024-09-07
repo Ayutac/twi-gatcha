@@ -19,6 +19,42 @@ public interface Characters {
             List.of(),
             Rarity.RARE);
 
+    CharacterBase PISCES = new CharacterBase(
+            "Pisces",
+            "A mage, striving to change peoples mind about his infamous passion. Seems to have a constantly running nose.",
+            CharacterClass.MAGIC,
+            new CharacterStats(9, 19, 9, 7),
+            new CharacterAttacks(Attacks.BONE_DART, Attacks.INVISIBILITY, Attacks.BONE_FRACTURE),
+            List.of(),
+            Rarity.SUPER_RARE);
+
+    CharacterBase CERIA = new CharacterBase(
+            "Ceria Springwalker",
+            "The cheerful and infamous Ice Squirrel, eyes open for any kind of treasure.",
+            CharacterClass.MAGIC,
+            new CharacterStats(10, 9, 10, 7),
+            new CharacterAttacks(Attacks.ICE_SHARD, Attacks.FROST_ARMOR, Attacks.FROZEN_WIND),
+            List.of(),
+            Rarity.SUPER_RARE);
+
+    CharacterBase KSMVR = new CharacterBase(
+            "Ksmvr",
+            "Former Prognugator of the Free Hive. Facing the shame of his failings, he now learns to fit in society.",
+            CharacterClass.SPECIALIST,
+            new CharacterStats(10, 15, 9, 9),
+            new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.QUICK_MOVEMENT, Attacks.SIDE_STEP),
+            List.of(),
+            Rarity.SUPER_RARE);
+
+    CharacterBase YVLON = new CharacterBase(
+            "Yvlon Byres",
+            "The young daughter of House Byres, wielding silver and bland conversations against evil.",
+            CharacterClass.MELEE,
+            new CharacterStats(16, 5, 9, 16),
+            new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.KEEN_EDGE, Attacks.IGNORE_PAIN),
+            List.of(),
+            Rarity.SUPER_RARE);
+
     CharacterBase ZOMBIE = new CharacterBase(
             "Zombie",
             "This was once a person…",

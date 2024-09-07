@@ -103,6 +103,18 @@ public interface Attacks {
             0, 0, 5,
             List.of(new DurationAttackEffect(EffectType.BUFF_HEALTH, 15, 3)));
 
+    Attack KEEN_EDGE = new Attack(
+            "Keen Edge",
+            "Use the sharp end of your weapon.",
+            0, 0, 5,
+            List.of(new DurationAttackEffect(EffectType.BUFF_ATTACK, 5, 3)));
+
+    Attack INVISIBILITY = new Attack(
+            "[Invisibility]",
+            "Become invisible.",
+            0, 0, 5,
+            List.of(new SimpleAttackEffect(EffectType.INVISIBILITY, 3)));
+
     Attack UNDEAD_CLAW = new Attack(
             "Claw",
             "Attack with a foul claw.",
