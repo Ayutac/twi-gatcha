@@ -32,11 +32,15 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
         }
         switch (type) {
             case DAMAGE_BLUNT, DAMAGE_SLASH, DAMAGE_PIERCE -> {
-                int dmg = Math.min(1, from.getAttack() - to.get().getDefense() + power);
+                final int dmg = Math.min(1, from.getAttack() - to.get().getDefense() + power);
+                to.get().takeDamage(dmg);
+            }
+            case DAMAGE_FROST -> {
+                final int dmg = Math.max(1, (from.getAttack() + power) / 3);
                 to.get().takeDamage(dmg);
             }
             case HEALING -> {
-                int heal = from.getAttack() + power;
+                final int heal = from.getAttack() + power;
                 to.get().heal(heal);
             }
             case INVISIBILITY -> {
