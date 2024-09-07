@@ -17,6 +17,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public class BattlefieldPane extends Pane {
 
     protected final @NotNull BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
     protected final @NotNull BattleScreen screen;
-    protected final @NotNull Tooltip tooltip = new Tooltip();
+    protected final @NotNull Map<Hexagon, Tooltip> tooltips = new HashMap<>();
 
     protected final @NotNull Battle battle;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
@@ -40,7 +41,6 @@ public class BattlefieldPane extends Pane {
         final double width = 2 * radius * this.battle.getWidth() + (this.battle.getHeight() > 1 ? radius : 0);
         final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
         addHexagons();
-        Tooltip.install(this, tooltip);
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() != MouseButton.PRIMARY) {
@@ -91,6 +91,9 @@ public class BattlefieldPane extends Pane {
                         radius + yOffset * y));
                 hexagons.put(new Vec2i(x, y), hexagon);
                 children.add(hexagon);
+                final Tooltip tooltip = new Tooltip("empty");
+                Tooltip.install(hexagon, tooltip);
+                tooltips.put(hexagon, tooltip);
             }
         }
     }
@@ -118,7 +121,7 @@ public class BattlefieldPane extends Pane {
                 else {
                     other.getValue().setFill(Color.TRANSPARENT);
                 }
-                tooltip.hide();
+                tooltips.get(other.getValue()).setText("empty");
             }
             else {
                 switch (character.get().getTeam()) {
@@ -126,16 +129,14 @@ public class BattlefieldPane extends Pane {
                     case PLAYER -> other.getValue().setFill(Color.BLUE);
                     default -> throw new IllegalStateException("Unhandled enum encountered!");
                 }
+                tooltips.get(other.getValue()).setText(String.format("%s (%d/%d)", character.get().getName(), character.get().getHealth(), character.get().getMaxHealth()));
             }
         }
         if (hexagon.isPresent()) {
             hexagon.get().setFill(Color.ORANGE);
             final Optional<CharacterInBattle> character = battle.getCharacterAt(hexagons.getKey(hexagon.get()));
             if (character.isPresent()) {
-                tooltip.setText(String.format("%s (%d/%d)", character.get().getName(), character.get().getHealth(), character.get().getMaxHealth()));
-            }
-            else {
-                tooltip.hide();
+                tooltips.get(hexagon.get()).setText(String.format("%s (%d/%d)", character.get().getName(), character.get().getHealth(), character.get().getMaxHealth()));
             }
         }
     }
