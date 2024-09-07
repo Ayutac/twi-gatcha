@@ -6,6 +6,8 @@ public enum EffectType {
     DAMAGE_SLASH,
     DAMAGE_PIERCE,
     DAMAGE_FROST,
+    BUFF_ARMOR,
+    DEBUFF_SPEED,
     HEALING,
     INVISIBILITY
 

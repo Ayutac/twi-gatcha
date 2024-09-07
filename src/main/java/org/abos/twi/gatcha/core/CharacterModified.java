@@ -49,10 +49,10 @@ public class CharacterModified implements Named, Describable {
     }
 
     public double getInitiative() {
-        return base.stats().initiative();
+        return getSpeed() / 4d;
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMovement() {
-        return base.stats().movement();
+        return (int)Math.round(getInitiative());
     }
 }

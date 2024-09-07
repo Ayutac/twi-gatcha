@@ -4,6 +4,7 @@ import org.abos.common.Describable;
 import org.abos.common.Named;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.effect.BuffEffect;
 import org.abos.twi.gatcha.core.effect.Effect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.core.effect.SimpleDurationEffect;
@@ -61,7 +62,13 @@ public class CharacterInBattle implements Named, Describable {
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getSpeed() {
-        return modified.getSpeed();
+        int speed = modified.getSpeed();
+        for (final Effect effect : activeEffects) {
+            if (effect.getEffectType() == EffectType.DEBUFF_SPEED && effect instanceof BuffEffect debuff) {
+                speed -= debuff.getPower();
+            }
+        }
+        return Math.max(0, speed);
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack() {
@@ -69,15 +76,21 @@ public class CharacterInBattle implements Named, Describable {
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense() {
-        return modified.getDefense();
+        int defense = modified.getDefense();
+        for (final Effect effect : activeEffects) {
+            if (effect.getEffectType() == EffectType.BUFF_ARMOR && effect instanceof BuffEffect buff) {
+                defense += buff.getPower();
+            }
+        }
+        return defense;
     }
 
     public double getInitiative() {
-        return modified.getInitiative();
+        return getSpeed() / 4d;
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMovement() {
-        return modified.getMovement();
+        return (int)Math.round(getInitiative());
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMoved() {
