@@ -37,12 +37,22 @@ public final class Gui extends Application {
 
     public void newGame() {
         final Battle battle = new Battle(10, 10, List.of());
-        battle.addWave(new Wave(0, List.of(new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)))));
+        battle.addWave(new Wave(0, List.of(
+                new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)),
+                new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 8)),
+                new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 7)),
+                new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 5)))));
         battle.addPlayerSpawn(new Vec2i(0, 0));
         battle.addPlayerSpawn(new Vec2i(0, 1));
+        battle.addPlayerSpawn(new Vec2i(0, 2));
         battle.addPlayerSpawn(new Vec2i(1, 0));
         battle.addPlayerSpawn(new Vec2i(1, 1));
-        battle.startPlacement(List.of(new CharacterModified(Characters.ERIN)));
+        battle.addPlayerSpawn(new Vec2i(1, 2));
+        battle.startPlacement(List.of(
+                new CharacterModified(Characters.PISCES),
+                new CharacterModified(Characters.CERIA),
+                new CharacterModified(Characters.KSMVR),
+                new CharacterModified(Characters.YVLON)));
         stage.setScene(battleScreenScene);
         battleScreen.setBattle(battle);
     }

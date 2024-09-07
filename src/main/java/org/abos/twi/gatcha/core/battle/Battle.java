@@ -297,7 +297,7 @@ public class Battle {
         final var moveGraph = getCharacterMovementGraph(character);
         final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(character.position);
         for (final Vec2i position : moveGraph.vertexSet()) {
-            double weight = paths.getPath(position).getWeight();
+            double weight = paths.getWeight(position);
             if (weight <= character.getMovement()) {
                 possiblePlayerFields.put(position, weight);
             }

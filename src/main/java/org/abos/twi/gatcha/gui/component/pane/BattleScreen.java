@@ -74,7 +74,9 @@ public final class BattleScreen extends StackPane {
 
     public void update() {
         if (battle != null && battle.getPhase().ordinal() > BattlePhase.PLACEMENT.ordinal()) {
-            final String text = battle.getCharacterOrder().stream().map(Named::getName).collect(Collectors.joining(", "));
+            final String text = battle.getCharacterOrder().stream()
+                    .map(character -> String.format("%s (%d/%d)", character.getName(), character.getHealth(), character.getMaxHealth()))
+                    .collect(Collectors.joining(", "));
             turnOrder.setText(text);
             if (battle.isPlayerAttack() && battle.getCurrentCharacter() != null) {
                 final CharacterAttacks attacks = battle.getCurrentCharacter().getModified().getBase().attacks();
