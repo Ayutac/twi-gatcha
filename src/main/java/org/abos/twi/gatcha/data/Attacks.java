@@ -50,11 +50,17 @@ public interface Attacks {
             2, 6, 3,
             List.of(new SimpleAttackEffect(EffectType.DAMAGE_PIERCE, 3)));
 
+    Attack BONE_DART = new Attack(
+            "[Bone Dart]",
+            "Shoot a bit of sharp bone at your target.",
+            2, 4, 1,
+            List.of(new SimpleAttackEffect(EffectType.DAMAGE_SLASH, 1)));
+
     Attack ICE_SHARD = new Attack(
             "[Ice Shard]",
             "Shoot a frozen bit of water at your target.",
             2, 4, 1,
-            List.of(new SimpleAttackEffect(EffectType.DAMAGE_PIERCE, 1),
+            List.of(new SimpleAttackEffect(EffectType.DAMAGE_SLASH, 1),
                     new SimpleAttackEffect(EffectType.DAMAGE_FROST, 1)));
 
     Attack UNDEAD_CLAW = new Attack(
