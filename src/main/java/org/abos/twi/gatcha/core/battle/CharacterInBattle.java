@@ -7,6 +7,7 @@ import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.effect.DurationEffect;
 import org.abos.twi.gatcha.core.effect.Effect;
 import org.abos.twi.gatcha.core.effect.EffectType;
+import org.abos.twi.gatcha.core.effect.HealthDurationEffect;
 import org.abos.twi.gatcha.core.effect.SimpleDurationEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -136,7 +137,20 @@ public class CharacterInBattle implements Named, Describable {
             activeEffects.remove(invulnerability.get());
             return;
         }
-        health = health <= amount ? 0 : health - amount;
+        int remainingAmount = amount;
+        for (final Effect effect : activeEffects) {
+            if (effect instanceof HealthDurationEffect hde && hde.getHealth() > 0) {
+                if (hde.getHealth() >= remainingAmount) {
+                    hde.setHealth(hde.getHealth() - remainingAmount);
+                    remainingAmount = 0;
+                }
+                else {
+                    remainingAmount -= hde.getHealth();
+                    hde.setHealth(0);
+                }
+            }
+        }
+        health = health <= remainingAmount ? 0 : health - remainingAmount;
         if (health == 0) {
             battle.removeCharacter(this);
         }

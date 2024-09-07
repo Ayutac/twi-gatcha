@@ -33,8 +33,11 @@ public class AoeDurationAttackEffect extends AoeAttackEffect {
         for (final CharacterInBattle aoeTarget : aoeTargets) {
             // changes here should be reflected in DurationAttackEffect
             switch (type) {
-                case BUFF_DEFENSE, BUFF_ATTACK, BUFF_SPEED, DEBUFF_SPEED -> {
+                case BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED -> {
                     aoeTarget.getActiveEffects().add(new DurationEffect(type, power, duration));
+                }
+                case BUFF_HEALTH -> {
+                    aoeTarget.getActiveEffects().add(new HealthDurationEffect(type, power, duration));
                 }
                 default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + AoeDurationAttackEffect.class.getSimpleName() + "!");
             }

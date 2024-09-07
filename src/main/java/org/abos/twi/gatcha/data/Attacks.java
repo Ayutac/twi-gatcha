@@ -97,6 +97,12 @@ public interface Attacks {
             0, 0, 5,
             List.of(new SimpleAttackEffect(EffectType.INVULNERABILITY, 3)));
 
+    Attack IGNORE_PAIN = new Attack(
+            "Ignore Pain",
+            "Just ignore it!",
+            0, 0, 5,
+            List.of(new DurationAttackEffect(EffectType.BUFF_HEALTH, 15, 3)));
+
     Attack UNDEAD_CLAW = new Attack(
             "Claw",
             "Attack with a foul claw.",
