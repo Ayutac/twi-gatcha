@@ -1,7 +1,9 @@
 package org.abos.twi.gatcha.data;
 
 import org.abos.twi.gatcha.core.battle.Attack;
-import org.abos.twi.gatcha.core.effect.BuffAttackEffect;
+import org.abos.twi.gatcha.core.effect.AoeAttackEffect;
+import org.abos.twi.gatcha.core.effect.AoeDurationAttackEffect;
+import org.abos.twi.gatcha.core.effect.DurationAttackEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.core.effect.SimpleAttackEffect;
 
@@ -68,14 +70,14 @@ public interface Attacks {
             "Frost Armor",
             "Cover yourself in a layer of ice.",
             0, 0, 5,
-            List.of(new BuffAttackEffect(EffectType.BUFF_ARMOR, 5, 3)));
+            List.of(new DurationAttackEffect(EffectType.BUFF_ARMOR, 5, 3)));
 
     Attack FROZEN_WIND = new Attack(
             "Frozen Wind",
             "Cover yourself in a layer of ice.",
             2, 4, 5,
-            List.of(// TODO AoE dam
-                    new BuffAttackEffect(EffectType.DEBUFF_SPEED, 2, 3)));
+            List.of(new AoeAttackEffect(EffectType.DAMAGE_FROST, 2, 0, 1),
+                    new AoeDurationAttackEffect(EffectType.DEBUFF_SPEED, 2, 3, 0, 1)));
 
     Attack UNDEAD_CLAW = new Attack(
             "Claw",

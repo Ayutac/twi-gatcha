@@ -9,7 +9,10 @@ import org.jetbrains.annotations.Range;
 import java.util.Objects;
 import java.util.Optional;
 
-public record SimpleAttackEffect(EffectType type, int power) implements AttackEffect {
+public class SimpleAttackEffect implements AttackEffect {
+
+    protected final @NotNull EffectType type;
+    protected final @Range(from = 0, to = Integer.MAX_VALUE) int power;
 
     public SimpleAttackEffect(final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int power) {
         this.type = Objects.requireNonNull(type);
@@ -21,7 +24,7 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
 
     @Override
     public @NotNull EffectType getEffectType() {
-        return type();
+        return type;
     }
 
     @Override
@@ -30,6 +33,7 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
         if (to.isEmpty()) {
             return;
         }
+        // changes here should be reflected in AoeAttackEffect
         switch (type) {
             case DAMAGE_BLUNT, DAMAGE_SLASH -> {
                 final int dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power);
