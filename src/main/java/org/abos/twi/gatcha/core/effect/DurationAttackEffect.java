@@ -26,11 +26,6 @@ public class DurationAttackEffect extends SimpleAttackEffect {
     }
 
     @Override
-    public @NotNull EffectType getEffectType() {
-        return type;
-    }
-
-    @Override
     public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
         final Optional<CharacterInBattle> to = battle.getCharacterAt(target);
         if (to.isEmpty()) {
