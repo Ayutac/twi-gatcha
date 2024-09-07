@@ -32,7 +32,7 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
         }
         switch (type) {
             case DAMAGE_BLUNT, DAMAGE_SLASH, DAMAGE_PIERCE -> {
-                final int dmg = Math.min(1, from.getAttack() - to.get().getDefense() + power);
+                final int dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power);
                 to.get().takeDamage(dmg);
             }
             case DAMAGE_FROST -> {
