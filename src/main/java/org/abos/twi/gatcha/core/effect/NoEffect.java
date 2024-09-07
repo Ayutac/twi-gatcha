@@ -17,7 +17,7 @@ public final class NoEffect implements AttackEffect {
 
     @Override
     public @NotNull EffectType getEffectType() {
-        return null;
+        return type;
     }
 
     @Override
