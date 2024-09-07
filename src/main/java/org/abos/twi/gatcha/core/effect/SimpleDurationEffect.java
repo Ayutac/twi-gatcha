@@ -21,7 +21,7 @@ public class SimpleDurationEffect implements Effect {
     }
 
     @Override
-    public EffectType getEffectType() {
+    public @NotNull EffectType getEffectType() {
         return type;
     }
 

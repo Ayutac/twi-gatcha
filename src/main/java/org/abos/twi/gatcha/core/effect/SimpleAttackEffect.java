@@ -20,7 +20,7 @@ public record SimpleAttackEffect(EffectType type, int power) implements AttackEf
     }
 
     @Override
-    public EffectType getEffectType() {
+    public @NotNull EffectType getEffectType() {
         return type();
     }
 

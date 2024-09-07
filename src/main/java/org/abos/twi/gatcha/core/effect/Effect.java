@@ -1,7 +1,9 @@
 package org.abos.twi.gatcha.core.effect;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Effect {
 
-    EffectType getEffectType();
+    @NotNull EffectType getEffectType();
 
 }
