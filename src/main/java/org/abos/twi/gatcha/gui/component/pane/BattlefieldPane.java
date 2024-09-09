@@ -14,6 +14,7 @@ import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.effect.AttackEffect;
 import org.abos.twi.gatcha.gui.Gui;
+import org.abos.twi.gatcha.gui.component.CharacterView;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class BattlefieldPane extends Pane {
     protected final @NotNull BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
     protected final @NotNull BattleScreen screen;
     protected final @NotNull Map<Hexagon, Tooltip> tooltips = new HashMap<>();
+    protected final @NotNull Map<CharacterInBattle, CharacterView> characterViews = new HashMap<>();
 
     protected final @NotNull Battle battle;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
@@ -55,7 +58,12 @@ public class BattlefieldPane extends Pane {
                 if (battle.getPhase() == BattlePhase.PLACEMENT) {
                     if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
                         CharacterModified character = battle.getPlacementParty().poll();
-                        battle.placePlayerCharacterAt(character, position);
+                        final CharacterInBattle cib = battle.placePlayerCharacterAt(character, position);
+                        final CharacterView characterView = new CharacterView(character.getBase(), true);
+                        characterView.setX(hexagon.get().getLeftUpperCorner().x());
+                        characterView.setY(hexagon.get().getLeftUpperCorner().y());
+                        BattlefieldPane.this.characterViews.put(cib, characterView);
+                        BattlefieldPane.this.getChildren().add(characterView);
                     }
                     if (battle.getPlacementParty().isEmpty()) {
                         battle.start();
@@ -67,6 +75,9 @@ public class BattlefieldPane extends Pane {
                     if (battle.isPlayerMove() && battle.getCurrentCharacter() != null && battle.getPossiblePlayerFields().containsKey(position)) {
                         battle.getCurrentCharacter().setMoved((int) Math.round(battle.getPossiblePlayerFields().get(position)));
                         battle.getCurrentCharacter().setPosition(position);
+                        final CharacterView characterView = characterViews.get(battle.getCurrentCharacter());
+                        characterView.setX(hexagon.get().getLeftUpperCorner().x());
+                        characterView.setY(hexagon.get().getLeftUpperCorner().y());
                         battle.playerMoveIsDone();
                         screen.update();
                     }
@@ -103,6 +114,19 @@ public class BattlefieldPane extends Pane {
     }
 
     protected void updateGrid(double mouseX, double mouseY) {
+        // remove downed character views
+        if (battle.getPhase().ordinal() >= BattlePhase.IN_PROGRESS.ordinal()) {
+            final Iterator<CharacterInBattle> it = characterViews.keySet().iterator();
+            CharacterInBattle current = null;
+            while (it.hasNext()) {
+                current = it.next();
+                if (!battle.getCharacterOrder().contains(current)) {
+                    getChildren().remove(characterViews.get(current));
+                    it.remove();
+                }
+            }
+        }
+        // update the hexagons
         final Optional<Hexagon> hexagon = findHexagonAt(mouseX, mouseY);
         for (final Map.Entry<Vec2i, Hexagon> other : hexagons.entrySet()) {
             if (hexagon.isPresent() && hexagon.get() == other.getValue()) {

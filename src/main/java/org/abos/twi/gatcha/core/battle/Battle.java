@@ -193,14 +193,16 @@ public class Battle {
         this.placementParty.addAll(party);
     }
 
-    public void placePlayerCharacterAt(final @NotNull CharacterModified character, final @NotNull Vec2i position) {
+    public CharacterInBattle placePlayerCharacterAt(final @NotNull CharacterModified character, final @NotNull Vec2i position) {
         if (!isPlayerSpawnAt(position)) {
             throw new IllegalArgumentException("Position cannot be used!");
         }
         if (!getCharacterMovementGraph(null).containsVertex(position)) {
             throw new IllegalArgumentException("Position is already taken!");
         }
-        characters.add(new CharacterInBattle(character, this, TeamKind.PLAYER, position));
+        final CharacterInBattle cib = new CharacterInBattle(character, this, TeamKind.PLAYER, position);
+        characters.add(cib);
+        return cib;
     }
 
     @NotNull

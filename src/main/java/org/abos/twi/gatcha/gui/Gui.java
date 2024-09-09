@@ -2,8 +2,10 @@ package org.abos.twi.gatcha.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.abos.common.Vec2i;
+import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
@@ -14,12 +16,18 @@ import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public final class Gui extends Application {
 
     public static final int DEFAULT_WIDTH = 1280;
     public static final int DEFAULT_HEIGHT = 720;
+    public static final Map<CharacterBase, Image> IMAGE_MAP;
+    public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final BattleScreen battleScreen = new BattleScreen(this);
@@ -27,6 +35,23 @@ public final class Gui extends Application {
     private Stage stage;
 
     private Player player;
+
+    static {
+        Map<CharacterBase, Image> imageMap = new HashMap<>();
+        Map<CharacterBase, Image> imageHexMap = new HashMap<>();
+        try {
+            for (final Field characterField : Characters.class.getFields()) {
+                final CharacterBase character = (CharacterBase) characterField.get(null);
+                imageMap.put(character, new Image("/textures/characters/" + character.imageName()));
+                imageHexMap.put(character, new Image("/textures/hexagons/" + character.imageName()));
+            }
+        }
+        catch (IllegalAccessException ex) {
+            Logger.getGlobal().warning("Couldn't access characters!");
+        }
+        IMAGE_MAP = Map.copyOf(imageMap);
+        IMAGE_HEX_MAP = Map.copyOf(imageHexMap);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
