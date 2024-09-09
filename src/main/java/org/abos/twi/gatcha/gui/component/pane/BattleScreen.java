@@ -1,5 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -33,6 +35,8 @@ public final class BattleScreen extends BorderPane {
         this.gui = Objects.requireNonNull(gui);
         // turn order at the top
         final VBox topBox = new VBox(new Label("Turn Order"), turnOrder);
+        topBox.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(topBox, new Insets(1, 0, 5, 0));
         setTop(topBox);
         // group the radio buttons
         final ToggleGroup attackGroup = new ToggleGroup();
@@ -45,8 +49,11 @@ public final class BattleScreen extends BorderPane {
         special2AttackButton.selectedProperty().addListener((obs, prev, now) -> update());
         // add them to the bottom
         attackBox = new HBox(normalAttackButton, special1AttackButton, special2AttackButton);
+        attackBox.setAlignment(Pos.CENTER);
         attackBox.setVisible(false);
         final VBox bottomBox = new VBox(new Label("Attack"), attackBox);
+        bottomBox.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(bottomBox, new Insets(5, 0, 1, 0));
         setBottom(bottomBox);
     }
 
@@ -58,7 +65,9 @@ public final class BattleScreen extends BorderPane {
         this.battle = battle;
         if (this.battle != null) {
             battlefieldPane = new BattlefieldPane(this, battle, 30);
-            setCenter(battlefieldPane);
+            final HBox box = new HBox(battlefieldPane);
+            box.setAlignment(Pos.CENTER);
+            setCenter(box);
         }
         else {
             battlefieldPane = null;
