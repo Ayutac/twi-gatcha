@@ -102,4 +102,15 @@ public class Player implements Named {
         return new ArrayList<>(rooster.values());
     }
 
+    public boolean hasCharacter(final @NotNull CharacterBase character) {
+        return rooster.containsKey(character);
+    }
+
+    public void addToRooster(final @NotNull CharacterBase character) {
+        if (rooster.containsKey(character)) {
+            throw new IllegalArgumentException("Player already owns this character!");
+        }
+        rooster.put(character, new CharacterModified(character));
+    }
+
 }

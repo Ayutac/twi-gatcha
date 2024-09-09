@@ -6,13 +6,13 @@ import org.abos.twi.gatcha.gui.Gui;
 
 public class CharacterView extends ImageView {
 
-    public CharacterView(CharacterBase character, boolean hex) {
+    public CharacterView(CharacterBase character, boolean hex, double size) {
         super(hex ? Gui.IMAGE_HEX_MAP.get(character) : Gui.IMAGE_MAP.get(character));
         if (hex) {
-            setFitWidth(60d);
+            setFitWidth(size);
         }
         else {
-            setFitHeight(680d);
+            setFitHeight(size);
         }
         setPreserveRatio(true);
         setSmooth(true);

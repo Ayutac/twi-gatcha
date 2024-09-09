@@ -1,7 +1,6 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -13,7 +12,6 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.effect.AttackEffect;
-import org.abos.twi.gatcha.gui.Gui;
 import org.abos.twi.gatcha.gui.component.CharacterView;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
@@ -59,7 +57,7 @@ public class BattlefieldPane extends Pane {
                     if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
                         CharacterModified character = battle.getPlacementParty().poll();
                         final CharacterInBattle cib = battle.placePlayerCharacterAt(character, position);
-                        final CharacterView characterView = new CharacterView(character.getBase(), true);
+                        final CharacterView characterView = new CharacterView(character.getBase(), true, 60d);
                         characterView.setX(hexagon.get().getLeftUpperCorner().x());
                         characterView.setY(hexagon.get().getLeftUpperCorner().y());
                         BattlefieldPane.this.characterViews.put(cib, characterView);
