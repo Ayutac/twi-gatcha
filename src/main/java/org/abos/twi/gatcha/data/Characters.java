@@ -27,7 +27,7 @@ public interface Characters {
             new CharacterStats(9, 19, 9, 7),
             new CharacterAttacks(Attacks.BONE_DART, Attacks.INVISIBILITY, Attacks.BONE_FRACTURE),
             List.of(),
-            Rarity.SUPER_RARE,
+            Rarity.RARE,
             "placeholder.png");
 
     CharacterBase CERIA = new CharacterBase(
@@ -37,7 +37,7 @@ public interface Characters {
             new CharacterStats(10, 9, 10, 7),
             new CharacterAttacks(Attacks.ICE_SHARD, Attacks.FROST_ARMOR, Attacks.FROZEN_WIND),
             List.of(),
-            Rarity.SUPER_RARE,
+            Rarity.RARE,
             "placeholder.png");
 
     CharacterBase KSMVR = new CharacterBase(
@@ -47,7 +47,7 @@ public interface Characters {
             new CharacterStats(10, 15, 9, 9),
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.QUICK_MOVEMENT, Attacks.SIDE_STEP),
             List.of(),
-            Rarity.SUPER_RARE,
+            Rarity.RARE,
             "placeholder.png");
 
     CharacterBase YVLON = new CharacterBase(
@@ -57,7 +57,7 @@ public interface Characters {
             new CharacterStats(16, 5, 9, 16),
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.KEEN_EDGE, Attacks.IGNORE_PAIN),
             List.of(),
-            Rarity.SUPER_RARE,
+            Rarity.RARE,
             "placeholder.png");
 
     CharacterBase ZOMBIE = new CharacterBase(
