@@ -13,11 +13,11 @@ import java.util.Objects;
  * <p>
  * Character bases are immutable during a running game and are only changed during updates.
  */
-public record CharacterBase(String name, String description, CharacterClass cclass, CharacterStats stats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity) implements Named, Describable {
+public record CharacterBase(String name, String description, CharacterClass cclass, CharacterStats stats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity, String imageName) implements Named, Describable {
 
     public CharacterBase(final @NotNull String name, final @NotNull String description, final @NotNull CharacterClass cclass,
                          final @NotNull CharacterStats stats, final @NotNull CharacterAttacks attacks, final @NotNull List<Effect> effects,
-                         final @NotNull Rarity rarity) {
+                         final @NotNull Rarity rarity, final @NotNull String imageName) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.cclass = Objects.requireNonNull(cclass);
@@ -25,6 +25,7 @@ public record CharacterBase(String name, String description, CharacterClass ccla
         this.attacks = Objects.requireNonNull(attacks);
         this.effects = Objects.requireNonNull(effects);
         this.rarity = Objects.requireNonNull(rarity);
+        this.imageName = Objects.requireNonNull(imageName);
     }
 
     @Override
