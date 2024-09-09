@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class Hexagon extends Polyline {
 
-    public static double RADII_FACTOR = Math.sqrt(3)/2;
+    public static double RADII_FACTOR = 2 / Math.sqrt(3);
 
     protected final @Range(from = 0, to = Integer.MAX_VALUE) int radius;
     protected final @NotNull Vec2d center;
@@ -32,4 +32,11 @@ public class Hexagon extends Polyline {
         getPoints().addAll(points);
     }
 
+    public @NotNull Vec2d getCenter() {
+        return center;
+    }
+
+    public @NotNull Vec2d getLeftUpperCorner() {
+        return new Vec2d(center.x() - radius, center.y() - RADII_FACTOR * radius);
+    }
 }
