@@ -1,16 +1,19 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.abos.common.Vec2d;
 import org.abos.common.Vec2i;
+import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.effect.AttackEffect;
+import org.abos.twi.gatcha.gui.Gui;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -50,8 +53,9 @@ public class BattlefieldPane extends Pane {
             if (hexagon.isPresent()) {
                 final Vec2i position = hexagons.getKey(hexagon.get());
                 if (battle.getPhase() == BattlePhase.PLACEMENT) {
-                    if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty()) {
-                        battle.placePlayerCharacterAt(battle.getPlacementParty().poll(), position);
+                    if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
+                        CharacterModified character = battle.getPlacementParty().poll();
+                        battle.placePlayerCharacterAt(character, position);
                     }
                     if (battle.getPlacementParty().isEmpty()) {
                         battle.start();
