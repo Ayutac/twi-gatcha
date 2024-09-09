@@ -5,9 +5,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.abos.common.Named;
 import org.abos.twi.gatcha.core.CharacterAttacks;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
@@ -18,11 +16,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class BattleScreen extends StackPane {
+public final class BattleScreen extends BorderPane {
 
     private final Gui gui;
 
-    private final @NotNull BorderPane borderPane = new BorderPane();
     private final @NotNull Label turnOrder = new Label();
     private final @NotNull RadioButton normalAttackButton = new RadioButton();
     private final @NotNull RadioButton special1AttackButton = new RadioButton();
@@ -36,7 +33,7 @@ public final class BattleScreen extends StackPane {
         this.gui = Objects.requireNonNull(gui);
         // turn order at the top
         final VBox topBox = new VBox(new Label("Turn Order"), turnOrder);
-        borderPane.setTop(topBox);
+        setTop(topBox);
         // group the radio buttons
         final ToggleGroup attackGroup = new ToggleGroup();
         normalAttackButton.setToggleGroup(attackGroup);
@@ -50,9 +47,7 @@ public final class BattleScreen extends StackPane {
         attackBox = new HBox(normalAttackButton, special1AttackButton, special2AttackButton);
         attackBox.setVisible(false);
         final VBox bottomBox = new VBox(new Label("Attack"), attackBox);
-        borderPane.setBottom(bottomBox);
-        // set layout
-        getChildren().add(borderPane);
+        setBottom(bottomBox);
     }
 
     public @Nullable Battle getBattle() {
@@ -63,11 +58,11 @@ public final class BattleScreen extends StackPane {
         this.battle = battle;
         if (this.battle != null) {
             battlefieldPane = new BattlefieldPane(this, battle, 30);
-            borderPane.setCenter(battlefieldPane);
+            setCenter(battlefieldPane);
         }
         else {
             battlefieldPane = null;
-            borderPane.setCenter(null);
+            setCenter(null);
             turnOrder.setText("");
         }
     }
