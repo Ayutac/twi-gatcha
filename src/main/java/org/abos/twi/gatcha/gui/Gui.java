@@ -7,16 +7,19 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
+import org.abos.twi.gatcha.gui.component.pane.PartyScreen;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -34,6 +37,8 @@ public final class Gui extends Application {
     private final Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final CharacterScreen characterScreen = new CharacterScreen(this);
     private final Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final PartyScreen partyScreen = new PartyScreen(this);
+    private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
 
     private Player player;
@@ -68,8 +73,6 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        /*stage.setScene(characterScreenScene);
-        characterScreen.setCharacter(new CharacterModified(Characters.PISCES));*/
         player = new Player("Dev");
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
@@ -79,8 +82,13 @@ public final class Gui extends Application {
         player.addToRooster(Characters.ZOMBIE);
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
-        stage.setScene(roosterScreenScene);
-        roosterScreen.setPlayer(player);
+//        stage.setScene(roosterScreenScene);
+//        roosterScreen.setPlayer(player);
+        player.addParty(new Party("test", List.of(
+                player.getCharacter(Characters.ERIN),
+                player.getCharacter(Characters.YVLON))));
+        stage.setScene(partyScreenScene);
+        partyScreen.setPlayer(player);
         /*final Battle battle = new Battle(10, 10, List.of());
         battle.addWave(new Wave(0, List.of(
                 new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)),

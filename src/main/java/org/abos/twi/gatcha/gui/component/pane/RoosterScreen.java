@@ -25,7 +25,7 @@ public final class RoosterScreen extends AbstractScreen {
     public void setPlayer(final @Nullable Player player) {
         this.player = player;
         if (this.player != null) {
-            galleryPane = new RoosterGalleryPane(this, player, 60);
+            galleryPane = new RoosterGalleryPane(this, player, 125);
             final HBox box = new HBox(galleryPane);
             box.setAlignment(Pos.CENTER);
             setCenter(new ScrollPane(box));

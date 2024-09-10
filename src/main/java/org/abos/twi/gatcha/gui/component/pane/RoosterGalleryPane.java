@@ -36,7 +36,7 @@ public class RoosterGalleryPane extends GridPane {
         this.radius = radius;
         int count = 0;
         for (final CharacterModified character : player.getCharacters()) {
-            final LabelledCharacterView view = new LabelledCharacterView(character, true, 250d);
+            final LabelledCharacterView view = new LabelledCharacterView(character, true, 2*radius);
             view.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 if (mouseEvent.getButton() != MouseButton.PRIMARY) {
                     return;

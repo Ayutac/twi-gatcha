@@ -17,6 +17,8 @@ import java.util.Objects;
  */
 public class Player implements Named {
 
+    public static final int PARTY_MAX_SIZE = 5;
+
     /**
      * @see #getName()
      */
@@ -26,7 +28,7 @@ public class Player implements Named {
 
     protected Map<CharacterBase, CharacterModified> rooster = new HashMap<>();
 
-    protected List<List<CharacterModified>> parties = new LinkedList<>();
+    protected List<Party> parties = new LinkedList<>();
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);
@@ -98,12 +100,19 @@ public class Player implements Named {
         increaseInventoryCount(kind, -amount);
     }
 
-    public List<CharacterModified> getCharacters() {
-        return new ArrayList<>(rooster.values());
-    }
-
     public boolean hasCharacter(final @NotNull CharacterBase character) {
         return rooster.containsKey(character);
+    }
+
+    public CharacterModified getCharacter(final @NotNull CharacterBase character) {
+        if (!rooster.containsKey(character)) {
+            throw new IllegalArgumentException("The player doesn't have this character!");
+        }
+        return rooster.get(character);
+    }
+
+    public List<CharacterModified> getCharacters() {
+        return new ArrayList<>(rooster.values());
     }
 
     public void addToRooster(final @NotNull CharacterBase character) {
@@ -111,6 +120,24 @@ public class Player implements Named {
             throw new IllegalArgumentException("Player already owns this character!");
         }
         rooster.put(character, new CharacterModified(character));
+    }
+
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getNumberOfParties() {
+        return parties.size();
+    }
+
+    public Party getParty(final @Range(from = 0, to = Integer.MAX_VALUE) int index) {
+        return parties.get(index);
+    }
+
+    public void addParty(final @NotNull Party party) {
+        if (party.characters().size() > PARTY_MAX_SIZE) {
+            throw new IllegalArgumentException("Party can have at most " + PARTY_MAX_SIZE + " members!");
+        }
+        if (party.characters().size() != party.characters().stream().distinct().count()) {
+            throw new IllegalArgumentException("Party cannot contain duplicates!");
+        }
+        parties.add(party);
     }
 
 }
