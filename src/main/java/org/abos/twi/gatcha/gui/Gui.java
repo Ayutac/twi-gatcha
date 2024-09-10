@@ -3,6 +3,7 @@ package org.abos.twi.gatcha.gui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
@@ -57,6 +58,11 @@ public final class Gui extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
+        characterScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                showRooster();
+            }
+        });
         this.stage.setScene(mainMenuScene);
         this.stage.show();
     }
