@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public final class RoosterScreen extends AbstractScreen {
 
     private @Nullable RoosterGalleryPane galleryPane;
+    private @Nullable PartyScreen caller;
 
     private @Nullable Player player;
 
@@ -34,5 +35,13 @@ public final class RoosterScreen extends AbstractScreen {
             galleryPane = null;
             setCenter(null);
         }
+    }
+
+    public @Nullable PartyScreen getCaller() {
+        return caller;
+    }
+
+    public void setCaller(@Nullable PartyScreen caller) {
+        this.caller = caller;
     }
 }

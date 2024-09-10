@@ -1,7 +1,9 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.gui.Gui;
+import org.abos.twi.gatcha.gui.component.LabelledCharacterView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +30,13 @@ public final class PartyScreen extends AbstractScreen {
         else {
             galleryPane = null;
             setCenter(null);
+        }
+    }
+
+    public void select(final @Nullable CharacterModified character) {
+        if (galleryPane != null && galleryPane.getSelectedIndex() != null) {
+            final LabelledCharacterView view = galleryPane.getViews().get(galleryPane.getSelectedIndex());
+            view.setCharacter(character == view.getCharacter() ? null : character);
         }
     }
 }

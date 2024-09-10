@@ -41,7 +41,13 @@ public class RoosterGalleryPane extends GridPane {
                 if (mouseEvent.getButton() != MouseButton.PRIMARY) {
                     return;
                 }
-                screen.getGui().showCharacterScreen(character);
+                if (screen.getCaller() == null) {
+                    screen.getGui().showCharacterScreen(character);
+                }
+                else {
+                    screen.getCaller().select(character);
+                    screen.getGui().showPartyScreen();
+                }
             });
             views.add(view);
             add(view, count % COLUMNS, count / COLUMNS);

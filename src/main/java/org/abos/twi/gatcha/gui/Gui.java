@@ -16,6 +16,7 @@ import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.PartyScreen;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public final class Gui extends Application {
         this.stage = stage;
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                showRooster();
+                showRoosterScreen(null);
             }
         });
         this.stage.setScene(mainMenuScene);
@@ -83,7 +84,7 @@ public final class Gui extends Application {
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
 //        stage.setScene(roosterScreenScene);
-//        roosterScreen.setPlayer(player);
+        roosterScreen.setPlayer(player);
         player.addParty(new Party("test", List.of(
                 player.getCharacter(Characters.ERIN),
                 player.getCharacter(Characters.YVLON))));
@@ -110,13 +111,18 @@ public final class Gui extends Application {
         battleScreen.setBattle(battle);*/
     }
 
-    public void showRooster() {
+    public void showRoosterScreen(final @Nullable PartyScreen caller) {
+        roosterScreen.setCaller(caller);
         stage.setScene(roosterScreenScene);
     }
 
     public void showCharacterScreen(final @NotNull CharacterModified character) {
         characterScreen.setCharacter(character);
         stage.setScene(characterScreenScene);
+    }
+
+    public void showPartyScreen() {
+        stage.setScene(partyScreenScene);
     }
 
     public static void main(String[] args) {

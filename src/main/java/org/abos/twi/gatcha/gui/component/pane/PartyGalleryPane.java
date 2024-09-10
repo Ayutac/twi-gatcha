@@ -1,5 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import org.abos.twi.gatcha.core.CharacterModified;
@@ -7,6 +9,7 @@ import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.gui.component.LabelledCharacterView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.LinkedList;
@@ -20,6 +23,7 @@ public class PartyGalleryPane extends GridPane {
 
     protected final @NotNull Player player;
     protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
+    protected @Nullable Integer selectedIndex;
 
     public PartyGalleryPane(final @NotNull PartyScreen screen, final @NotNull Player player, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
         this.screen = Objects.requireNonNull(screen);
@@ -34,7 +38,7 @@ public class PartyGalleryPane extends GridPane {
         }
         final LabelledCharacterView[] localViews = new LabelledCharacterView[Player.PARTY_MAX_SIZE];
         for (int i = 0; i < localViews.length; i++) {
-            localViews[i] = getView(party.characters(), i);
+            localViews[i] = createView(party.characters(), i);
         }
         add(localViews[0], 0, 0, 2, 1);
         add(localViews[1], 2, 0, 2, 1);
@@ -49,12 +53,27 @@ public class PartyGalleryPane extends GridPane {
         }
     }
 
-    private @NotNull LabelledCharacterView getView(@NotNull List<CharacterModified> characters, final @Range(from = 0, to = Integer.MAX_VALUE) int index) {
+    private @NotNull LabelledCharacterView createView(@NotNull List<CharacterModified> characters, final @Range(from = 0, to = Integer.MAX_VALUE) int index) {
         final LabelledCharacterView view = new LabelledCharacterView(null, true, 2 * radius);
         if (characters.size() > index) {
             view.setCharacter(characters.get(index));
         }
+        view.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (mouseEvent.getButton() != MouseButton.PRIMARY) {
+                return;
+            }
+            selectedIndex = index;
+            screen.getGui().showRoosterScreen(screen);
+        });
         views.add(view);
         return view;
+    }
+
+    public @NotNull List<LabelledCharacterView> getViews() {
+        return views;
+    }
+
+    public @Nullable Integer getSelectedIndex() {
+        return selectedIndex;
     }
 }
