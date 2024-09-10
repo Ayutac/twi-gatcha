@@ -2,25 +2,20 @@ package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-public final class RoosterScreen extends BorderPane {
-
-    private final Gui gui;
+public final class RoosterScreen extends AbstractScreen {
 
     private @Nullable RoosterGalleryPane galleryPane;
 
     private @Nullable Player player;
 
     public RoosterScreen(final @NotNull Gui gui) {
-        this.gui = Objects.requireNonNull(gui);
+        super(gui);
     }
 
     public @Nullable Player getPlayer() {

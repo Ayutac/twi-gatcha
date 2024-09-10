@@ -4,22 +4,17 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Player;
-import org.abos.twi.gatcha.core.battle.Battle;
-import org.abos.twi.gatcha.core.battle.TeamKind;
-import org.abos.twi.gatcha.core.battle.Wave;
-import org.abos.twi.gatcha.core.battle.ai.DirectRandomAttacker;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
+import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -35,6 +30,8 @@ public final class Gui extends Application {
     private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final RoosterScreen roosterScreen = new RoosterScreen(this);
     private final Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final CharacterScreen characterScreen = new CharacterScreen(this);
+    private final Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
 
     private Player player;
@@ -64,7 +61,9 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        player = new Player("Dev");
+        stage.setScene(characterScreenScene);
+        characterScreen.setCharacter(new CharacterModified(Characters.PISCES));
+        /*player = new Player("Dev");
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
         player.addToRooster(Characters.KSMVR);
@@ -74,7 +73,7 @@ public final class Gui extends Application {
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
         stage.setScene(roosterScreenScene);
-        roosterScreen.setPlayer(player);
+        roosterScreen.setPlayer(player);*/
         /*final Battle battle = new Battle(10, 10, List.of());
         battle.addWave(new Wave(0, List.of(
                 new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)),

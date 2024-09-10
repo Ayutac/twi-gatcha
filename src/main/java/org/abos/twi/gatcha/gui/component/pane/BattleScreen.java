@@ -15,12 +15,9 @@ import org.abos.twi.gatcha.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class BattleScreen extends BorderPane {
-
-    private final Gui gui;
+public final class BattleScreen extends AbstractScreen {
 
     private final @NotNull Label turnOrder = new Label();
     private final @NotNull RadioButton normalAttackButton = new RadioButton();
@@ -32,7 +29,7 @@ public final class BattleScreen extends BorderPane {
     private @Nullable Battle battle;
 
     public BattleScreen(final @NotNull Gui gui) {
-        this.gui = Objects.requireNonNull(gui);
+        super(gui);
         // turn order at the top
         final VBox topBox = new VBox(new Label("Turn Order"), turnOrder);
         topBox.setAlignment(Pos.CENTER);
