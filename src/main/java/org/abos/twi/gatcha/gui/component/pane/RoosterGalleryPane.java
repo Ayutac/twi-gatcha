@@ -1,5 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Player;
@@ -35,6 +37,12 @@ public class RoosterGalleryPane extends GridPane {
         int count = 0;
         for (final CharacterModified character : player.getCharacters()) {
             final LabelledCharacterView view = new LabelledCharacterView(character, true, 250d);
+            view.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                if (mouseEvent.getButton() != MouseButton.PRIMARY) {
+                    return;
+                }
+                screen.getGui().showCharacterScreen(character);
+            });
             views.add(view);
             add(view, count % COLUMNS, count / COLUMNS);
             count++;

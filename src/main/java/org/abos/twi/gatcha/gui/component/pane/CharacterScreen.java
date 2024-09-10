@@ -2,6 +2,8 @@ package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.abos.twi.gatcha.core.CharacterModified;
@@ -13,8 +15,8 @@ public final class CharacterScreen extends AbstractScreen {
 
     private @Nullable CharacterModified character;
 
-    private @NotNull Label name = new Label();
-    private @NotNull Label description = new Label();
+    private final @NotNull Label name = new Label();
+    private final @NotNull Label description = new Label();
     private @Nullable CharacterDetailPane detailPane;
 
     public CharacterScreen(final @NotNull Gui gui) {
@@ -25,6 +27,11 @@ public final class CharacterScreen extends AbstractScreen {
         final HBox descBox = new HBox(description);
         descBox.setAlignment(Pos.CENTER);
         setBottom(descBox);
+        addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.BACK) {
+                this.gui.showRooster();
+            }
+        });
     }
 
     public @Nullable CharacterModified getCharacter() {

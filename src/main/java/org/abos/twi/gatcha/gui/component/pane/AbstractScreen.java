@@ -13,4 +13,8 @@ public abstract class AbstractScreen extends BorderPane {
     public AbstractScreen(final @NotNull Gui gui) {
         this.gui = Objects.requireNonNull(gui);
     }
+
+    public @NotNull Gui getGui() {
+        return gui;
+    }
 }

@@ -12,6 +12,7 @@ import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -61,9 +62,9 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        stage.setScene(characterScreenScene);
-        characterScreen.setCharacter(new CharacterModified(Characters.PISCES));
-        /*player = new Player("Dev");
+        /*stage.setScene(characterScreenScene);
+        characterScreen.setCharacter(new CharacterModified(Characters.PISCES));*/
+        player = new Player("Dev");
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
         player.addToRooster(Characters.KSMVR);
@@ -73,7 +74,7 @@ public final class Gui extends Application {
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
         stage.setScene(roosterScreenScene);
-        roosterScreen.setPlayer(player);*/
+        roosterScreen.setPlayer(player);
         /*final Battle battle = new Battle(10, 10, List.of());
         battle.addWave(new Wave(0, List.of(
                 new DirectRandomAttacker(new CharacterModified(Characters.ZOMBIE), battle, TeamKind.ENEMY, new Vec2i(9, 9)),
@@ -93,6 +94,15 @@ public final class Gui extends Application {
                 new CharacterModified(Characters.YVLON)));
         stage.setScene(battleScreenScene);
         battleScreen.setBattle(battle);*/
+    }
+
+    public void showRooster() {
+        stage.setScene(roosterScreenScene);
+    }
+
+    public void showCharacterScreen(final @NotNull CharacterModified character) {
+        characterScreen.setCharacter(character);
+        stage.setScene(characterScreenScene);
     }
 
     public static void main(String[] args) {
