@@ -5,6 +5,7 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.TeamKind;
+import org.abos.twi.gatcha.core.battle.WaveUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -15,8 +16,12 @@ import java.util.List;
  * An {@link AiCharacter} that always moves one tile if possible.
  */
 public class SlowWanderer extends AiCharacter {
-    public SlowWanderer(@NotNull CharacterModified modified, @NotNull Battle battle, @NotNull TeamKind team, @NotNull Vec2i position) {
+    public SlowWanderer(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull TeamKind team, final @NotNull Vec2i position) {
         super(modified, battle, team, position);
+    }
+
+    public SlowWanderer(final @NotNull WaveUnit unit, final @NotNull Battle battle) {
+        super(unit.character(), battle, unit.team(), unit.startPos());
     }
 
     @Override

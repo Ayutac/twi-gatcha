@@ -17,11 +17,9 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
@@ -37,8 +35,8 @@ public class Battle {
     protected final List<CharacterInBattle> characters = new LinkedList<>();
     protected final List<Terrain> terrainList;
     protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
-    protected final @NotNull Set<Vec2i> playerSpawns = new HashSet<>();
-    protected final @NotNull Set<Wave> waves = new HashSet<>();
+    protected final @NotNull Set<Vec2i> playerSpawns;
+    protected final @NotNull Set<Wave> waves;
     protected final @NotNull Queue<CharacterModified> placementParty = new LinkedList<>();
     protected final @NotNull Map<CharacterInBattle, Double> initiativeRolls = new HashMap<>();
     protected final @NotNull List<CharacterInBattle> characterOrder = new ArrayList<>();
@@ -54,7 +52,9 @@ public class Battle {
 
     public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int width,
-                  final @NotNull List<Terrain> terrainList) {
+                  final @NotNull List<Terrain> terrainList,
+                  final @NotNull Set<Wave> waves,
+                  final @NotNull Set<Vec2i> playerSpawns) {
         if (height < 1 || width < 1) {
             throw new IllegalArgumentException("Dimensions must be positive!");
         }
@@ -72,6 +72,12 @@ public class Battle {
             }
         }
         this.terrainList = List.copyOf(terrainList);
+        if (waves.size() != waves.stream().mapToInt(Wave::turn).distinct().count()) {
+            throw new IllegalArgumentException("A turn can have at most one wave!");
+        }
+        this.waves = Set.copyOf(waves);
+        this.playerSpawns = Set.copyOf(playerSpawns);
+        // generate terrain graph
         terrainGraph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
         terrainGraph.setVertexSupplier(new GridSupplier(height, width));
         new HexaGridGraphGenerator<Vec2i, DefaultEdge>(height, width).generateGraph(terrainGraph);
@@ -168,27 +174,14 @@ public class Battle {
         return playerSpawns.contains(position);
     }
 
-    public void addPlayerSpawn(final @NotNull Vec2i playerSpawn) {
-        if (phase != BattlePhase.INACTIVE) {
-            throw new IllegalStateException("No more player spawns can be added!");
-        }
-        playerSpawns.add(Objects.requireNonNull(playerSpawn));
-    }
-
-    public void addWave(final @NotNull Wave wave) {
-        if (phase != BattlePhase.INACTIVE) {
-            throw new IllegalStateException("No more waves can be added!");
-        }
-        if (waves.stream().anyMatch(w -> wave.turn() == w.turn())) {
-            throw new IllegalArgumentException("Each turn can at most have one wave!");
-        }
-        waves.add(wave);
-    }
-
     public void startPlacement(final @NotNull List<CharacterModified> party) {
         final Optional<Wave> firstWave = waves.stream().filter(w -> w.turn() == 0).findFirst();
         // TODO avoid character collision
-        firstWave.ifPresent(wave -> characters.addAll(wave.characters()));
+        firstWave.ifPresent(wave -> {
+            for (final WaveUnit unit : wave.units()) {
+                characters.add(unit.createCharacterInBattle(Battle.this));
+            }
+        });
         phase = BattlePhase.PLACEMENT;
         this.placementParty.addAll(party);
     }

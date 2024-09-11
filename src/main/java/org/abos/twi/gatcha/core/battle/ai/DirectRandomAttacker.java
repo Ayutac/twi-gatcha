@@ -7,6 +7,7 @@ import org.abos.twi.gatcha.core.battle.Attack;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.battle.TeamKind;
+import org.abos.twi.gatcha.core.battle.WaveUnit;
 import org.abos.twi.gatcha.core.effect.AttackEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
@@ -19,8 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 public class DirectRandomAttacker extends AiCharacter {
-    public DirectRandomAttacker(@NotNull CharacterModified modified, @NotNull Battle battle, @NotNull TeamKind team, @NotNull Vec2i position) {
+    public DirectRandomAttacker(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull TeamKind team, final @NotNull Vec2i position) {
         super(modified, battle, team, position);
+    }
+
+    public DirectRandomAttacker(final @NotNull WaveUnit unit, final @NotNull Battle battle) {
+        this(unit.character(), battle, unit.team(), unit.startPos());
     }
 
     @Override
