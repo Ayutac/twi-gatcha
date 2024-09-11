@@ -12,6 +12,7 @@ public final class HomeScreen extends AbstractScreen {
     private final @NotNull Button roosterBtn = new Button("Garden of Sanctuary");
     private final @NotNull Button partyBtn = new Button("Pavilion of Secrets");
     private final @NotNull Button pullBtn = new Button("Palace of Fates");
+    private final @NotNull Button missionBtn = new Button("<Quests>");
 
     public HomeScreen(@NotNull Gui gui) {
         super(gui);
@@ -20,7 +21,10 @@ public final class HomeScreen extends AbstractScreen {
         partyBtn.setPrefWidth(BUTTON_WIDTH);
         partyBtn.setOnMouseClicked(mouseEvent -> this.gui.showPartyScreen());
         pullBtn.setPrefWidth(BUTTON_WIDTH);
-        final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn);
+        pullBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        missionBtn.setPrefWidth(BUTTON_WIDTH);
+        missionBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn);
         setRight(rightBox);
     }
 

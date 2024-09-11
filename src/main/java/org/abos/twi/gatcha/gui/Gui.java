@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -152,6 +153,13 @@ public final class Gui extends Application {
 
     public void showPartyScreen() {
         stage.setScene(partyScreenScene);
+    }
+
+    public static void showNotImplemented() {
+        final Alert warning = new Alert(Alert.AlertType.WARNING);
+        warning.setTitle("Uh oh!");
+        warning.setContentText("This feature is not yet implemented!");
+        warning.showAndWait();
     }
 
     public static void main(String[] args) {
