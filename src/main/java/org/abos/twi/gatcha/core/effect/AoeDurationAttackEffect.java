@@ -41,6 +41,9 @@ public class AoeDurationAttackEffect extends AoeAttackEffect {
                 }
                 default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + AoeDurationAttackEffect.class.getSimpleName() + "!");
             }
+            if (battle.getUi() != null) {
+                battle.getUi().characterAttacked(from, aoeTarget, type, 0);
+            }
         }
     }
 }

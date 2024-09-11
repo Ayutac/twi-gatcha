@@ -51,26 +51,28 @@ public class AoeAttackEffect extends SimpleAttackEffect {
         List<CharacterInBattle> aoeTargets = getAoeTargets(target, battle);
         // changes here should be reflected in SimpleAttackEffect
         for (final CharacterInBattle aoeTarget : aoeTargets) {
+            int dmg = 0;
             switch (type) {
                 case DAMAGE_BLUNT, DAMAGE_SLASH -> {
-                    final int dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power);
+                    dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power);
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_PIERCE -> {
-                    final int dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power) * 2;
+                    dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power) * 2;
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_IGNORES_ARMOR -> {
-                    final int dmg = from.getAttack() + power;
+                    dmg = from.getAttack() + power;
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_FROST -> {
-                    final int dmg = Math.max(1, (from.getAttack() + power) / 3);
+                    dmg = Math.max(1, (from.getAttack() + power) / 3);
                     aoeTarget.takeDamage(dmg);
                 }
                 case HEALING -> {
                     final int heal = from.getAttack() + power;
                     aoeTarget.heal(heal);
+                    dmg = heal;
                 }
                 case INVISIBILITY -> {
                     aoeTarget.getActiveEffects().add(new SimpleDurationEffect(EffectType.INVISIBILITY, power));
@@ -79,6 +81,9 @@ public class AoeAttackEffect extends SimpleAttackEffect {
                     aoeTarget.getActiveEffects().add(new SimpleDurationEffect(EffectType.INVULNERABILITY, power));
                 }
                 default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + AoeAttackEffect.class.getSimpleName() + "!");
+            }
+            if (battle.getUi() != null) {
+                battle.getUi().characterAttacked(from, aoeTarget, type, dmg);
             }
         }
     }

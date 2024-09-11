@@ -21,19 +21,23 @@ public class SlowWanderer extends AiCharacter {
     }
 
     public SlowWanderer(final @NotNull WaveUnit unit, final @NotNull Battle battle) {
-        super(unit.character(), battle, unit.team(), unit.startPos());
+        this(unit.character(), battle, unit.team(), unit.startPos());
     }
 
     @Override
     public void turn() {
         // move one tile
         final var movementGraph = battle.getCharacterMovementGraph(this);
-        final List<DefaultEdge> directions = new LinkedList<>(movementGraph.outgoingEdgesOf(position));
+        final var oldPosition = position;
+        final List<DefaultEdge> directions = new LinkedList<>(movementGraph.outgoingEdgesOf(oldPosition));
         directions.removeIf(defaultEdge -> movementGraph.getEdgeWeight(defaultEdge) > getMovement());
         if (!directions.isEmpty()) {
             final DefaultEdge e = CollectionUtil.getRandomEntry(directions, random);
             setMoved((int)Math.round(movementGraph.getEdgeWeight(e)));
             setPosition(movementGraph.getEdgeTarget(e));
+            if (battle.getUi() != null) {
+                battle.getUi().characterMoved(this, oldPosition, position);
+            }
         }
     }
 }

@@ -10,13 +10,16 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
+import org.abos.twi.gatcha.core.battle.BattleUi;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.effect.AttackEffect;
+import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.gui.component.CharacterView;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.HashMap;
@@ -24,8 +27,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-public class BattlefieldPane extends Pane {
+public class BattlefieldPane extends Pane implements BattleUi {
 
     protected final @NotNull BidiMap<Vec2i, Hexagon> hexagons = new DualHashBidiMap<>();
     protected final @NotNull BattleScreen screen;
@@ -33,7 +37,10 @@ public class BattlefieldPane extends Pane {
     protected final @NotNull Map<CharacterInBattle, CharacterView> characterViews = new HashMap<>();
 
     protected final @NotNull Battle battle;
-    protected @Range(from = 1, to = Integer.MAX_VALUE) int radius;
+    protected final @Range(from = 1, to = Integer.MAX_VALUE) int radius;
+    protected boolean playerMoving;
+    protected boolean playerAttacking;
+    protected @Nullable CompletableFuture<Object> playerDone;
 
     public BattlefieldPane(final @NotNull BattleScreen screen, final @NotNull Battle battle, final @Range(from = 1, to = Integer.MAX_VALUE) int radius) {
         this.screen = Objects.requireNonNull(screen);
@@ -42,9 +49,10 @@ public class BattlefieldPane extends Pane {
             throw new IllegalArgumentException("Radius must be positive!");
         }
         this.radius = radius;
-        final double width = 2 * radius * this.battle.getWidth() + (this.battle.getHeight() > 1 ? radius : 0);
-        final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
+//        final double width = 2 * radius * this.battle.getWidth() + (this.battle.getHeight() > 1 ? radius : 0);
+//        final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
         addHexagons();
+        battle.setUi(this);
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() != MouseButton.PRIMARY) {
@@ -63,6 +71,7 @@ public class BattlefieldPane extends Pane {
                         characterView.setY(hexagon.get().getLeftUpperCorner().y());
                         BattlefieldPane.this.characterViews.put(cib, characterView);
                         BattlefieldPane.this.getChildren().add(characterView);
+                        screen.update();
                     }
                     if (battle.getPlacementParty().isEmpty() || battle.noFreeSpawns()) {
                         battle.start();
@@ -71,21 +80,26 @@ public class BattlefieldPane extends Pane {
                 }
                 else if (battle.getPhase() == BattlePhase.IN_PROGRESS) {
                     // move with the player character
-                    if (battle.isPlayerMove() && battle.getCurrentCharacter() != null && battle.getPossiblePlayerFields().containsKey(position)) {
+                    if (isPlayerMoving() && battle.getCurrentCharacter() != null && battle.getPossiblePlayerFields().containsKey(position)) {
                         battle.getCurrentCharacter().setMoved((int) Math.round(battle.getPossiblePlayerFields().get(position)));
                         battle.getCurrentCharacter().setPosition(position);
                         final CharacterView characterView = characterViews.get(battle.getCurrentCharacter());
                         characterView.setX(hexagon.get().getLeftUpperCorner().x());
                         characterView.setY(hexagon.get().getLeftUpperCorner().y());
-                        battle.playerMoveIsDone();
+                        playerMoving = false;
+                        playerAttacking = true;
                         screen.update();
                     }
                     // attack with the player character
-                    else if (battle.isPlayerAttack() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
+                    else if (isPlayerAttacking() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
                         for (final AttackEffect effect : battle.getSelectedAttack().effects()) {
                             effect.apply(battle.getCurrentCharacter(), position, battle);
                         }
-                        battle.playerAttackIsDone();
+                        playerAttacking = false;
+                        if (playerDone != null) {
+                            playerDone.complete(null);
+                            playerDone = null;
+                        }
                         screen.update();
                     }
                 }
@@ -110,6 +124,43 @@ public class BattlefieldPane extends Pane {
                 tooltips.put(hexagon, tooltip);
             }
         }
+    }
+
+    @Override
+    public @NotNull Battle getBattle() {
+        return battle;
+    }
+
+    @Override
+    public void characterPlaced(final @NotNull CharacterInBattle character, final @NotNull Vec2i position) {
+        screen.update();
+    }
+
+    @Override
+    public void characterMoved(final @NotNull CharacterInBattle character, final @NotNull Vec2i from, final @NotNull Vec2i to) {
+        screen.update();
+    }
+
+    @Override
+    public void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage) {
+        screen.update();
+    }
+
+    @Override
+    public boolean isPlayerMoving() {
+        return playerMoving;
+    }
+
+    @Override
+    public boolean isPlayerAttacking() {
+        return playerAttacking;
+    }
+
+    @Override
+    public CompletableFuture<Object> waitForPlayer() {
+        playerDone = new CompletableFuture<>();
+        playerMoving = true;
+        return playerDone;
     }
 
     protected void updateGrid(double mouseX, double mouseY) {
@@ -138,11 +189,11 @@ public class BattlefieldPane extends Pane {
                     other.getValue().setFill(Color.AQUA);
                 }
                 // show possible move fields
-                else if (battle.isPlayerMove() && battle.getPossiblePlayerFields().containsKey(other.getKey())) {
+                else if (isPlayerMoving() && battle.getPossiblePlayerFields().containsKey(other.getKey())) {
                     other.getValue().setFill(Color.LIGHTBLUE);
                 }
                 // show possible attack fields
-                else if (battle.isPlayerAttack() && !battle.isPlayerMove() && battle.getPossibleAttackFields().contains(other.getKey())) {
+                else if (isPlayerAttacking() && !isPlayerMoving() && battle.getPossibleAttackFields().contains(other.getKey())) {
                     other.getValue().setFill(Color.MISTYROSE);
                 }
                 else {

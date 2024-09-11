@@ -48,6 +48,7 @@ public class DirectRandomAttacker extends AiCharacter {
             return;
         }
         // move there
+        final Vec2i oldPosition = position;
         final Vec2i movementTarget = CollectionUtil.getRandomEntry(neighborTiles, random);
         final var movementGraph = battle.getCharacterMovementGraph(this);
         final var graphPath = BellmanFordShortestPath.findPathBetween(movementGraph, position, movementTarget);
@@ -69,6 +70,9 @@ public class DirectRandomAttacker extends AiCharacter {
                 setMoved((int)Math.round(pathWeight));
                 setPosition(movementGraph.getEdgeTarget(pathEdges.get(count-1)));
             }
+        }
+        if (battle.getUi() != null && !oldPosition.equals(position)) {
+            battle.getUi().characterMoved(this, oldPosition, position);
         }
         // attack something in range
         final Map<Attack, List<Vec2i>> possibleTargets = new HashMap<>();

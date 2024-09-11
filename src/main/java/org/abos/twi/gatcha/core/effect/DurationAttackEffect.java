@@ -41,5 +41,8 @@ public class DurationAttackEffect extends SimpleAttackEffect {
             }
             default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + DurationAttackEffect.class.getSimpleName() + "!");
         }
+        if (battle.getUi() != null) {
+            battle.getUi().characterAttacked(from, to.get(), type, 0);
+        }
     }
 }

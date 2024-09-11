@@ -33,27 +33,29 @@ public class SimpleAttackEffect implements AttackEffect {
         if (to.isEmpty()) {
             return;
         }
+        int dmg = 0;
         // changes here should be reflected in AoeAttackEffect
         switch (type) {
             case DAMAGE_BLUNT, DAMAGE_SLASH -> {
-                final int dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power);
+                dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power);
                 to.get().takeDamage(dmg);
             }
             case DAMAGE_PIERCE -> {
-                final int dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power) * 2;
+                dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power) * 2;
                 to.get().takeDamage(dmg);
             }
             case DAMAGE_IGNORES_ARMOR -> {
-                final int dmg = from.getAttack() + power;
+                dmg = from.getAttack() + power;
                 to.get().takeDamage(dmg);
             }
             case DAMAGE_FROST -> {
-                final int dmg = Math.max(1, (from.getAttack() + power) / 3);
+                dmg = Math.max(1, (from.getAttack() + power) / 3);
                 to.get().takeDamage(dmg);
             }
             case HEALING -> {
                 final int heal = from.getAttack() + power;
                 to.get().heal(heal);
+                dmg = heal;
             }
             case INVISIBILITY -> {
                 to.get().getActiveEffects().add(new SimpleDurationEffect(EffectType.INVISIBILITY, power));
@@ -62,6 +64,9 @@ public class SimpleAttackEffect implements AttackEffect {
                 to.get().getActiveEffects().add(new SimpleDurationEffect(EffectType.INVULNERABILITY, power));
             }
             default -> throw new IllegalStateException("An unfitting effect type has been associated with this " + SimpleAttackEffect.class.getSimpleName() + "!");
+        }
+        if (battle.getUi() != null) {
+            battle.getUi().characterAttacked(from, to.get(), type, dmg);
         }
     }
 }

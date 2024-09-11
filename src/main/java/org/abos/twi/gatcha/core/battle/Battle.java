@@ -50,6 +50,11 @@ public class Battle {
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int size;
 
     /**
+     * @see #getUi()
+     */
+    protected @Nullable BattleUi ui;
+
+    /**
      * A list of all characters that were introduced to this battle, in introduction order.
      */
     protected final List<CharacterInBattle> characters = new LinkedList<>();
@@ -102,14 +107,6 @@ public class Battle {
      * @see #getSelectedAttack()
      */
     protected @Nullable Attack selectedAttack = null;
-    /**
-     * @see #isPlayerMove()
-     */
-    protected boolean playerMoveDone = true;
-    /**
-     * @see #isPlayerAttack()
-     */
-    protected boolean playerAttackDone = true;
 
     /**
      * Creates a new {@link Battle}.
@@ -201,8 +198,26 @@ public class Battle {
     /**
      * @return the positive number of tiles on this battle's field
      */
-    public @Range(from = 1, to = Integer.MAX_VALUE)int getSize() {
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getSize() {
         return size;
+    }
+
+    /**
+     * Returns the UI associated with this battle.
+     * @return the UI of this battle, might be {@code null}
+     * @see #setUi(BattleUi)
+     */
+    public @Nullable BattleUi getUi() {
+        return ui;
+    }
+
+    /**
+     * Sets the UI associated with this battle.
+     * @param ui the new UI for this battle, might be {@code null}
+     * @see #getUi()
+     */
+    public void setUi(@Nullable BattleUi ui) {
+        this.ui = ui;
     }
 
     /**
@@ -287,7 +302,11 @@ public class Battle {
         // TODO avoid character collision
         firstWave.ifPresent(wave -> {
             for (final WaveUnit unit : wave.units()) {
-                characters.add(unit.createCharacterInBattle(Battle.this));
+                final CharacterInBattle character = unit.createCharacterInBattle(Battle.this);
+                characters.add(character);
+                if (ui != null) {
+                    ui.characterPlaced(character, character.getPosition());
+                }
             }
         });
         phase = BattlePhase.PLACEMENT;
@@ -303,6 +322,9 @@ public class Battle {
         }
         final CharacterInBattle cib = new CharacterInBattle(character, this, TeamKind.PLAYER, position);
         characters.add(cib);
+        if (ui != null) {
+            ui.characterPlaced(cib, cib.getPosition());
+        }
         return cib;
     }
 
@@ -351,7 +373,6 @@ public class Battle {
     public void start() {
         phase = BattlePhase.IN_PROGRESS;
         rollForInitiative();
-        // TODO use an ExecutionService
         EXECUTOR.submit(() -> {
             while (!checkDone()) {
                 turn();
@@ -388,8 +409,10 @@ public class Battle {
                 }
                 currentCharacter.turn();
             }
-            else {
-                waitForPlayer(currentCharacter);
+            // if no UI is set, the player character's turn is skipped
+            else if (ui != null) {
+                prepareForPlayer();
+                ui.waitForPlayer().join();
             }
             currentCharacter.endTurn();
             // next character
@@ -404,52 +427,19 @@ public class Battle {
         // TODO introduce new waves
     }
 
-    public void waitForPlayer(final @NotNull CharacterInBattle character) {
-        playerMoveDone = false;
-        playerAttackDone = false;
+    private void prepareForPlayer() {
+        if (currentCharacter == null) {
+            return;
+        }
         possiblePlayerFields.clear();
-        final var moveGraph = getCharacterMovementGraph(character);
-        final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(character.position);
+        final var moveGraph = getCharacterMovementGraph(currentCharacter);
+        final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(currentCharacter.position);
         for (final Vec2i position : moveGraph.vertexSet()) {
             double weight = paths.getWeight(position);
-            if (weight <= character.getMovement()) {
+            if (weight <= currentCharacter.getMovement()) {
                 possiblePlayerFields.put(position, weight);
             }
         }
-        while (!playerMoveDone) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        while (!playerAttackDone) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public boolean isPlayerMove() {
-        return !playerMoveDone;
-    }
-
-    public boolean isPlayerAttack() {
-        return !playerAttackDone;
-    }
-
-    public boolean isPlayerTurn() {
-        return !playerMoveDone || !playerAttackDone;
-    }
-
-    public void playerMoveIsDone() {
-        playerMoveDone = true;
-    }
-
-    public void playerAttackIsDone() {
-        playerAttackDone = true;
     }
 
     /**

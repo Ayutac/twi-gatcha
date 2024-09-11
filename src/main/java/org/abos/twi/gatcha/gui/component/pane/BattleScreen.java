@@ -88,7 +88,7 @@ public final class BattleScreen extends AbstractScreen {
                     .map(character -> String.format("%s (%d/%d)", character.getName(), character.getHealth(), character.getMaxHealth()))
                     .collect(Collectors.joining(", "));
             turnOrder.setText(text);
-            if (battle.isPlayerAttack() && battle.getCurrentCharacter() != null) {
+            if (battle.getUi() != null && battle.getUi().isPlayerAttacking() && battle.getCurrentCharacter() != null) {
                 final CharacterAttacks attacks = battle.getCurrentCharacter().getModified().getBase().attacks();
                 normalAttackButton.setText(attacks.normal().name());
                 special1AttackButton.setText(attacks.special1().name());
@@ -103,11 +103,13 @@ public final class BattleScreen extends AbstractScreen {
                     battle.setSelectedAttack(attacks.special2());
                 }
                 attackBox.setVisible(true);
-                battlefieldPane.updateGrid(0d, 0d);
             }
             else {
                 attackBox.setVisible(false);
             }
+        }
+        if (battlefieldPane != null) {
+            battlefieldPane.updateGrid(-10d, -10d);
         }
     }
 }
