@@ -54,6 +54,7 @@ public class BattlefieldPane extends Pane {
             if (hexagon.isPresent()) {
                 final Vec2i position = hexagons.getKey(hexagon.get());
                 if (battle.getPhase() == BattlePhase.PLACEMENT) {
+                    // place player character
                     if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
                         CharacterModified character = battle.getPlacementParty().poll();
                         final CharacterInBattle cib = battle.placePlayerCharacterAt(character, position);
@@ -63,7 +64,7 @@ public class BattlefieldPane extends Pane {
                         BattlefieldPane.this.characterViews.put(cib, characterView);
                         BattlefieldPane.this.getChildren().add(characterView);
                     }
-                    if (battle.getPlacementParty().isEmpty()) {
+                    if (battle.getPlacementParty().isEmpty() || battle.noFreeSpawns()) {
                         battle.start();
                         screen.update();
                     }

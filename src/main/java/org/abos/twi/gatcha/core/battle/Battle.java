@@ -315,6 +315,17 @@ public class Battle {
         return Optional.empty();
     }
 
+    public boolean noFreeSpawns() {
+        boolean result = true;
+        for (final Vec2i position : playerSpawns) {
+            if (!isCharacterAt(position)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     public void removeCharacter(final CharacterInBattle character) {
         characters.remove(character);
         characterOrder.remove(character);
