@@ -362,7 +362,7 @@ public class Battle {
 
     protected void turn() {
         currentCharacter = characterOrder.getFirst();
-        while (currentCharacter != null) {
+        while (currentCharacter != null && !checkDone()) {
             currentCharacter.startTurn();
             if (currentCharacter instanceof AiCharacter) {
                 try {
