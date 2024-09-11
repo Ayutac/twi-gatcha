@@ -26,30 +26,96 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
+/**
+ * An instantiation of a {@link Level}.
+ */
 public class Battle {
 
+    /**
+     * @see #getHeight()
+     */
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int height;
+    /**
+     * @see #getWidth()
+     */
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int width;
+    /**
+     * @see #getSize()
+     */
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int size;
 
+    /**
+     * A list of all characters that were introduced to this battle, in introduction order.
+     */
     protected final List<CharacterInBattle> characters = new LinkedList<>();
-    protected final List<Terrain> terrainList;
+    /**
+     * @see #getTerrainGraph()
+     */
     protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
+    /**
+     * All the places where the player can place their characters at the beginning of the battle.
+     */
     protected final @NotNull Set<Vec2i> playerSpawns;
+    /**
+     * The waves of enemies (or allies) to appear during the battle.
+     */
     protected final @NotNull Set<Wave> waves;
+    /**
+     * @see #getPlacementParty()
+     */
     protected final @NotNull Queue<CharacterModified> placementParty = new LinkedList<>();
+    /**
+     * Saves the initiative rolls of each character participating in the battle.
+     */
     protected final @NotNull Map<CharacterInBattle, Double> initiativeRolls = new HashMap<>();
+    /**
+     * @see #getCharacterOrder()
+     */
     protected final @NotNull List<CharacterInBattle> characterOrder = new ArrayList<>();
+    /**
+     * @see #getPossiblePlayerFields()
+     */
     protected final @NotNull Map<Vec2i, Double> possiblePlayerFields = new HashMap<>();
+    /**
+     * @see #getPossibleAttackFields()
+     */
     protected final @NotNull List<Vec2i> possibleAttackFields = new LinkedList<>();
 
+    /**
+     * @see #getPhase()
+     */
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
+    /**
+     * A {@link Random} instance for this battle.
+     */
     protected @NotNull Random random;
+    /**
+     * @see #getCurrentCharacter()
+     */
     protected @Nullable CharacterInBattle currentCharacter = null;
+    /**
+     * @see #getSelectedAttack()
+     */
     protected @Nullable Attack selectedAttack = null;
+    /**
+     * @see #isPlayerMove()
+     */
     protected boolean playerMoveDone = true;
+    /**
+     * @see #isPlayerAttack()
+     */
     protected boolean playerAttackDone = true;
 
+    /**
+     * Creates a new {@link Battle}.
+     * @param height the number of vertical hex tiles, positive
+     * @param width the number of horizontal hex tiles, positive
+     * @param terrainList a list with terrains to supplement this battle's field with, can be empty but not {@code null}
+     * @param waves the waves for this battle, can be empty but not {@code null}; each turn can only have one wave
+     * @param playerSpawns spots the player can place their characters, not empty or {@code null}
+     * @throws IllegalArgumentException If the constraints are violated, the field is too big or any positions
+     *                                  given by the terrain, waves or spawns are outside the field.
+     */
     public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int width,
                   final @NotNull List<Terrain> terrainList,
@@ -71,11 +137,25 @@ public class Battle {
                 throw new IllegalArgumentException("Terrain must be within field!");
             }
         }
-        this.terrainList = List.copyOf(terrainList);
         if (waves.size() != waves.stream().mapToInt(Wave::turn).distinct().count()) {
             throw new IllegalArgumentException("A turn can have at most one wave!");
         }
+        for (final Wave wave : waves) {
+            for (final WaveUnit unit : wave.units()) {
+                if (!contains(unit.startPos())) {
+                    throw new IllegalArgumentException("Unit spawn must be within field!");
+                }
+            }
+        }
         this.waves = Set.copyOf(waves);
+        if (playerSpawns.isEmpty()) {
+            throw new IllegalArgumentException("At least 1 player spawn point must be provided!");
+        }
+        for (final Vec2i spawnPosition : playerSpawns) {
+            if (!contains(spawnPosition)) {
+                throw new IllegalArgumentException("Player spawn must be within field!");
+            }
+        }
         this.playerSpawns = Set.copyOf(playerSpawns);
         // generate terrain graph
         terrainGraph = new SimpleDirectedWeightedGraph<>(DefaultEdge.class);
@@ -99,33 +179,56 @@ public class Battle {
         random = new Random((long) size * (1 + terrainList.size()));
     }
 
-    @Range(from = 1, to = Integer.MAX_VALUE)
-    public int getHeight() {
+    /**
+     * @return the positive number of vertical tiles on this battle's field
+     */
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getHeight() {
         return height;
     }
 
-    @Range(from = 1, to = Integer.MAX_VALUE)
-    public int getWidth() {
+    /**
+     * @return the positive number of horizontal tiles on this battle's field
+     */
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getWidth() {
         return width;
     }
 
-    @Range(from = 1, to = Integer.MAX_VALUE)
-    public int getSize() {
+    /**
+     * @return the positive number of tiles on this battle's field
+     */
+    public @Range(from = 1, to = Integer.MAX_VALUE)int getSize() {
         return size;
     }
 
+    /**
+     * @return the {@link BattlePhase} this battle is in, not {@code null}
+     */
     public @NotNull BattlePhase getPhase() {
         return phase;
     }
 
+    /**
+     * Once the {@link BattlePhase#PLACEMENT} started, this queue contains all party members of the player that still have to be placed.
+     * @return the player's party to place, not {@code null} but might be empty
+     * @see #startPlacement(List)
+     */
     public @NotNull Queue<CharacterModified> getPlacementParty() {
         return placementParty;
     }
 
+    /**
+     * Once the {@link BattlePhase#IN_PROGRESS} started, contains the characters currently involved in battle in the order of their turns.
+     * @return the battle's characters in their turn order, not {@code null} but might be empty
+     */
     public @NotNull List<CharacterInBattle> getCharacterOrder() {
         return characterOrder;
     }
 
+    /**
+     * During a player's turn before they moved, this will contain all the fields the player's character can move to.
+     * @return a map of the current (player) character's possible fields to go to, not {@code null}
+     * @see #getCurrentCharacter()
+     */
     public @NotNull Map<Vec2i, Double> getPossiblePlayerFields() {
         return possiblePlayerFields;
     }
