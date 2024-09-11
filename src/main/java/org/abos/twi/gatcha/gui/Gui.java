@@ -95,9 +95,8 @@ public final class Gui extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         Battle.shutdown();
-        super.stop();
     }
 
     public @Nullable Player getPlayer() {
