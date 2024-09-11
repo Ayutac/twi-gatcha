@@ -25,6 +25,7 @@ public final class BattleScreen extends AbstractScreen {
     private final @NotNull RadioButton special2AttackButton = new RadioButton();
     private final @NotNull HBox attackBox;
     private @Nullable BattlefieldPane battlefieldPane;
+    private @Nullable AbstractScreen caller;
 
     private @Nullable Battle battle;
 
@@ -71,6 +72,14 @@ public final class BattleScreen extends AbstractScreen {
             setCenter(null);
             turnOrder.setText("");
         }
+    }
+
+    public @Nullable AbstractScreen getCaller() {
+        return caller;
+    }
+
+    public void setCaller(@Nullable AbstractScreen caller) {
+        this.caller = caller;
     }
 
     public void update() {

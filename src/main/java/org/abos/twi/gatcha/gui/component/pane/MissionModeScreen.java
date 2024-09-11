@@ -22,7 +22,7 @@ public final class MissionModeScreen extends AbstractScreen {
             }
         });
         campaignBtn.setPrefWidth(BUTTON_WIDTH);
-        campaignBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        campaignBtn.setOnMouseClicked(mouseEvent -> this.gui.showCampaignScreen());
         dungeonBtn.setPrefWidth(BUTTON_WIDTH);
         dungeonBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
         final VBox rightBox = new VBox(campaignBtn, dungeonBtn);

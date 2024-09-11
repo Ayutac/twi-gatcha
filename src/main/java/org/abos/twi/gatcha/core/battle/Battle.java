@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.battle.ai.AiCharacter;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
 import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
@@ -112,16 +113,16 @@ public class Battle {
 
     /**
      * Creates a new {@link Battle}.
-     * @param height the number of vertical hex tiles, positive
      * @param width the number of horizontal hex tiles, positive
+     * @param height the number of vertical hex tiles, positive
      * @param terrainList a list with terrains to supplement this battle's field with, can be empty but not {@code null}
      * @param waves the waves for this battle, can be empty but not {@code null}; each turn can only have one wave
      * @param playerSpawns spots the player can place their characters, not empty or {@code null}
      * @throws IllegalArgumentException If the constraints are violated, the field is too big or any positions
      *                                  given by the terrain, waves or spawns are outside the field.
      */
-    public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int height,
-                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
+    public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int width,
+                  final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @NotNull List<Terrain> terrainList,
                   final @NotNull Set<Wave> waves,
                   final @NotNull Set<Vec2i> playerSpawns) {
@@ -214,7 +215,7 @@ public class Battle {
     /**
      * Once the {@link BattlePhase#PLACEMENT} started, this queue contains all party members of the player that still have to be placed.
      * @return the player's party to place, not {@code null} but might be empty
-     * @see #startPlacement(List)
+     * @see #startPlacement(Party)
      */
     public @NotNull Queue<CharacterModified> getPlacementParty() {
         return placementParty;
@@ -281,7 +282,7 @@ public class Battle {
         return playerSpawns.contains(position);
     }
 
-    public void startPlacement(final @NotNull List<CharacterModified> party) {
+    public void startPlacement(final @NotNull Party party) {
         final Optional<Wave> firstWave = waves.stream().filter(w -> w.turn() == 0).findFirst();
         // TODO avoid character collision
         firstWave.ifPresent(wave -> {
@@ -290,7 +291,7 @@ public class Battle {
             }
         });
         phase = BattlePhase.PLACEMENT;
-        this.placementParty.addAll(party);
+        this.placementParty.addAll(party.characters());
     }
 
     public CharacterInBattle placePlayerCharacterAt(final @NotNull CharacterModified character, final @NotNull Vec2i position) {

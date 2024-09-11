@@ -14,6 +14,7 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.AbstractScreen;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
+import org.abos.twi.gatcha.gui.component.pane.CampaignScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.HomeScreen;
@@ -47,6 +48,8 @@ public final class Gui extends Application {
     private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final MissionModeScreen missionModeScreen = new MissionModeScreen(this);
     private final Scene missionModeScreenScene = new Scene(missionModeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final CampaignScreen campaignScreen = new CampaignScreen(this);
+    private final Scene campaignScreenScene = new Scene(campaignScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final BattleScreen battleScreen = new BattleScreen(this);
     private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
@@ -71,8 +74,14 @@ public final class Gui extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.stage = stage;
+        setupKeyboardNavigation();
+        this.stage.setScene(mainMenuScene);
+        this.stage.show();
+    }
+
+    private void setupKeyboardNavigation() {
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showRoosterScreen(homeScreen);
@@ -98,8 +107,11 @@ public final class Gui extends Application {
                 showHomeScreen();
             }
         });
-        this.stage.setScene(mainMenuScene);
-        this.stage.show();
+        campaignScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                showMissionModeScreen();
+            }
+        });
     }
 
     @Override
@@ -171,6 +183,20 @@ public final class Gui extends Application {
 
     public void showMissionModeScreen() {
         stage.setScene(missionModeScreenScene);
+    }
+
+    public void showCampaignScreen() {
+        stage.setScene(campaignScreenScene);
+    }
+
+    public void showBattleScreen(final @NotNull AbstractScreen caller, final @NotNull Battle battle) {
+        if (player == null || player.getNumberOfParties() == 0) {
+            return;
+        }
+        battleScreen.setCaller(caller);
+        battleScreen.setBattle(battle);
+        stage.setScene(battleScreenScene);
+        battle.startPlacement(player.getParty(0));
     }
 
     public static void showNotImplemented() {
