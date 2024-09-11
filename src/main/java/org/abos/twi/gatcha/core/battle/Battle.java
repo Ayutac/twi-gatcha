@@ -24,12 +24,16 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 /**
  * An instantiation of a {@link Level}.
  */
 public class Battle {
+
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(1);
 
     /**
      * @see #getHeight()
@@ -336,11 +340,11 @@ public class Battle {
         phase = BattlePhase.IN_PROGRESS;
         rollForInitiative();
         // TODO use an ExecutionService
-        new Thread(() -> {
+        EXECUTOR.submit(() -> {
             while (!checkDone()) {
                 turn();
             }
-        }).start();
+        });
     }
 
     public void rollForInitiative() {
@@ -450,5 +454,9 @@ public class Battle {
             phase = BattlePhase.DONE;
         }
         return phase == BattlePhase.DONE;
+    }
+
+    public static void shutdown() {
+        EXECUTOR.shutdownNow();
     }
 }

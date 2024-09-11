@@ -10,6 +10,7 @@ import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
+import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.AbstractScreen;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
@@ -91,6 +92,12 @@ public final class Gui extends Application {
         });
         this.stage.setScene(mainMenuScene);
         this.stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        Battle.shutdown();
+        super.stop();
     }
 
     public @Nullable Player getPlayer() {
