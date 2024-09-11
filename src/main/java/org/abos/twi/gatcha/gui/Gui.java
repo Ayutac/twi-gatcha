@@ -100,10 +100,10 @@ public final class Gui extends Application {
         partyScreen.setPlayer(player);*/
         final Level level = new Level(10, 10, List.of(), Set.of(
                 new Wave(0, List.of(
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), TeamKind.ENEMY, new Vec2i(9, 9), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), TeamKind.ENEMY, new Vec2i(9, 8), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), TeamKind.ENEMY, new Vec2i(9, 7), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), TeamKind.ENEMY, new Vec2i(9, 5), DirectRandomAttacker::new)))),
+                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 9), DirectRandomAttacker::new),
+                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 8), DirectRandomAttacker::new),
+                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 7), DirectRandomAttacker::new),
+                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 5), DirectRandomAttacker::new)))),
                 Set.of(new Vec2i(0, 0), new Vec2i(0, 1), new Vec2i(0, 2), new Vec2i(1, 0), new Vec2i(1, 1), new Vec2i(1, 2)));
         final Battle battle = level.prepareBattle();
         battle.startPlacement(List.of(
