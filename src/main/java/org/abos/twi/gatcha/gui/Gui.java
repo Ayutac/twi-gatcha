@@ -17,6 +17,7 @@ import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.HomeScreen;
+import org.abos.twi.gatcha.gui.component.pane.MissionModeScreen;
 import org.abos.twi.gatcha.gui.component.pane.PartyScreen;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
@@ -38,14 +39,16 @@ public final class Gui extends Application {
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final HomeScreen homeScreen = new HomeScreen(this);
     private final Scene homeMenuScene = new Scene(homeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final BattleScreen battleScreen = new BattleScreen(this);
-    private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final RoosterScreen roosterScreen = new RoosterScreen(this);
     private final Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final CharacterScreen characterScreen = new CharacterScreen(this);
     private final Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final PartyScreen partyScreen = new PartyScreen(this);
     private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final MissionModeScreen missionModeScreen = new MissionModeScreen(this);
+    private final Scene missionModeScreenScene = new Scene(missionModeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final BattleScreen battleScreen = new BattleScreen(this);
+    private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
 
     private @Nullable Player player;
@@ -86,6 +89,11 @@ public final class Gui extends Application {
             }
         });
         partyScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                showHomeScreen();
+            }
+        });
+        missionModeScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showHomeScreen();
             }
@@ -159,6 +167,10 @@ public final class Gui extends Application {
 
     public void showPartyScreen() {
         stage.setScene(partyScreenScene);
+    }
+
+    public void showMissionModeScreen() {
+        stage.setScene(missionModeScreenScene);
     }
 
     public static void showNotImplemented() {

@@ -23,7 +23,7 @@ public final class HomeScreen extends AbstractScreen {
         pullBtn.setPrefWidth(BUTTON_WIDTH);
         pullBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
         missionBtn.setPrefWidth(BUTTON_WIDTH);
-        missionBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        missionBtn.setOnMouseClicked(mouseEvent -> this.gui.showMissionModeScreen());
         final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn);
         setRight(rightBox);
     }
