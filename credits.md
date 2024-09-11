@@ -15,7 +15,8 @@
 * Ayutac
 
 ## Art
-* [character] by [artist]
+* Pontastic: Erin
 
 ## Special Thanks To
 * Chalyon
+* Ziondiac
