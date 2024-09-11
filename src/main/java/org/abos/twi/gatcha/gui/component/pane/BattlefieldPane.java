@@ -1,5 +1,6 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.application.Platform;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -133,17 +134,17 @@ public class BattlefieldPane extends Pane implements BattleUi {
 
     @Override
     public void characterPlaced(final @NotNull CharacterInBattle character, final @NotNull Vec2i position) {
-        screen.update();
+        Platform.runLater(screen::update);
     }
 
     @Override
     public void characterMoved(final @NotNull CharacterInBattle character, final @NotNull Vec2i from, final @NotNull Vec2i to) {
-        screen.update();
+        Platform.runLater(screen::update);
     }
 
     @Override
     public void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage) {
-        screen.update();
+        Platform.runLater(screen::update);
     }
 
     @Override
