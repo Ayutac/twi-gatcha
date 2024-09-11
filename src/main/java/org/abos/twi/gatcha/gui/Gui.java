@@ -5,21 +5,16 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
-import org.abos.twi.gatcha.core.battle.Battle;
-import org.abos.twi.gatcha.core.battle.Level;
-import org.abos.twi.gatcha.core.battle.TeamKind;
-import org.abos.twi.gatcha.core.battle.Wave;
-import org.abos.twi.gatcha.core.battle.WaveUnit;
-import org.abos.twi.gatcha.core.battle.ai.DirectRandomAttacker;
 import org.abos.twi.gatcha.data.Characters;
+import org.abos.twi.gatcha.gui.component.pane.AbstractScreen;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
+import org.abos.twi.gatcha.gui.component.pane.HomeScreen;
 import org.abos.twi.gatcha.gui.component.pane.PartyScreen;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +24,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public final class Gui extends Application {
@@ -40,6 +34,8 @@ public final class Gui extends Application {
     public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final HomeScreen homeScreen = new HomeScreen(this);
+    private final Scene homeMenuScene = new Scene(homeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final BattleScreen battleScreen = new BattleScreen(this);
     private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final RoosterScreen roosterScreen = new RoosterScreen(this);
@@ -50,7 +46,7 @@ public final class Gui extends Application {
     private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private Stage stage;
 
-    private Player player;
+    private @Nullable Player player;
 
     static {
         final Map<CharacterBase, Image> imageMap = new HashMap<>();
@@ -74,31 +70,55 @@ public final class Gui extends Application {
         this.stage = stage;
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                showRoosterScreen(null);
+                showRoosterScreen(homeScreen);
+            }
+        });
+        roosterScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                if (roosterScreen.getCaller() instanceof PartyScreen) {
+                    showPartyScreen();
+                }
+                else {
+                    showHomeScreen();
+                }
+            }
+        });
+        partyScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                showHomeScreen();
             }
         });
         this.stage.setScene(mainMenuScene);
         this.stage.show();
     }
 
+    public @Nullable Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(final @Nullable Player player) {
+        this.player = player;
+        roosterScreen.setPlayer(this.player);
+        partyScreen.setPlayer(this.player);
+    }
+
     public void newGame() {
-        /*player = new Player("Dev");
+        final Player newPlayer = new Player("Dev");
+        newPlayer.addToRooster(Characters.ERIN);
+        newPlayer.addParty(new Party("First Party", List.of(
+                newPlayer.getCharacter(Characters.ERIN))));
+        setPlayer(newPlayer);
+        stage.setScene(homeMenuScene);
+
+        // Test code
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
         player.addToRooster(Characters.KSMVR);
-        player.addToRooster(Characters.ERIN);
         player.addToRooster(Characters.YVLON);
         player.addToRooster(Characters.ZOMBIE);
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
-//        stage.setScene(roosterScreenScene);
-        roosterScreen.setPlayer(player);
-        player.addParty(new Party("test", List.of(
-                player.getCharacter(Characters.ERIN),
-                player.getCharacter(Characters.YVLON))));
-        stage.setScene(partyScreenScene);
-        partyScreen.setPlayer(player);*/
-        final Level level = new Level(10, 10, List.of(), Set.of(
+        /*final Level level = new Level(10, 10, List.of(), Set.of(
                 new Wave(0, List.of(
                         new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 9), DirectRandomAttacker::new),
                         new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 8), DirectRandomAttacker::new),
@@ -112,11 +132,16 @@ public final class Gui extends Application {
                 new CharacterModified(Characters.KSMVR),
                 new CharacterModified(Characters.YVLON)));
         stage.setScene(battleScreenScene);
-        battleScreen.setBattle(battle);
+        battleScreen.setBattle(battle);*/
     }
 
-    public void showRoosterScreen(final @Nullable PartyScreen caller) {
+    public void showHomeScreen() {
+        stage.setScene(homeMenuScene);
+    }
+
+    public void showRoosterScreen(final @Nullable AbstractScreen caller) {
         roosterScreen.setCaller(caller);
+        roosterScreen.updateGallery();
         stage.setScene(roosterScreenScene);
     }
 

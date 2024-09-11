@@ -29,7 +29,7 @@ public final class CharacterScreen extends AbstractScreen {
         setBottom(descBox);
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.BACK) {
-                this.gui.showRoosterScreen(null);
+                this.gui.showRoosterScreen(CharacterScreen.this);
             }
         });
     }

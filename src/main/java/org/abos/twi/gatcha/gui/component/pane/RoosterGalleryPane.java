@@ -34,19 +34,25 @@ public class RoosterGalleryPane extends GridPane {
             throw new IllegalArgumentException("Radius must be positive!");
         }
         this.radius = radius;
+        updateGallery();
+    }
+
+    protected void updateGallery() {
+        views.clear();
+        getChildren().clear();
         int count = 0;
         for (final CharacterModified character : player.getCharacters()) {
-            final LabelledCharacterView view = new LabelledCharacterView(character, true, 2*radius);
+            final LabelledCharacterView view = new LabelledCharacterView(character, true, 2* radius);
             view.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 if (mouseEvent.getButton() != MouseButton.PRIMARY) {
                     return;
                 }
-                if (screen.getCaller() == null) {
-                    screen.getGui().showCharacterScreen(character);
+                if (screen.getCaller() instanceof PartyScreen partyScreen){
+                    partyScreen.select(character);
+                    screen.getGui().showPartyScreen();
                 }
                 else {
-                    screen.getCaller().select(character);
-                    screen.getGui().showPartyScreen();
+                    screen.getGui().showCharacterScreen(character);
                 }
             });
             views.add(view);

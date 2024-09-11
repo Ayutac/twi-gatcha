@@ -1,5 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.gui.Gui;
@@ -15,6 +17,11 @@ public final class PartyScreen extends AbstractScreen {
 
     public PartyScreen(@NotNull Gui gui) {
         super(gui);
+        addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.BACK) {
+                this.gui.showHomeScreen();
+            }
+        });
     }
 
     public @Nullable Player getPlayer() {
