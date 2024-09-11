@@ -116,6 +116,7 @@ public final class Gui extends Application {
 
     @Override
     public void stop() {
+        battleScreen.shutdown();
         Battle.shutdown();
     }
 

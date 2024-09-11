@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -24,6 +26,7 @@ public final class BattleScreen extends AbstractScreen {
     private final @NotNull RadioButton special1AttackButton = new RadioButton();
     private final @NotNull RadioButton special2AttackButton = new RadioButton();
     private final @NotNull HBox attackBox;
+    private final @NotNull TextArea battleLog = new TextArea();
     private @Nullable BattlefieldPane battlefieldPane;
     private @Nullable AbstractScreen caller;
 
@@ -36,6 +39,12 @@ public final class BattleScreen extends AbstractScreen {
         topBox.setAlignment(Pos.CENTER);
         BorderPane.setMargin(topBox, new Insets(1, 0, 5, 0));
         setTop(topBox);
+        // batte log at the right
+        battleLog.setEditable(false);
+        battleLog.setWrapText(true);
+        battleLog.setPrefHeight(500d);
+        battleLog.setPrefWidth(200d);
+        setRight(battleLog);
         // group the radio buttons
         final ToggleGroup attackGroup = new ToggleGroup();
         normalAttackButton.setToggleGroup(attackGroup);
@@ -61,6 +70,7 @@ public final class BattleScreen extends AbstractScreen {
 
     public void setBattle(final @Nullable Battle battle) {
         this.battle = battle;
+        battleLog.setText("");
         if (this.battle != null) {
             battlefieldPane = new BattlefieldPane(this, battle, 30);
             final HBox box = new HBox(battlefieldPane);
@@ -80,6 +90,10 @@ public final class BattleScreen extends AbstractScreen {
 
     public void setCaller(@Nullable AbstractScreen caller) {
         this.caller = caller;
+    }
+
+    public @NotNull TextArea getBattleLog() {
+        return battleLog;
     }
 
     public void update() {
@@ -110,6 +124,12 @@ public final class BattleScreen extends AbstractScreen {
         }
         if (battlefieldPane != null) {
             battlefieldPane.updateGrid(-10d, -10d);
+        }
+    }
+
+    public void shutdown() {
+        if (battlefieldPane != null && battlefieldPane.playerDone != null) {
+            battlefieldPane.playerDone.cancel(true);
         }
     }
 }

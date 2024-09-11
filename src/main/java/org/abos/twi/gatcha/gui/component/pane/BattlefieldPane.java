@@ -1,6 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -82,11 +83,13 @@ public class BattlefieldPane extends Pane implements BattleUi {
                 else if (battle.getPhase() == BattlePhase.IN_PROGRESS) {
                     // move with the player character
                     if (isPlayerMoving() && battle.getCurrentCharacter() != null && battle.getPossiblePlayerFields().containsKey(position)) {
+                        final Vec2i oldPosition = battle.getCurrentCharacter().getPosition();
                         battle.getCurrentCharacter().setMoved((int) Math.round(battle.getPossiblePlayerFields().get(position)));
                         battle.getCurrentCharacter().setPosition(position);
                         final CharacterView characterView = characterViews.get(battle.getCurrentCharacter());
                         characterView.setX(hexagon.get().getLeftUpperCorner().x());
                         characterView.setY(hexagon.get().getLeftUpperCorner().y());
+                        characterMoved(battle.getCurrentCharacter(), oldPosition, battle.getCurrentCharacter().getPosition());
                         playerMoving = false;
                         playerAttacking = true;
                         screen.update();
@@ -134,11 +137,15 @@ public class BattlefieldPane extends Pane implements BattleUi {
 
     @Override
     public void characterPlaced(final @NotNull CharacterInBattle character, final @NotNull Vec2i position) {
+        final String msg = String.format("%s appeared at (%d,%d).\n", character.getName(), position.x(), position.y());
+        screen.getBattleLog().appendText(msg);
         Platform.runLater(screen::update);
     }
 
     @Override
     public void characterMoved(final @NotNull CharacterInBattle character, final @NotNull Vec2i from, final @NotNull Vec2i to) {
+        final String msg = String.format("%s moved from (%d,%d) to (%d,%d).\n", character.getName(), from.x(), from.y(), to.x(), to.y());
+        screen.getBattleLog().appendText(msg);
         Platform.runLater(screen::update);
     }
 
