@@ -75,8 +75,21 @@ public class InventoryMap extends EnumMap<InventoryKind, Integer> {
         return add(key, -value);
     }
 
-    public void addAll(final @NotNull InventoryMap reward) {
-        reward.forEach(this::add);
+    public void addAll(final @NotNull InventoryMap map) {
+        map.forEach(this::add);
+    }
+
+    public boolean canSubtract(final @NotNull InventoryMap map) {
+        for (final InventoryKind kind : InventoryKind.values()) {
+            if (get(kind) - map.get(kind) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void subtractAll(final @NotNull InventoryMap map) {
+        map.forEach(this::subtract);
     }
 
     @Override
