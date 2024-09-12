@@ -1,7 +1,6 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.application.Platform;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
