@@ -13,6 +13,9 @@ public record Party(String name, List<CharacterModified> characters) implements 
     public Party(final @NotNull String name, final @NotNull List<CharacterModified> characters) {
         this.name = Objects.requireNonNull(name);
         this.characters = List.copyOf(characters);
+        if (characters.size() != characters.stream().distinct().count()) {
+            throw new IllegalArgumentException("Party cannot contain duplicates!");
+        }
     }
 
     @Override

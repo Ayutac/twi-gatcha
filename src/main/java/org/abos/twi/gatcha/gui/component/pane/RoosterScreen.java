@@ -22,7 +22,7 @@ public final class RoosterScreen extends AbstractScreen {
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.BACK) {
                 if (caller instanceof PartyScreen) {
-                    this.gui.showPartyScreen();
+                    this.gui.showPartyScreen(false);
                 }
                 else {
                     this.gui.showHomeScreen();

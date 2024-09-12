@@ -90,7 +90,7 @@ public final class Gui extends Application {
         roosterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 if (roosterScreen.getCaller() instanceof PartyScreen) {
-                    showPartyScreen();
+                    showPartyScreen(false);
                 }
                 else {
                     showHomeScreen();
@@ -179,7 +179,10 @@ public final class Gui extends Application {
         stage.setScene(characterScreenScene);
     }
 
-    public void showPartyScreen() {
+    public void showPartyScreen(boolean reset) {
+        if (reset) {
+            partyScreen.update();
+        }
         stage.setScene(partyScreenScene);
     }
 

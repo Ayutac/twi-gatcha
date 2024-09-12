@@ -88,10 +88,11 @@ public class Player implements Named {
         if (party.characters().size() > PARTY_MAX_SIZE) {
             throw new IllegalArgumentException("Party can have at most " + PARTY_MAX_SIZE + " members!");
         }
-        if (party.characters().size() != party.characters().stream().distinct().count()) {
-            throw new IllegalArgumentException("Party cannot contain duplicates!");
-        }
         parties.add(party);
+    }
+
+    public void updateParty(final @NotNull Party party, final @Range(from = 0, to = Integer.MAX_VALUE) int index) {
+        parties.set(index, Objects.requireNonNull(party));
     }
 
 }

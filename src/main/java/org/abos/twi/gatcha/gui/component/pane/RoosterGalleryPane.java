@@ -49,7 +49,7 @@ public class RoosterGalleryPane extends GridPane {
                 }
                 if (screen.getCaller() instanceof PartyScreen partyScreen){
                     partyScreen.select(character);
-                    screen.getGui().showPartyScreen();
+                    screen.getGui().showPartyScreen(false);
                 }
                 else {
                     screen.getGui().showCharacterScreen(character);

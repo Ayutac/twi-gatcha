@@ -36,7 +36,7 @@ public final class HomeScreen extends AbstractScreen {
         partyBtn.setPrefWidth(BUTTON_WIDTH);
         partyBtn.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                this.gui.showPartyScreen();
+                this.gui.showPartyScreen(true);
             }
         });
         pullBtn.setPrefWidth(BUTTON_WIDTH);
