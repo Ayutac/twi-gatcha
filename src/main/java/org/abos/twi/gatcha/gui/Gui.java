@@ -38,8 +38,8 @@ public final class Gui extends Application {
     public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final HomeScreen homeScreen = new HomeScreen(this);
-    private final Scene homeMenuScene = new Scene(homeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final HomeScreen homeMenuScreen = new HomeScreen(this);
+    private final Scene homeMenuScreenScene = new Scene(homeMenuScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final RoosterScreen roosterScreen = new RoosterScreen(this);
     private final Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final CharacterScreen characterScreen = new CharacterScreen(this);
@@ -84,7 +84,7 @@ public final class Gui extends Application {
     private void setupKeyboardNavigation() {
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                showRoosterScreen(homeScreen);
+                showRoosterScreen(homeMenuScreen);
             }
         });
         roosterScreenScene.setOnKeyReleased(keyEvent -> {
@@ -136,7 +136,7 @@ public final class Gui extends Application {
         newPlayer.addParty(new Party("First Party", List.of(
                 newPlayer.getCharacter(Characters.ERIN))));
         setPlayer(newPlayer);
-        stage.setScene(homeMenuScene);
+        showHomeScreen();
 
         // Test code
         player.addToRooster(Characters.CERIA);
@@ -164,7 +164,8 @@ public final class Gui extends Application {
     }
 
     public void showHomeScreen() {
-        stage.setScene(homeMenuScene);
+        homeMenuScreen.update();
+        stage.setScene(homeMenuScreenScene);
     }
 
     public void showRoosterScreen(final @Nullable AbstractScreen caller) {

@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.InventoryMap;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.battle.ai.AiCharacter;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
@@ -70,6 +72,10 @@ public class Battle {
      * The waves of enemies (or allies) to appear during the battle.
      */
     protected final @NotNull Set<Wave> waves;
+    /**
+     * @see #getReward()
+     */
+    protected final @NotNull InventoryMap reward;
     /**
      * @see #getPlacementParty()
      */
@@ -122,7 +128,8 @@ public class Battle {
                   final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @NotNull List<Terrain> terrainList,
                   final @NotNull Set<Wave> waves,
-                  final @NotNull Set<Vec2i> playerSpawns) {
+                  final @NotNull Set<Vec2i> playerSpawns,
+                  final @NotNull InventoryMap reward) {
         if (height < 1 || width < 1) {
             throw new IllegalArgumentException("Dimensions must be positive!");
         }
@@ -150,6 +157,7 @@ public class Battle {
             }
         }
         this.waves = Set.copyOf(waves);
+        this.reward = Objects.requireNonNull(reward);
         if (playerSpawns.isEmpty()) {
             throw new IllegalArgumentException("At least 1 player spawn point must be provided!");
         }
@@ -200,6 +208,13 @@ public class Battle {
      */
     public @Range(from = 1, to = Integer.MAX_VALUE) int getSize() {
         return size;
+    }
+
+    /**
+     * @return the reward for this battle
+     */
+    public @NotNull InventoryMap getReward() {
+        return reward;
     }
 
     /**
@@ -451,9 +466,12 @@ public class Battle {
             return true;
         }
         // game is over if there are no player characters or no enemies anymore
-        if (characters.stream().noneMatch(character -> character.getTeam() == TeamKind.PLAYER) ||
-                characters.stream().noneMatch(character -> character.getTeam() == TeamKind.ENEMY)) {
+        boolean allEnemiesDefeated = characters.stream().noneMatch(character -> character.getTeam() == TeamKind.ENEMY);
+        if (characters.stream().noneMatch(character -> character.getTeam() == TeamKind.PLAYER) || allEnemiesDefeated) {
             phase = BattlePhase.DONE;
+            if (ui != null && allEnemiesDefeated) {
+                ui.awardReward();
+            }
         }
         return phase == BattlePhase.DONE;
     }

@@ -1,6 +1,7 @@
 package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -9,6 +10,8 @@ import javafx.scene.paint.Color;
 import org.abos.common.Vec2d;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.InventoryMap;
+import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.BattleUi;
@@ -208,6 +211,24 @@ public class BattlefieldPane extends Pane implements BattleUi {
         playerDone = new CompletableFuture<>();
         playerMoving = true;
         return playerDone;
+    }
+
+    @Override
+    public void awardReward() {
+        final Player player = screen.getGui().getPlayer();
+        if (player != null) {
+            final InventoryMap reward = getBattle().getReward();
+            player.getInventory().addAll(reward);
+            Platform.runLater(() -> {
+                final Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Congratulations!");
+                info.setContentText(String.format("You received %s!", reward));
+                info.showAndWait();
+                if (screen.getCaller() instanceof CampaignScreen) {
+                    screen.getGui().showCampaignScreen();
+                }
+            });
+        }
     }
 
     protected void updateGrid(double mouseX, double mouseY) {

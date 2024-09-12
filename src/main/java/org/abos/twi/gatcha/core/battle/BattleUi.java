@@ -73,4 +73,9 @@ public interface BattleUi {
      */
     CompletableFuture<Object> waitForPlayer();
 
+    /**
+     * Gives the player the reward for this stage.
+     */
+    void awardReward();
+
 }
