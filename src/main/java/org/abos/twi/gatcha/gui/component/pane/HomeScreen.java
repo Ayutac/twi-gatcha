@@ -3,6 +3,7 @@ package org.abos.twi.gatcha.gui.component.pane;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import org.abos.twi.gatcha.core.InventoryKind;
 import org.abos.twi.gatcha.core.Player;
@@ -27,13 +28,25 @@ public final class HomeScreen extends AbstractScreen {
         setTop(topBox);
         // right buttons
         roosterBtn.setPrefWidth(BUTTON_WIDTH);
-        roosterBtn.setOnMouseClicked(mouseEvent -> this.gui.showRoosterScreen(this));
+        roosterBtn.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.showRoosterScreen(this);
+            }
+        });
         partyBtn.setPrefWidth(BUTTON_WIDTH);
-        partyBtn.setOnMouseClicked(mouseEvent -> this.gui.showPartyScreen());
+        partyBtn.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.showPartyScreen();
+            }
+        });
         pullBtn.setPrefWidth(BUTTON_WIDTH);
         pullBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
         missionBtn.setPrefWidth(BUTTON_WIDTH);
-        missionBtn.setOnMouseClicked(mouseEvent -> this.gui.showMissionModeScreen());
+        missionBtn.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.showMissionModeScreen();
+            }
+        });
         final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn);
         setRight(rightBox);
     }
