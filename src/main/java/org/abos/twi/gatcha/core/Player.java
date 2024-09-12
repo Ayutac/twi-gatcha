@@ -77,10 +77,11 @@ public class Player implements Named {
 
     /**
      * Increases the count of an item in the inventory. The new amount cannot be negative.
-     * @param kind the kind of item to change
-     * @param amount the additional amount of that item
+     * @param kind the kind of item to change, not {@code null}
+     * @param amount the additional amount of that item, can be negative
+     * @throws IllegalArgumentException If the sum amount after the increase is negative or overflows
      */
-    public void increaseInventoryCount(final @NotNull InventoryKind kind, final @Range(from = 0, to = Integer.MAX_VALUE) int amount) {
+    public void increaseInventoryCount(final @NotNull InventoryKind kind, final int amount) {
         int sum = getInventoryCount(kind); // throws NPE
         try {
             sum = Math.addExact(sum, amount);
