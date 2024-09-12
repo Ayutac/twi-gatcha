@@ -1,19 +1,24 @@
 package org.abos.twi.gatcha.gui;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import org.abos.twi.gatcha.core.Booster;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
+import org.abos.twi.gatcha.data.Boosters;
 import org.abos.twi.gatcha.data.Characters;
 import org.abos.twi.gatcha.gui.component.pane.AbstractScreen;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
+import org.abos.twi.gatcha.gui.component.pane.BoosterScreen;
 import org.abos.twi.gatcha.gui.component.pane.CampaignScreen;
 import org.abos.twi.gatcha.gui.component.pane.CharacterScreen;
 import org.abos.twi.gatcha.gui.component.pane.MainMenu;
@@ -26,8 +31,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public final class Gui extends Application {
@@ -36,6 +43,7 @@ public final class Gui extends Application {
     public static final int DEFAULT_HEIGHT = 720;
     public static final Map<CharacterBase, Image> IMAGE_MAP;
     public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
+    public static final List<Booster> BOOSTERS;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final HomeScreen homeScreen = new HomeScreen(this);
@@ -46,6 +54,8 @@ public final class Gui extends Application {
     private final Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final PartyScreen partyScreen = new PartyScreen(this);
     private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final BoosterScreen boosterScreen = new BoosterScreen(this);
+    private final Scene boosterScreenScene = new Scene(boosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final MissionModeScreen missionModeScreen = new MissionModeScreen(this);
     private final Scene missionModeScreenScene = new Scene(missionModeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final CampaignScreen campaignScreen = new CampaignScreen(this);
@@ -71,6 +81,17 @@ public final class Gui extends Application {
         }
         IMAGE_MAP = Map.copyOf(imageMap);
         IMAGE_HEX_MAP = Map.copyOf(imageHexMap);
+        final List<Booster> boosters = new LinkedList<>();
+        try {
+            for (final Field boosterField : Boosters.class.getFields()) {
+                final Booster booster = (Booster) boosterField.get(null);
+                boosters.add(booster);
+            }
+        }
+        catch (IllegalAccessException ex) {
+            Logger.getGlobal().warning("Couldn't access boosters!");
+        }
+        BOOSTERS = List.copyOf(boosters);
     }
 
     @Override
@@ -82,6 +103,11 @@ public final class Gui extends Application {
     }
 
     private void setupKeyboardNavigation() {
+        final EventHandler<KeyEvent> simplyReturnHome = keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                showHomeScreen();
+            }
+        };
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showRoosterScreen(homeScreen);
@@ -97,16 +123,9 @@ public final class Gui extends Application {
                 }
             }
         });
-        partyScreenScene.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                showHomeScreen();
-            }
-        });
-        missionModeScreenScene.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                showHomeScreen();
-            }
-        });
+        partyScreenScene.setOnKeyReleased(simplyReturnHome);
+        boosterScreenScene.setOnKeyReleased(simplyReturnHome);
+        missionModeScreenScene.setOnKeyReleased(simplyReturnHome);
         campaignScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showMissionModeScreen();
@@ -186,6 +205,11 @@ public final class Gui extends Application {
         stage.setScene(partyScreenScene);
     }
 
+    public void showBoosterScreen() {
+        boosterScreen.update();
+        stage.setScene(boosterScreenScene);
+    }
+
     public void showMissionModeScreen() {
         stage.setScene(missionModeScreenScene);
     }
@@ -209,6 +233,15 @@ public final class Gui extends Application {
         warning.setTitle("Uh oh!");
         warning.setContentText("This feature is not yet implemented!");
         warning.showAndWait();
+    }
+
+    public static @NotNull Optional<Booster> getBoosterByName(final @Nullable String name) {
+        for (final Booster booster : BOOSTERS) {
+            if (booster.getName().equals(name)) {
+                return Optional.of(booster);
+            }
+        }
+        return Optional.empty();
     }
 
     public static void main(String[] args) {

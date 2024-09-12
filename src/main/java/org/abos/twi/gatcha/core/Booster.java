@@ -13,9 +13,6 @@ public record Booster(String name, String description, List<CharacterBase> chara
                    final @NotNull InventoryMap price, final @NotNull Trigger availability) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
-        if (characters.contains(null)) {
-            throw new NullPointerException("Character list cannot contain null!");
-        }
         this.characters = List.copyOf(characters);
         this.price = Objects.requireNonNull(price);
         this.availability = Objects.requireNonNull(availability);

@@ -40,7 +40,11 @@ public final class HomeScreen extends AbstractScreen {
             }
         });
         pullBtn.setPrefWidth(BUTTON_WIDTH);
-        pullBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        pullBtn.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.showBoosterScreen();
+            }
+        });
         missionBtn.setPrefWidth(BUTTON_WIDTH);
         missionBtn.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
