@@ -17,6 +17,9 @@
 ## Art
 * Pontastic: Erin
 
+## Game Tester
+* Ceburi
+
 ## Special Thanks To
 * Chalyon
 * Ziondiac
