@@ -16,12 +16,18 @@ import java.util.Objects;
  */
 public class Player implements Named {
 
+    public static final int DEFAULT_MAX_STAMINA = 100;
+
     public static final int PARTY_MAX_SIZE = 5;
 
     /**
      * @see #getName()
      */
     protected String name;
+
+    protected @Range(from = 1, to = Integer.MAX_VALUE) int maxStamina;
+
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int stamina;
 
     protected InventoryMap inventory = new InventoryMap();
 
@@ -31,6 +37,7 @@ public class Player implements Named {
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);
+        this.stamina = this.maxStamina = DEFAULT_MAX_STAMINA;
     }
 
     @Override
