@@ -153,6 +153,9 @@ public class CharacterInBattle implements Named, Describable {
         health = health <= remainingAmount ? 0 : health - remainingAmount;
         if (health == 0) {
             battle.removeCharacter(this);
+            if (battle.getUi() != null) {
+                battle.getUi().characterDefeated(this);
+            }
         }
     }
 

@@ -42,6 +42,12 @@ public interface BattleUi {
     void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage);
 
     /**
+     * Gets called when a character gets defeated.
+     * @param defeated the character who got defeated, not {@code null}
+     */
+    void characterDefeated(final @NotNull CharacterInBattle defeated);
+
+    /**
      * Tells if it is the player's turn to move a character.
      * @return {@code true} if the player has to move a character, else {@code false}
      */

@@ -144,13 +144,53 @@ public class BattlefieldPane extends Pane implements BattleUi {
 
     @Override
     public void characterMoved(final @NotNull CharacterInBattle character, final @NotNull Vec2i from, final @NotNull Vec2i to) {
-        final String msg = String.format("%s moved from (%d,%d) to (%d,%d).\n", character.getName(), from.x(), from.y(), to.x(), to.y());
+        final String msg;
+        if (!from.equals(to)) {
+            msg = String.format("%s moved from (%d,%d) to (%d,%d).\n", character.getName(), from.x(), from.y(), to.x(), to.y());
+        }
+        else {
+            msg = String.format("%s remained on (%d,%d).\n", character.getName(), from.x(), from.y());
+        }
+        screen.getBattleLog().appendText(msg);
+        Platform.runLater(screen::update);
+    }
+
+    private String defenderString(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender) {
+        if (attacker == defender) {
+            return attacker.getModified().getBase().self();
+        }
+        if (defender == null) {
+            return "nothing";
+        }
+        return defender.getName();
+    }
+
+    @Override
+    public void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage) {
+        final String msg = switch (type) {
+            case DAMAGE_BLUNT -> String.format("%s attacked %s for %d blunt damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_SLASH -> String.format("%s attacked %s for %d slash damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_PIERCE -> String.format("%s attacked %s for %d piercing damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_IGNORES_ARMOR -> String.format("%s attacked %s for %d armor penetrating damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_FROST -> String.format("%s attacked %s for %d frost damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case BUFF_ATTACK -> String.format("%s buffed the attack of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case BUFF_DEFENSE -> String.format("%s buffed the defense of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case BUFF_SPEED -> String.format("%s buffed the speed of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case BUFF_HEALTH -> String.format("%s buffed the health of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case DEBUFF_SPEED -> String.format("%s debuffed the speed of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case HEALING -> String.format("%s healed %s for %d damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
+            case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
+            default -> throw new AssertionError("Unknown effect type encountered!\n"); // shouldn't happen
+        };
         screen.getBattleLog().appendText(msg);
         Platform.runLater(screen::update);
     }
 
     @Override
-    public void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage) {
+    public void characterDefeated(@NotNull CharacterInBattle defeated) {
+        final String msg = String.format("%s is almost defeated!\n", defeated.getName());
+        screen.getBattleLog().appendText(msg);
         Platform.runLater(screen::update);
     }
 

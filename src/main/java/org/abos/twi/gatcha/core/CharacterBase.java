@@ -13,13 +13,16 @@ import java.util.Objects;
  * <p>
  * Character bases are immutable during a running game and are only changed during updates.
  */
-public record CharacterBase(String name, String description, CharacterClass cclass, CharacterStats stats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity, String imageName) implements Named, Describable {
+public record CharacterBase(String name, String description, String pronoun, String genitive, CharacterClass cclass, CharacterStats stats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity, String imageName) implements Named, Describable {
 
-    public CharacterBase(final @NotNull String name, final @NotNull String description, final @NotNull CharacterClass cclass,
+    public CharacterBase(final @NotNull String name, final @NotNull String description, final @NotNull String pronoun, final @NotNull String genitive,
+                         final @NotNull CharacterClass cclass,
                          final @NotNull CharacterStats stats, final @NotNull CharacterAttacks attacks, final @NotNull List<Effect> effects,
                          final @NotNull Rarity rarity, final @NotNull String imageName) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
+        this.pronoun = Objects.requireNonNull(pronoun);
+        this.genitive = Objects.requireNonNull(genitive);
         this.cclass = Objects.requireNonNull(cclass);
         this.stats = Objects.requireNonNull(stats);
         this.attacks = Objects.requireNonNull(attacks);
@@ -36,5 +39,13 @@ public record CharacterBase(String name, String description, CharacterClass ccla
     @Override
     public @NotNull String getDescription() {
         return description;
+    }
+
+    /**
+     * Reflexive form of the pronoun.
+     * @return same as {@code genitive() + "self"}
+     */
+    public String self() {
+        return genitive + "self";
     }
 }
