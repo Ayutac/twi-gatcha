@@ -7,15 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-public record Booster(String name, String description, List<CharacterBase> characters) implements Named, Describable {
+public record Booster(String name, String description, List<CharacterBase> characters, InventoryMap price, Trigger availability) implements Named, Describable {
 
-    public Booster(final @NotNull String name, final @NotNull String description, final @NotNull List<CharacterBase> characters) {
+    public Booster(final @NotNull String name, final @NotNull String description, final @NotNull List<CharacterBase> characters,
+                   final @NotNull InventoryMap price, final @NotNull Trigger availability) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         if (characters.contains(null)) {
             throw new NullPointerException("Character list cannot contain null!");
         }
         this.characters = List.copyOf(characters);
+        this.price = Objects.requireNonNull(price);
+        this.availability = Objects.requireNonNull(availability);
     }
 
     @Override

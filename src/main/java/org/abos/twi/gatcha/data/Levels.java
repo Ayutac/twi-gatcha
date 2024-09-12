@@ -20,12 +20,12 @@ public interface Levels {
             Set.of(new Wave(0, List.of(
                     new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(2, 1), SlowWanderer::new)))),
             Set.of(new Vec2i(0, 0)),
-            new InventoryMap(new InventoryKind[]{InventoryKind.GOLD}, new int[]{1}));
+            new InventoryMap(InventoryKind.GOLD, 1));
 
     Level ONE_TWO = new Level(3, 2,
             List.of(),
             Set.of(new Wave(0, List.of(
                     new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(2, 1), DirectRandomAttacker::new)))),
             Set.of(new Vec2i(0, 0)),
-            new InventoryMap(new InventoryKind[]{InventoryKind.GOLD}, new int[]{5}));
+            new InventoryMap(InventoryKind.GOLD, 5));
 }

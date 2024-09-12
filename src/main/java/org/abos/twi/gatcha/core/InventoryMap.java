@@ -21,6 +21,18 @@ public class InventoryMap extends EnumMap<InventoryKind, Integer> {
         }
     }
 
+    public InventoryMap(InventoryKind kind, int amount) {
+        this(new InventoryKind[]{kind}, new int[]{amount});
+    }
+
+    public InventoryMap(InventoryKind kind1, int amount1, InventoryKind kind2, int amount2) {
+        this(new InventoryKind[]{kind1, kind2}, new int[]{amount1, amount2});
+    }
+
+    public InventoryMap(InventoryKind kind1, int amount1, InventoryKind kind2, int amount2, InventoryKind kind3, int amount3) {
+        this(new InventoryKind[]{kind1, kind2, kind3}, new int[]{amount1, amount2, amount3});
+    }
+
     @Override
     public Integer put(final InventoryKind key, final Integer value) {
         if (value < 0) {
