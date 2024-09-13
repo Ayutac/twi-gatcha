@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface Characters {
 
-    CharacterBase ERIN = new CharacterBase(
+    CharacterBase ERIN = new CharacterBase("erin_1",
             "Erin Solstice",
             "A girl lost in another world.",
             "she", "her",
@@ -21,7 +21,7 @@ public interface Characters {
             Rarity.RARE,
             "erin.png");
 
-    CharacterBase PISCES = new CharacterBase(
+    CharacterBase PISCES = new CharacterBase("pisces_pre",
             "Pisces",
             "A mage, striving to change peoples mind about his infamous passion. Seems to have a constantly running nose.",
             "he", "him",
@@ -32,7 +32,7 @@ public interface Characters {
             Rarity.RARE,
             "placeholder.png");
 
-    CharacterBase CERIA = new CharacterBase(
+    CharacterBase CERIA = new CharacterBase("ceria_pre",
             "Ceria Springwalker",
             "The cheerful and infamous Ice Squirrel, eyes open for any kind of treasure.",
             "she", "her",
@@ -43,7 +43,7 @@ public interface Characters {
             Rarity.RARE,
             "placeholder.png");
 
-    CharacterBase KSMVR = new CharacterBase(
+    CharacterBase KSMVR = new CharacterBase("ksmvr_pre",
             "Ksmvr",
             "Former Prognugator of the Free Hive. Facing the shame of his failings, he now learns to fit in society.",
             "he", "him",
@@ -54,7 +54,7 @@ public interface Characters {
             Rarity.RARE,
             "placeholder.png");
 
-    CharacterBase YVLON = new CharacterBase(
+    CharacterBase YVLON = new CharacterBase("yvlon_pre",
             "Yvlon Byres",
             "The young daughter of House Byres, wielding silver and bland conversations against evil.",
             "she", "her",
@@ -65,7 +65,7 @@ public interface Characters {
             Rarity.RARE,
             "placeholder.png");
 
-    CharacterBase ZOMBIE = new CharacterBase(
+    CharacterBase ZOMBIE = new CharacterBase("zombie",
             "Zombie",
             "This was once a person…",
             "it", "it",
@@ -76,7 +76,7 @@ public interface Characters {
             Rarity.COMMON,
             "placeholder.png");
 
-    CharacterBase SKELETON = new CharacterBase(
+    CharacterBase SKELETON = new CharacterBase("skeleton",
             "Skeleton",
             "All that's left is bones and rage.",
             "it", "it",
@@ -87,7 +87,7 @@ public interface Characters {
             Rarity.COMMON,
             "placeholder.png");
 
-    CharacterBase SKELETON_ARCHER = new CharacterBase(
+    CharacterBase SKELETON_ARCHER = new CharacterBase("skeleton_archer",
             "Skeleton Archer",
             "A skeleton, but look out for arrows.",
             "it", "it",

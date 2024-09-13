@@ -14,8 +14,8 @@ import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
-import org.abos.twi.gatcha.data.Boosters;
 import org.abos.twi.gatcha.data.Characters;
+import org.abos.twi.gatcha.data.Lookups;
 import org.abos.twi.gatcha.gui.component.pane.AbstractScreen;
 import org.abos.twi.gatcha.gui.component.pane.BattleScreen;
 import org.abos.twi.gatcha.gui.component.pane.BoosterScreen;
@@ -31,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +42,6 @@ public final class Gui extends Application {
     public static final int DEFAULT_HEIGHT = 720;
     public static final Map<CharacterBase, Image> IMAGE_MAP;
     public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
-    public static final List<Booster> BOOSTERS;
 
     private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final HomeScreen homeScreen = new HomeScreen(this);
@@ -81,17 +79,11 @@ public final class Gui extends Application {
         }
         IMAGE_MAP = Map.copyOf(imageMap);
         IMAGE_HEX_MAP = Map.copyOf(imageHexMap);
-        final List<Booster> boosters = new LinkedList<>();
         try {
-            for (final Field boosterField : Boosters.class.getFields()) {
-                final Booster booster = (Booster) boosterField.get(null);
-                boosters.add(booster);
-            }
+            Lookups.registerAll();
+        } catch (IllegalAccessException ex) {
+            throw new IllegalStateException("Lookup registration failed!", ex);
         }
-        catch (IllegalAccessException ex) {
-            Logger.getGlobal().warning("Couldn't access boosters!");
-        }
-        BOOSTERS = List.copyOf(boosters);
     }
 
     @Override
@@ -236,12 +228,7 @@ public final class Gui extends Application {
     }
 
     public static @NotNull Optional<Booster> getBoosterByName(final @Nullable String name) {
-        for (final Booster booster : BOOSTERS) {
-            if (booster.getName().equals(name)) {
-                return Optional.of(booster);
-            }
-        }
-        return Optional.empty();
+        return Optional.ofNullable(Lookups.BOOSTERS.get(name));
     }
 
     public static void main(String[] args) {

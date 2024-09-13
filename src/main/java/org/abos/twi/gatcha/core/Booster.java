@@ -1,13 +1,13 @@
 package org.abos.twi.gatcha.core;
 
 import org.abos.common.Describable;
-import org.abos.common.Named;
+import org.abos.common.Registerable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
-public record Booster(String name, String description, List<CharacterBase> characters, InventoryMap price, Trigger availability) implements Named, Describable {
+public record Booster(String name, String description, List<CharacterBase> characters, InventoryMap price, Trigger availability) implements Describable, Registerable<Booster> {
 
     public Booster(final @NotNull String name, final @NotNull String description, final @NotNull List<CharacterBase> characters,
                    final @NotNull InventoryMap price, final @NotNull Trigger availability) {
@@ -19,12 +19,17 @@ public record Booster(String name, String description, List<CharacterBase> chara
     }
 
     @Override
+    public @NotNull String getId() {
+        return name;
+    }
+
+    @Override
     public @NotNull String getName() {
-        return name();
+        return name;
     }
 
     @Override
     public @NotNull String getDescription() {
-        return description();
+        return description;
     }
 }

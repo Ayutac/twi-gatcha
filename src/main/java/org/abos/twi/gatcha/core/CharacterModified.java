@@ -1,7 +1,6 @@
 package org.abos.twi.gatcha.core;
 
 import org.abos.common.Describable;
-import org.abos.common.Named;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -10,7 +9,7 @@ import java.util.Objects;
 /**
  * The character as modified by a player outside of battle, based on {@link CharacterBase}.
  */
-public class CharacterModified implements Named, Describable {
+public class CharacterModified implements Describable {
 
     protected final @NotNull CharacterBase base;
 

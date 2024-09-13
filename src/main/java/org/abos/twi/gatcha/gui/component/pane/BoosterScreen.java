@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import org.abos.common.Named;
 import org.abos.twi.gatcha.core.Booster;
 import org.abos.twi.gatcha.core.Player;
+import org.abos.twi.gatcha.data.Lookups;
 import org.abos.twi.gatcha.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +57,7 @@ public final class BoosterScreen extends AbstractScreen {
     public void update() {
         final Player player = gui.getPlayer();
         if (player != null) {
-            comboBox.setItems(FXCollections.observableList(Gui.BOOSTERS.stream()
+            comboBox.setItems(FXCollections.observableList(Lookups.BOOSTERS.values().stream()
                     .filter(booster -> booster.availability().check(player))
                     .map(Named::getName)
                     .sorted(String::compareTo)

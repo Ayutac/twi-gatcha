@@ -1,7 +1,6 @@
 package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Describable;
-import org.abos.common.Named;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.effect.DurationEffect;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CharacterInBattle implements Named, Describable {
+public class CharacterInBattle implements Describable {
 
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Battle battle;

@@ -116,13 +116,13 @@ public interface Attacks {
             List.of(new SimpleAttackEffect(EffectType.INVISIBILITY, 3)));
 
     Attack UNDEAD_CLAW = new Attack(
-            "Claw",
+            "Undead Claw",
             "Attack with a foul claw.",
             1, 1, 2,
             List.of(new SimpleAttackEffect(EffectType.DAMAGE_SLASH, 3)));
 
     Attack UNDEAD_BITE = new Attack(
-            "Bite",
+            "Undead Bite",
             "A foul bite.",
             1, 1, 3,
             List.of(new SimpleAttackEffect(EffectType.DAMAGE_PIERCE, 4)));
