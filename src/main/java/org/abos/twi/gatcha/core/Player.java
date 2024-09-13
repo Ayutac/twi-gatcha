@@ -4,6 +4,9 @@ import org.abos.common.Named;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,7 +34,7 @@ public class Player implements Named {
 
     protected InventoryMap inventory = new InventoryMap();
 
-    protected Map<CharacterBase, CharacterModified> rooster = new HashMap<>();
+    protected Map<String, CharacterModified> rooster = new HashMap<>();
 
     protected List<Party> parties = new LinkedList<>();
 
@@ -62,14 +65,14 @@ public class Player implements Named {
     }
 
     public boolean hasCharacter(final @NotNull CharacterBase character) {
-        return rooster.containsKey(character);
+        return rooster.containsKey(character.id());
     }
 
     public CharacterModified getCharacter(final @NotNull CharacterBase character) {
-        if (!rooster.containsKey(character)) {
+        if (!rooster.containsKey(character.id())) {
             throw new IllegalArgumentException("The player doesn't have this character!");
         }
-        return rooster.get(character);
+        return rooster.get(character.id());
     }
 
     public List<CharacterModified> getCharacters() {
@@ -77,10 +80,10 @@ public class Player implements Named {
     }
 
     public void addToRooster(final @NotNull CharacterBase character) {
-        if (rooster.containsKey(character)) {
+        if (rooster.containsKey(character.id())) {
             throw new IllegalArgumentException("Player already owns this character!");
         }
-        rooster.put(character, new CharacterModified(character));
+        rooster.put(character.id(), new CharacterModified(character));
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getNumberOfParties() {
@@ -100,6 +103,50 @@ public class Player implements Named {
 
     public void updateParty(final @NotNull Party party, final @Range(from = 0, to = Integer.MAX_VALUE) int index) {
         parties.set(index, Objects.requireNonNull(party));
+    }
+
+    public void save(final @NotNull ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(name);
+        oos.writeInt(maxStamina);
+        oos.writeInt(stamina);
+        inventory.save(oos);
+        oos.writeInt(rooster.size());
+        for (final CharacterModified character : rooster.values()) {
+            character.save(oos);
+        }
+        oos.writeInt(parties.size());
+        for (final Party party : parties) {
+            oos.writeUTF(party.getName());
+            oos.writeInt(party.characters().size());
+            for (final CharacterModified character : party.characters()) {
+                oos.writeUTF(character.getBase().id());
+            }
+        }
+    }
+
+    public static Player load(final @NotNull ObjectInputStream ois) throws IOException {
+        final String name = ois.readUTF();
+        final Player player = new Player(name);
+        player.maxStamina = ois.readInt();
+        player.stamina = ois.readInt();
+        final InventoryMap inventory = InventoryMap.load(ois);
+        player.inventory.addAll(inventory);
+        final int roosterSize = ois.readInt();
+        for (int i = 0; i < roosterSize; i++) {
+            final CharacterModified character = CharacterModified.load(ois);
+            player.rooster.put(character.getBase().getId(), character);
+        }
+        final int partiesSize = ois.readInt();
+        for (int i = 0; i < partiesSize; i++) {
+            final String partyName = ois.readUTF();
+            final int partySize = ois.readInt();
+            final List<CharacterModified> characters = new ArrayList<>(partySize);
+            for (int j = 0; j < partySize; j++) {
+                characters.add(player.rooster.get(ois.readUTF()));
+            }
+            player.parties.add(new Party(partyName, characters));
+        }
+        return player;
     }
 
 }

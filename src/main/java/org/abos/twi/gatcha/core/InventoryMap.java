@@ -2,7 +2,11 @@ package org.abos.twi.gatcha.core;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class InventoryMap extends EnumMap<InventoryKind, Integer> {
@@ -97,5 +101,23 @@ public class InventoryMap extends EnumMap<InventoryKind, Integer> {
         return entrySet().stream()
                 .map(entry -> String.format("%d %s", entry.getValue(), entry.getKey().getName(entry.getValue() == 1)))
                 .collect(Collectors.joining(", "));
+    }
+
+    public void save(final @NotNull ObjectOutputStream oos) throws IOException {
+        oos.writeInt(size());
+        for (Map.Entry<InventoryKind, Integer> entry : entrySet()) {
+            oos.writeInt(entry.getKey().ordinal());
+            oos.writeInt(entry.getValue());
+        }
+    }
+
+    public static InventoryMap load(final @NotNull ObjectInputStream ois) throws IOException {
+        final int size = ois.readInt();
+        final InventoryKind[] keys = InventoryKind.values();
+        final InventoryMap result = new InventoryMap();
+        for (int i = 0; i < size; i++) {
+            result.put(keys[ois.readInt()], ois.readInt());
+        }
+        return result;
     }
 }

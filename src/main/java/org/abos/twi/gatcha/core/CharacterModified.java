@@ -1,9 +1,13 @@
 package org.abos.twi.gatcha.core;
 
 import org.abos.common.Describable;
+import org.abos.twi.gatcha.data.Lookups;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Objects;
 
 /**
@@ -11,7 +15,7 @@ import java.util.Objects;
  */
 public class CharacterModified implements Describable {
 
-    protected final @NotNull CharacterBase base;
+    protected transient final @NotNull CharacterBase base;
 
     public CharacterModified(final @NotNull CharacterBase base) {
         this.base = Objects.requireNonNull(base);
@@ -53,5 +57,14 @@ public class CharacterModified implements Describable {
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getMovement() {
         return (int)Math.round(getInitiative());
+    }
+
+    public void save(final @NotNull ObjectOutputStream oos) throws IOException {
+        oos.writeUTF(base.getId());
+    }
+
+    public static CharacterModified load(final @NotNull ObjectInputStream ois) throws IOException {
+        final CharacterBase base = Lookups.CHARACTERS.get(ois.readUTF());
+        return new CharacterModified(base);
     }
 }
