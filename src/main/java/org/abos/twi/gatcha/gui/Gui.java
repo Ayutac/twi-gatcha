@@ -108,6 +108,9 @@ public final class Gui extends Application {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showHomeScreen();
             }
+            else if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.S) {
+                saveGame();
+            }
         };
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
