@@ -22,7 +22,11 @@ public final class MainMenu extends AbstractScreen {
         });
         final Button loadGame = new Button("Load Game");
         loadGame.setMinWidth(BUTTON_WIDTH);
-        loadGame.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        loadGame.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.loadGame();
+            }
+        });
         final Button exit = new Button("Exit");
         exit.setMinWidth(BUTTON_WIDTH);
         exit.setOnMouseClicked(mouseEvent -> {

@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.Booster;
 import org.abos.twi.gatcha.core.CharacterBase;
@@ -29,6 +30,12 @@ import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -43,23 +50,24 @@ public final class Gui extends Application {
     public static final Map<CharacterBase, Image> IMAGE_MAP;
     public static final Map<CharacterBase, Image> IMAGE_HEX_MAP;
 
-    private final Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final HomeScreen homeScreen = new HomeScreen(this);
-    private final Scene homeScreenScene = new Scene(homeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final RoosterScreen roosterScreen = new RoosterScreen(this);
-    private final Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final CharacterScreen characterScreen = new CharacterScreen(this);
-    private final Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final PartyScreen partyScreen = new PartyScreen(this);
-    private final Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final BoosterScreen boosterScreen = new BoosterScreen(this);
-    private final Scene boosterScreenScene = new Scene(boosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final MissionModeScreen missionModeScreen = new MissionModeScreen(this);
-    private final Scene missionModeScreenScene = new Scene(missionModeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final CampaignScreen campaignScreen = new CampaignScreen(this);
-    private final Scene campaignScreenScene = new Scene(campaignScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    private final BattleScreen battleScreen = new BattleScreen(this);
-    private final Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull Scene mainMenuScene = new Scene(new MainMenu(this), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull HomeScreen homeScreen = new HomeScreen(this);
+    private final @NotNull Scene homeScreenScene = new Scene(homeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull RoosterScreen roosterScreen = new RoosterScreen(this);
+    private final @NotNull Scene roosterScreenScene = new Scene(roosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull CharacterScreen characterScreen = new CharacterScreen(this);
+    private final @NotNull Scene characterScreenScene = new Scene(characterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull PartyScreen partyScreen = new PartyScreen(this);
+    private final @NotNull Scene partyScreenScene = new Scene(partyScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull BoosterScreen boosterScreen = new BoosterScreen(this);
+    private final @NotNull Scene boosterScreenScene = new Scene(boosterScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull MissionModeScreen missionModeScreen = new MissionModeScreen(this);
+    private final @NotNull Scene missionModeScreenScene = new Scene(missionModeScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull CampaignScreen campaignScreen = new CampaignScreen(this);
+    private final @NotNull Scene campaignScreenScene = new Scene(campaignScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull BattleScreen battleScreen = new BattleScreen(this);
+    private final @NotNull Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull FileChooser chooser = new FileChooser();
     private Stage stage;
 
     private @Nullable Player player;
@@ -90,6 +98,7 @@ public final class Gui extends Application {
     public void start(Stage stage) {
         this.stage = stage;
         setupKeyboardNavigation();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TWI Gacha save files", "*.sav"));
         this.stage.setScene(mainMenuScene);
         this.stage.show();
     }
@@ -129,6 +138,7 @@ public final class Gui extends Application {
     public void stop() {
         battleScreen.shutdown();
         Battle.shutdown();
+        saveGame();
     }
 
     public @Nullable Player getPlayer() {
@@ -172,6 +182,46 @@ public final class Gui extends Application {
                 new CharacterModified(Characters.YVLON)));
         stage.setScene(battleScreenScene);
         battleScreen.setBattle(battle);*/
+    }
+
+    public void saveGame() {
+        if (player == null) {
+            return;
+        }
+        File location = chooser.showSaveDialog(stage);
+        if (location == null) {
+            return;
+        }
+        final String fileString = location.toString();
+        if (!fileString.endsWith(".sav")) {
+            location = new File(fileString + ".sav");
+        }
+        try (final FileOutputStream fos = new FileOutputStream(location);
+             final ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            player.save(oos);
+        } catch (final IOException ex) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Uh oh!");
+            alert.setContentText("Couldn't save game!");
+            alert.showAndWait();
+        }
+    }
+
+    public void loadGame() {
+        final File location = chooser.showOpenDialog(stage);
+        if (location == null) {
+            return;
+        }
+        try (final FileInputStream fis = new FileInputStream(location);
+             final ObjectInputStream ois = new ObjectInputStream(fis)) {
+            setPlayer(Player.load(ois));
+            showHomeScreen();
+        } catch (final IOException ex) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Uh oh!");
+            alert.setContentText("Couldn't load game!");
+            alert.showAndWait();
+        }
     }
 
     public void showHomeScreen() {
