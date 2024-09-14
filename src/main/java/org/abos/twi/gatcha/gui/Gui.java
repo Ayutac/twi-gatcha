@@ -112,6 +112,11 @@ public final class Gui extends Application {
                 saveGame();
             }
         };
+        homeScreenScene.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.S) {
+                saveGame();
+            }
+        });
         characterScreenScene.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ESCAPE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
                 showRoosterScreen(homeScreen);
