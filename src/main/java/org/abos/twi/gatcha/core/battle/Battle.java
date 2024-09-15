@@ -15,6 +15,7 @@ import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -313,17 +314,7 @@ public class Battle {
     }
 
     public void startPlacement(final @NotNull Party party) {
-        final Optional<Wave> firstWave = waves.stream().filter(w -> w.turn() == 0).findFirst();
-        // TODO avoid character collision
-        firstWave.ifPresent(wave -> {
-            for (final WaveUnit unit : wave.units()) {
-                final CharacterInBattle character = unit.createCharacterInBattle(Battle.this);
-                characters.add(character);
-                if (ui != null) {
-                    ui.characterPlaced(character, character.getPosition());
-                }
-            }
-        });
+        releaseWave(0);
         phase = BattlePhase.PLACEMENT;
         this.placementParty.addAll(party.characters());
     }
@@ -389,8 +380,9 @@ public class Battle {
         phase = BattlePhase.IN_PROGRESS;
         rollForInitiative();
         EXECUTOR.submit(() -> {
+            int turnNr = 0;
             while (!checkDone()) {
-                turn();
+                turn(++turnNr);
             }
         });
     }
@@ -412,7 +404,7 @@ public class Battle {
         }
     }
 
-    protected void turn() {
+    protected void turn(final @Range(from = 1, to = Integer.MAX_VALUE) int turn) {
         currentCharacter = characterOrder.getFirst();
         while (currentCharacter != null && !checkDone()) {
             currentCharacter.startTurn();
@@ -439,7 +431,42 @@ public class Battle {
                 currentCharacter = characterOrder.get(index);
             }
         }
-        // TODO introduce new waves
+        releaseWave(turn);
+    }
+
+    private void releaseWave(final @Range(from = 0, to = Integer.MAX_VALUE) int turn) {
+        final Optional<Wave> wave = waves.stream().filter(w -> w.turn() == turn).findFirst();
+        // TODO avoid character collision
+        if (wave.isEmpty()) {
+            return;
+        }
+        for (final WaveUnit unit : wave.get().units()) {
+            final CharacterInBattle character = unit.createCharacterInBattle(Battle.this);
+            // if position is already taken
+            if (isCharacterAt(character.getPosition())) {
+                Vec2i newPos = null;
+                // appear at next nearest position
+                final var it = new BreadthFirstIterator<>(terrainGraph);
+                while (it.hasNext()) {
+                    final Vec2i position = it.next();
+                    if (!isCharacterAt(position)) {
+                        newPos = position;
+                        break;
+                    }
+                }
+                // if there is no position available, this unit doesn't get placed
+                if (newPos == null) {
+                    continue;
+                }
+                // update the position
+                character.setPosition(newPos);
+            }
+            // actually set the character on the board
+            characters.add(character);
+            if (ui != null) {
+                ui.characterPlaced(character, character.getPosition());
+            }
+        }
     }
 
     private void prepareForPlayer() {
