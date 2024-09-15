@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -436,7 +437,6 @@ public class Battle {
 
     private void releaseWave(final @Range(from = 0, to = Integer.MAX_VALUE) int turn) {
         final Optional<Wave> wave = waves.stream().filter(w -> w.turn() == turn).findFirst();
-        // TODO avoid character collision
         if (wave.isEmpty()) {
             return;
         }
@@ -465,6 +465,18 @@ public class Battle {
             characters.add(character);
             if (ui != null) {
                 ui.characterPlaced(character, character.getPosition());
+            }
+            // add character to the turn order
+            final double initiative = character.getInitiative();
+            final ListIterator<CharacterInBattle> it = characterOrder.listIterator(characterOrder.size());
+            CharacterInBattle other;
+            while (it.hasPrevious()) {
+                other = it.previous();
+                if (other.getInitiative() > initiative) {
+                    it.next();
+                    it.add(character);
+                    break;
+                }
             }
         }
     }
