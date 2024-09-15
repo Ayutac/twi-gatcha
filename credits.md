@@ -6,6 +6,7 @@
 ## Game Designers
 * Ayutac
 * Bookwhyrm
+* Ceburi
 * Congra
 * MarkTechv7
 * Pänguini
