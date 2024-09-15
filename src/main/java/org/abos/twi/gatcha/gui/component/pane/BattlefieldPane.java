@@ -57,6 +57,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
 //        final double height = (this.battle.getHeight() - 1) * radius * (0.5 + Hexagon.RADII_FACTOR) + 2 * radius;
         addHexagons();
         battle.setUi(this);
+        battle.setStats(screen.getGui().getPlayer() != null ? screen.getGui().getPlayer().getStats() : null);
         addEventHandler(MouseEvent.MOUSE_MOVED, mouseEvent -> updateGrid(mouseEvent.getX(), mouseEvent.getY()));
         addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             if (mouseEvent.getButton() != MouseButton.PRIMARY) {
@@ -214,15 +215,50 @@ public class BattlefieldPane extends Pane implements BattleUi {
     }
 
     @Override
-    public void awardReward() {
+    public void hasWon() {
         final Player player = screen.getGui().getPlayer();
         if (player != null) {
             final InventoryMap reward = getBattle().getReward();
             player.getInventory().addAll(reward);
+            player.getStats().increaseLevelWon(battle.getLevelId());
             Platform.runLater(() -> {
                 final Alert info = new Alert(Alert.AlertType.INFORMATION);
                 info.setTitle("Congratulations!");
                 info.setContentText(String.format("You received %s!", reward));
+                info.showAndWait();
+                if (screen.getCaller() instanceof CampaignScreen) {
+                    screen.getGui().showCampaignScreen();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void hasTied() {
+        final Player player = screen.getGui().getPlayer();
+        if (player != null) {
+            player.getStats().increaseLevelTied(battle.getLevelId());
+            Platform.runLater(() -> {
+                final Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Well…");
+                info.setContentText("You tied this battle…");
+                info.showAndWait();
+                if (screen.getCaller() instanceof CampaignScreen) {
+                    screen.getGui().showCampaignScreen();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void hasLost() {
+        final Player player = screen.getGui().getPlayer();
+        if (player != null) {
+            player.getStats().increaseLevelLost(battle.getLevelId());
+            Platform.runLater(() -> {
+                final Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle("Uh oh!");
+                info.setContentText("You lost this battle!");
                 info.showAndWait();
                 if (screen.getCaller() instanceof CampaignScreen) {
                     screen.getGui().showCampaignScreen();

@@ -4,6 +4,7 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
 import org.abos.twi.gatcha.core.InventoryMap;
 import org.abos.twi.gatcha.core.Party;
+import org.abos.twi.gatcha.core.PlayerStats;
 import org.abos.twi.gatcha.core.battle.ai.AiCharacter;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
 import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
@@ -41,6 +42,11 @@ public class Battle {
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(1);
 
     /**
+     * @see #getLevelId()
+     */
+    protected final @NotNull String levelId;
+
+    /**
      * @see #getHeight()
      */
     protected final @Range(from = 1, to = Integer.MAX_VALUE) int height;
@@ -57,6 +63,11 @@ public class Battle {
      * @see #getUi()
      */
     protected @Nullable BattleUi ui;
+
+    /**
+     * @see #getStats();
+     */
+    protected @Nullable PlayerStats stats;
 
     /**
      * A list of all characters that were introduced to this battle, in introduction order.
@@ -126,12 +137,14 @@ public class Battle {
      * @throws IllegalArgumentException If the constraints are violated, the field is too big or any positions
      *                                  given by the terrain, waves or spawns are outside the field.
      */
-    public Battle(final @Range(from = 1, to = Integer.MAX_VALUE) int width,
+    public Battle(final @NotNull String levelId,
+                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int height,
                   final @NotNull List<Terrain> terrainList,
                   final @NotNull Set<Wave> waves,
                   final @NotNull Set<Vec2i> playerSpawns,
                   final @NotNull InventoryMap reward) {
+        this.levelId = Objects.requireNonNull(levelId);
         if (height < 1 || width < 1) {
             throw new IllegalArgumentException("Dimensions must be positive!");
         }
@@ -192,6 +205,14 @@ public class Battle {
     }
 
     /**
+     * Returns the ID of the level this battle was generated from.
+     * @return the ID of this battle's level, not {@code null}
+     */
+    public @NotNull String getLevelId() {
+        return levelId;
+    }
+
+    /**
      * @return the positive number of vertical tiles on this battle's field
      */
     public @Range(from = 1, to = Integer.MAX_VALUE) int getHeight() {
@@ -233,8 +254,26 @@ public class Battle {
      * @param ui the new UI for this battle, might be {@code null}
      * @see #getUi()
      */
-    public void setUi(@Nullable BattleUi ui) {
+    public void setUi(final @Nullable BattleUi ui) {
         this.ui = ui;
+    }
+
+    /**
+     * Returns the player stats associated with this battle.
+     * @return the player stats of this battle, might be {@code null}
+     * @see #setStats(PlayerStats)
+     */
+    public @Nullable PlayerStats getStats() {
+        return stats;
+    }
+
+    /**
+     * Sets the player stats associated with this battle.
+     * @param stats the new player stats for this battle, might be {@code null}
+     * @see #getStats()
+     */
+    public void setStats(final @Nullable PlayerStats stats) {
+        this.stats = stats;
     }
 
     /**
@@ -318,6 +357,11 @@ public class Battle {
         releaseWave(0);
         phase = BattlePhase.PLACEMENT;
         this.placementParty.addAll(party.characters());
+        if (stats != null) {
+            for (final CharacterModified character : party.characters()) {
+                stats.increaseCharacterInSquat(character);
+            }
+        }
     }
 
     public CharacterInBattle placePlayerCharacterAt(final @NotNull CharacterModified character, final @NotNull Vec2i position) {
@@ -329,6 +373,9 @@ public class Battle {
         }
         final CharacterInBattle cib = new CharacterInBattle(character, this, TeamKind.PLAYER, position);
         characters.add(cib);
+        if (stats != null) {
+            stats.increaseCharacterDeployed(character);
+        }
         if (ui != null) {
             ui.characterPlaced(cib, cib.getPosition());
         }
@@ -359,6 +406,9 @@ public class Battle {
     public void removeCharacter(final CharacterInBattle character) {
         characters.remove(character);
         characterOrder.remove(character);
+        if (character.getTeam() == TeamKind.PLAYER && stats != null) {
+            stats.increaseCharacterDeployedDefeated(character.getModified());
+        }
     }
 
     public AbstractBaseGraph<Vec2i, DefaultEdge> getTerrainGraph() {
@@ -505,11 +555,20 @@ public class Battle {
             return true;
         }
         // game is over if there are no player characters or no enemies anymore
-        boolean allEnemiesDefeated = characters.stream().noneMatch(character -> character.getTeam() == TeamKind.ENEMY);
-        if (characters.stream().noneMatch(character -> character.getTeam() == TeamKind.PLAYER) || allEnemiesDefeated) {
+        final boolean allEnemiesDefeated = characters.stream().noneMatch(character -> character.getTeam() == TeamKind.ENEMY);
+        final boolean allPlayersDefeated = characters.stream().noneMatch(character -> character.getTeam() == TeamKind.PLAYER);
+        if (allPlayersDefeated || allEnemiesDefeated) {
             phase = BattlePhase.DONE;
-            if (ui != null && allEnemiesDefeated) {
-                ui.awardReward();
+            if (ui != null) {
+                if (allPlayersDefeated && allEnemiesDefeated) {
+                    ui.hasTied();
+                }
+                else if (allPlayersDefeated) {
+                    ui.hasLost();
+                }
+                else {
+                    ui.hasWon();
+                }
             }
         }
         return phase == BattlePhase.DONE;

@@ -74,8 +74,18 @@ public interface BattleUi {
     CompletableFuture<Object> waitForPlayer();
 
     /**
-     * Gives the player the reward for this stage.
+     * Gets called if the player has won a stage.
      */
-    void awardReward();
+    void hasWon();
+
+    /**
+     * Gets called if the player has tied a stage.
+     */
+    void hasTied();
+
+    /**
+     * Gets called if the player has lost a stage.
+     */
+    void hasLost();
 
 }

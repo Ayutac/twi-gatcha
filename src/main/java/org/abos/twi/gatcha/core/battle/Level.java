@@ -40,6 +40,6 @@ public record Level(String id, int width, int height, List<Terrain> terrainList,
     }
 
     public Battle prepareBattle() {
-        return new Battle(width, height, terrainList, waves, playerSpawns, reward);
+        return new Battle(id, width, height, terrainList, waves, playerSpawns, reward);
     }
 }

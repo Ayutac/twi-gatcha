@@ -32,11 +32,13 @@ public class Player implements Named {
 
     protected @Range(from = 0, to = Integer.MAX_VALUE) int stamina;
 
-    protected InventoryMap inventory = new InventoryMap();
+    protected final InventoryMap inventory = new InventoryMap();
 
-    protected Map<String, CharacterModified> rooster = new HashMap<>();
+    protected final Map<String, CharacterModified> rooster = new HashMap<>();
 
-    protected List<Party> parties = new LinkedList<>();
+    protected final List<Party> parties = new LinkedList<>();
+
+    protected final PlayerStats stats = new PlayerStats();
 
     public Player(final @NotNull String name) {
         this.name = Objects.requireNonNull(name);
@@ -105,6 +107,10 @@ public class Player implements Named {
         parties.set(index, Objects.requireNonNull(party));
     }
 
+    public PlayerStats getStats() {
+        return stats;
+    }
+
     public void save(final @NotNull ObjectOutputStream oos) throws IOException {
         oos.writeUTF(name);
         oos.writeInt(maxStamina);
@@ -122,6 +128,7 @@ public class Player implements Named {
                 oos.writeUTF(character.getBase().id());
             }
         }
+        stats.save(oos);
     }
 
     public static Player load(final @NotNull ObjectInputStream ois) throws IOException {
@@ -146,6 +153,8 @@ public class Player implements Named {
             }
             player.parties.add(new Party(partyName, characters));
         }
+        player.stats.copyStats(PlayerStats.load(ois));
+        player.inventory.setAssociatedStats(player.stats);
         return player;
     }
 

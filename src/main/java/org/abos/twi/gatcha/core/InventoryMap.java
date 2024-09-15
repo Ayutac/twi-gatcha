@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class InventoryMap extends EnumMap<InventoryKind, Integer> {
 
+    protected PlayerStats associatedStats;
+
     public InventoryMap() {
         super(InventoryKind.class);
     }
@@ -61,6 +63,9 @@ public class InventoryMap extends EnumMap<InventoryKind, Integer> {
         if (value == 0) {
             return get(key);
         }
+        if (value > 0 && associatedStats != null) {
+            associatedStats.increaseItemGot(key, value);
+        }
         if (!containsKey(key)) {
             return put(key, value);
         }
@@ -94,6 +99,14 @@ public class InventoryMap extends EnumMap<InventoryKind, Integer> {
 
     public void subtractAll(final @NotNull InventoryMap map) {
         map.forEach(this::subtract);
+    }
+
+    public PlayerStats getAssociatedStats() {
+        return associatedStats;
+    }
+
+    public void setAssociatedStats(PlayerStats associatedStats) {
+        this.associatedStats = associatedStats;
     }
 
     @Override
