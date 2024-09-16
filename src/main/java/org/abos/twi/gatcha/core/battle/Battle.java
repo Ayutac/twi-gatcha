@@ -403,7 +403,7 @@ public class Battle {
         return result;
     }
 
-    public void removeCharacter(final CharacterInBattle character) {
+    public void removeCharacter(final @NotNull CharacterInBattle character) {
         characters.remove(character);
         characterOrder.remove(character);
         if (character.getTeam() == TeamKind.PLAYER && stats != null) {

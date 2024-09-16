@@ -39,5 +39,7 @@ public class SlowWanderer extends AiCharacter {
                 battle.getUi().characterMoved(this, oldPosition, position);
             }
         }
+        // don't attack
+        battle.setSelectedAttack(null);
     }
 }

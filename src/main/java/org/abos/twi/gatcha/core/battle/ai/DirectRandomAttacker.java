@@ -77,43 +77,51 @@ public class DirectRandomAttacker extends AiCharacter {
         // attack something in range
         final Map<Attack, List<Vec2i>> possibleTargets = new HashMap<>();
         // … with normal attack
-        battle.setSelectedAttack(modified.getBase().attacks().normal());
-        if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-            final List<Vec2i> targets = new LinkedList<>();
-            for (final Vec2i enemyPos : enemyPositions) {
-                if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                    targets.add(enemyPos);
+        if (cooldownNormal == 0) { // should always be the case
+            battle.setSelectedAttack(modified.getBase().attacks().normal());
+            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
+                final List<Vec2i> targets = new LinkedList<>();
+                for (final Vec2i enemyPos : enemyPositions) {
+                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
+                        targets.add(enemyPos);
+                    }
                 }
+                possibleTargets.put(modified.getBase().attacks().normal(), targets);
             }
-            possibleTargets.put(modified.getBase().attacks().normal(), targets);
         }
         // … with special 1 attack
-        battle.setSelectedAttack(modified.getBase().attacks().special1());
-        if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-            final List<Vec2i> targets = new LinkedList<>();
-            for (final Vec2i enemyPos : enemyPositions) {
-                if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                    targets.add(enemyPos);
+        if (cooldownSpecial1 == 0) {
+            battle.setSelectedAttack(modified.getBase().attacks().special1());
+            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
+                final List<Vec2i> targets = new LinkedList<>();
+                for (final Vec2i enemyPos : enemyPositions) {
+                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
+                        targets.add(enemyPos);
+                    }
                 }
+                possibleTargets.put(modified.getBase().attacks().special1(), targets);
             }
-            possibleTargets.put(modified.getBase().attacks().special1(), targets);
         }
         // … with special 2 attack
-        battle.setSelectedAttack(modified.getBase().attacks().special2());
-        if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-            final List<Vec2i> targets = new LinkedList<>();
-            for (final Vec2i enemyPos : enemyPositions) {
-                if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                    targets.add(enemyPos);
+        if (cooldownSpecial2 == 0) {
+            battle.setSelectedAttack(modified.getBase().attacks().special2());
+            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
+                final List<Vec2i> targets = new LinkedList<>();
+                for (final Vec2i enemyPos : enemyPositions) {
+                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
+                        targets.add(enemyPos);
+                    }
                 }
+                possibleTargets.put(modified.getBase().attacks().special2(), targets);
             }
-            possibleTargets.put(modified.getBase().attacks().special2(), targets);
         }
         // if no targets, no attack
         if (possibleTargets.isEmpty()) {
+            battle.setSelectedAttack(null);
             return;
         }
         final Attack chosenAttack = CollectionUtil.getRandomEntry(possibleTargets.keySet(), random);
+        battle.setSelectedAttack(chosenAttack);
         final Vec2i chosenTarget = CollectionUtil.getRandomEntry(possibleTargets.get(chosenAttack), random);
         for (final AttackEffect effect : chosenAttack.effects()) {
             effect.apply(battle.getCurrentCharacter(), chosenTarget, battle);

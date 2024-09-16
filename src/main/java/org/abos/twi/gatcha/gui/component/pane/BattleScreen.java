@@ -105,8 +105,15 @@ public final class BattleScreen extends AbstractScreen {
             if (battle.getUi() != null && battle.getUi().isPlayerAttacking() && battle.getCurrentCharacter() != null) {
                 final CharacterAttacks attacks = battle.getCurrentCharacter().getModified().getBase().attacks();
                 normalAttackButton.setText(attacks.normal().name());
+                normalAttackButton.setDisable(battle.getCurrentCharacter().getCooldownNormal() != 0);
                 special1AttackButton.setText(attacks.special1().name());
+                special1AttackButton.setDisable(battle.getCurrentCharacter().getCooldownSpecial1() != 0);
                 special2AttackButton.setText(attacks.special2().name());
+                special2AttackButton.setDisable(battle.getCurrentCharacter().getCooldownSpecial2() != 0);
+                if ((special1AttackButton.isDisable() && special1AttackButton.isSelected()) ||
+                        (special2AttackButton.isDisable() && special2AttackButton.isSelected())) {
+                    normalAttackButton.setSelected(true);
+                }
                 if (normalAttackButton.isSelected()) {
                     battle.setSelectedAttack(attacks.normal());
                 }

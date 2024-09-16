@@ -26,6 +26,9 @@ public class CharacterInBattle implements Describable {
     protected @NotNull Vec2i position;
     protected @Range(from = 0, to = Integer.MAX_VALUE) int health;
     protected @Range(from = 0, to = Integer.MAX_VALUE) int moved;
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int cooldownNormal;
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int cooldownSpecial1;
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int cooldownSpecial2;
 
     public CharacterInBattle(final @NotNull CharacterModified modified, final @NotNull Battle battle, final @NotNull TeamKind team, final @NotNull Vec2i position) {
         this.modified = Objects.requireNonNull(modified);
@@ -127,6 +130,18 @@ public class CharacterInBattle implements Describable {
         return position.equals(this.position);
     }
 
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getCooldownNormal() {
+        return cooldownNormal;
+    }
+
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getCooldownSpecial1() {
+        return cooldownSpecial1;
+    }
+
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getCooldownSpecial2() {
+        return cooldownSpecial2;
+    }
+
     public void takeDamage(final @Range(from = 0, to = Integer.MAX_VALUE) int amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount of damage must be positive!");
@@ -174,9 +189,21 @@ public class CharacterInBattle implements Describable {
         return false;
     }
 
+    protected void attacksCoolDown() {
+        if (cooldownNormal > 0) {
+            cooldownNormal--;
+        }
+        if (cooldownSpecial1 > 0) {
+            cooldownSpecial1--;
+        }
+        if (cooldownSpecial2 > 0) {
+            cooldownSpecial2--;
+        }
+    }
+
     public void startTurn() {
         setMoved(0);
-        List<Effect> expiredEffects = new LinkedList<>();
+        final List<Effect> expiredEffects = new LinkedList<>();
         for (final Effect effect : activeEffects) {
             if (effect instanceof SimpleDurationEffect durationEffect) {
                 durationEffect.decreaseRemainingDuration();
@@ -186,6 +213,7 @@ public class CharacterInBattle implements Describable {
             }
         }
         activeEffects.removeAll(expiredEffects);
+        attacksCoolDown();
     }
 
     public void turn() {
@@ -193,6 +221,18 @@ public class CharacterInBattle implements Describable {
     }
 
     public void endTurn() {
-        // intentionally left empty
+        final Attack usedAttack = battle.getSelectedAttack();
+        if (usedAttack == null) {
+            return;
+        }
+        if (usedAttack == modified.getBase().attacks().normal()) {
+            cooldownNormal = usedAttack.cooldown();
+        }
+        else if (usedAttack == modified.getBase().attacks().special1()) {
+            cooldownSpecial1 = usedAttack.cooldown();
+        }
+        else if (usedAttack == modified.getBase().attacks().special2()) {
+            cooldownSpecial2 = usedAttack.cooldown();
+        }
     }
 }
