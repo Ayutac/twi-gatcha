@@ -14,11 +14,12 @@ import java.util.Objects;
  * Character bases are immutable during a running game and are only changed during updates.
  */
 public record CharacterBase(String id, String name, String description, String pronoun, String genitive, CharacterClass cclass,
-                            CharacterStats stats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity, String imageName) implements Describable, Registerable<CharacterBase> {
+                            CharacterStats startStats, CharacterStats endStats, CharacterAttacks attacks, List<Effect> effects, Rarity rarity, String imageName) implements Describable, Registerable<CharacterBase> {
 
     public CharacterBase(final @NotNull String id, final @NotNull String name, final @NotNull String description, final @NotNull String pronoun, final @NotNull String genitive,
                          final @NotNull CharacterClass cclass,
-                         final @NotNull CharacterStats stats, final @NotNull CharacterAttacks attacks, final @NotNull List<Effect> effects,
+                         final @NotNull CharacterStats startStats, final @NotNull CharacterStats endStats,
+                         final @NotNull CharacterAttacks attacks, final @NotNull List<Effect> effects,
                          final @NotNull Rarity rarity, final @NotNull String imageName) {
         this.id = Objects.requireNonNull(id);
         this.name = Objects.requireNonNull(name);
@@ -26,7 +27,8 @@ public record CharacterBase(String id, String name, String description, String p
         this.pronoun = Objects.requireNonNull(pronoun);
         this.genitive = Objects.requireNonNull(genitive);
         this.cclass = Objects.requireNonNull(cclass);
-        this.stats = Objects.requireNonNull(stats);
+        this.startStats = Objects.requireNonNull(startStats);
+        this.endStats = Objects.requireNonNull(endStats);
         this.attacks = Objects.requireNonNull(attacks);
         this.effects = Objects.requireNonNull(effects);
         this.rarity = Objects.requireNonNull(rarity);
@@ -55,4 +57,5 @@ public record CharacterBase(String id, String name, String description, String p
     public String self() {
         return genitive + "self";
     }
+
 }

@@ -17,6 +17,7 @@ public class PlayerStats {
     protected final @NotNull HashMap<String, Integer> characterDeployed = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> characterInSquat = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> characterDeployedDefeated = new HashMap<>();
+    protected int characterLevelledUp = 0;
     protected final @NotNull HashMap<String, Integer> levelWon = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> levelTied = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> levelLost = new HashMap<>();
@@ -59,6 +60,14 @@ public class PlayerStats {
 
     public int getCharacterDeployedDefeated(final @NotNull CharacterModified character) {
         return characterDeployedDefeated.getOrDefault(character.getBase().getId(), 0);
+    }
+
+    public void increaseCharacterLevelledUp() {
+        characterLevelledUp++;
+    }
+
+    public int getCharacterLevelledUp() {
+        return characterLevelledUp;
     }
 
     public void increaseLevelWon(final @NotNull String levelId) {
@@ -111,6 +120,7 @@ public class PlayerStats {
         characterInSquat.putAll(from.characterInSquat);
         characterDeployedDefeated.clear();
         characterDeployedDefeated.putAll(from.characterDeployedDefeated);
+        characterLevelledUp = from.characterLevelledUp;
         levelWon.clear();
         levelWon.putAll(from.levelWon);
         levelTied.clear();
@@ -128,6 +138,7 @@ public class PlayerStats {
         oos.writeObject(characterDeployed);
         oos.writeObject(characterInSquat);
         oos.writeObject(characterDeployedDefeated);
+        oos.writeInt(characterLevelledUp);
         oos.writeObject(levelWon);
         oos.writeObject(levelTied);
         oos.writeObject(levelLost);
@@ -143,6 +154,7 @@ public class PlayerStats {
             stats.characterDeployed.putAll((Map<String, Integer>) ois.readObject());
             stats.characterInSquat.putAll((Map<String, Integer>) ois.readObject());
             stats.characterDeployedDefeated.putAll((Map<String, Integer>) ois.readObject());
+            stats.characterLevelledUp = ois.readInt();
             stats.levelWon.putAll((Map<String, Integer>) ois.readObject());
             stats.levelTied.putAll((Map<String, Integer>) ois.readObject());
             stats.levelLost.putAll((Map<String, Integer>) ois.readObject());

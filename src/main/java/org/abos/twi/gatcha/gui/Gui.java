@@ -168,6 +168,9 @@ public final class Gui extends Application {
         showHomeScreen();
 
         // Test code
+        for (int i = 0; i < 30; i++) {
+            newPlayer.getCharacter(Characters.ERIN).increaseLevel(newPlayer.getStats());
+        }
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
         player.addToRooster(Characters.KSMVR);

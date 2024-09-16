@@ -27,6 +27,8 @@ public class CharacterStatGrid extends GridPane {
         final HBox statsBox = new HBox(new Label("Stats"));
         statsBox.setAlignment(Pos.CENTER);
         add(statsBox, 0, row++, 2, 1);
+        add(new Label("Level:"), 0, row);
+        add(new Label(Integer.toString(character.getLevel())), 1, row++);
         add(new Label("Health:"), 0, row);
         add(new Label(Integer.toString(character.getMaxHealth())), 1, row++);
         add(new Label("Attack:"), 0, row);
