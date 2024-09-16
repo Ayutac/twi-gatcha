@@ -174,7 +174,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case DAMAGE_BLUNT -> String.format("%s attacked %s for %d blunt damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_SLASH -> String.format("%s attacked %s for %d slash damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_PIERCE -> String.format("%s attacked %s for %d piercing damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
-            case DAMAGE_IGNORES_ARMOR -> String.format("%s attacked %s for %d armor penetrating damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_DEATH -> String.format("%s attacked %s for %d death damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_FROST -> String.format("%s attacked %s for %d frost damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case BUFF_ATTACK -> String.format("%s buffed the attack of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case BUFF_DEFENSE -> String.format("%s buffed the defense of %s.\n", attacker.getName(), defenderString(attacker, defender));
@@ -184,6 +184,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case HEALING -> String.format("%s healed %s for %d damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
+            case TURN_FRIENDLY -> String.format("%s made %s friendly.\n", attacker.getName(), defenderString(attacker, defender));
             default -> throw new AssertionError("Unknown effect type encountered!\n"); // shouldn't happen
         };
         screen.getBattleLog().appendText(msg);
@@ -308,8 +309,9 @@ public class BattlefieldPane extends Pane implements BattleUi {
             else {
                 switch (character.get().getTeam()) {
                     case ENEMY -> other.getValue().setFill(Color.RED);
+                    case ALLY -> other.getValue().setFill(Color.GREEN);
                     case PLAYER -> other.getValue().setFill(Color.BLUE);
-                    default -> throw new IllegalStateException("Unhandled enum encountered!");
+                    default -> throw new AssertionError("Unhandled enum encountered!"); // shouldn't happen
                 }
                 tooltips.get(other.getValue()).setText(String.format("%s (%d/%d)", character.get().getName(), character.get().getHealth(), character.get().getMaxHealth()));
             }

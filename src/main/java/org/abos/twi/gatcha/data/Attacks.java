@@ -5,6 +5,7 @@ import org.abos.twi.gatcha.core.effect.AoeAttackEffect;
 import org.abos.twi.gatcha.core.effect.AoeDurationAttackEffect;
 import org.abos.twi.gatcha.core.effect.DurationAttackEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
+import org.abos.twi.gatcha.core.effect.GroupAttackEffect;
 import org.abos.twi.gatcha.core.effect.SimpleAttackEffect;
 
 import java.util.List;
@@ -63,7 +64,13 @@ public interface Attacks {
             "Bone Fracture",
             "Directly damages the bones, bypassing armor.",
             1, 1, 5,
-            List.of(new SimpleAttackEffect(EffectType.DAMAGE_IGNORES_ARMOR, 5)));
+            List.of(new SimpleAttackEffect(EffectType.DAMAGE_DEATH, 5)));
+
+    Attack DEATH_BOLT = new Attack(
+            "[Death Bolt]",
+            "Fires a bolt of potent death mana, dealing minor damage but bypassing the opponents defense and armor.",
+            2, 4, 1,
+            List.of(new SimpleAttackEffect(EffectType.DAMAGE_DEATH, 10)));
 
     Attack ICE_SHARD = new Attack(
             "[Ice Shard]",
@@ -114,6 +121,12 @@ public interface Attacks {
             "Become invisible.",
             0, 0, 5,
             List.of(new SimpleAttackEffect(EffectType.INVISIBILITY, 3)));
+
+    Attack TURN_SKELETON = new Attack(
+            "Turn Skeleton",
+            "Turn a skeleton friendly.",
+            1, 3, 5,
+            List.of(new GroupAttackEffect(EffectType.TURN_FRIENDLY, 3, "Weak Skeletons")));
 
     Attack UNDEAD_CLAW = new Attack(
             "Undead Claw",

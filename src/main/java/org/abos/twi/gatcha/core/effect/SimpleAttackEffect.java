@@ -44,8 +44,14 @@ public class SimpleAttackEffect implements AttackEffect {
                 dmg = Math.max(1, from.getAttack() - to.get().getDefense() + power) * 2;
                 to.get().takeDamage(dmg);
             }
-            case DAMAGE_IGNORES_ARMOR -> {
-                dmg = from.getAttack() + power;
+            case DAMAGE_DEATH -> {
+                int resistance = 0;
+                for (final Effect effect : to.get().getActiveEffects()) {
+                    if (effect instanceof DurationEffect resEffect && effect.getEffectType() == EffectType.RESIST_DEATH) {
+                        resistance += resEffect.getPower();
+                    }
+                }
+                dmg = (int)Math.round(power * (1 - Math.min(100, resistance) / 100d));
                 to.get().takeDamage(dmg);
             }
             case DAMAGE_FROST -> {

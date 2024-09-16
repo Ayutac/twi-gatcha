@@ -61,8 +61,14 @@ public class AoeAttackEffect extends SimpleAttackEffect {
                     dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + power) * 2;
                     aoeTarget.takeDamage(dmg);
                 }
-                case DAMAGE_IGNORES_ARMOR -> {
-                    dmg = from.getAttack() + power;
+                case DAMAGE_DEATH -> {
+                    int resistance = 0;
+                    for (final Effect effect : aoeTarget.getActiveEffects()) {
+                        if (effect instanceof DurationEffect resEffect && effect.getEffectType() == EffectType.RESIST_DEATH) {
+                            resistance += resEffect.getPower();
+                        }
+                    }
+                    dmg = (int)Math.round(power * (1 - Math.min(100, resistance) / 100d));
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_FROST -> {

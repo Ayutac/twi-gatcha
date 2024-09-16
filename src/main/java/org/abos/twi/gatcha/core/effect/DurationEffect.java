@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Range;
 public class DurationEffect extends SimpleDurationEffect {
     protected final @Range(from = 0, to = Integer.MAX_VALUE) int power;
 
-    public DurationEffect(@NotNull EffectType type, @Range(from = 0, to = Integer.MAX_VALUE) int power, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
+    public DurationEffect(final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int power, final @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
         super(type, duration);
         if (power < 0) {
             throw new IllegalArgumentException("Power cannot be negative!");

@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.data;
 
 import org.abos.twi.gatcha.core.Booster;
 import org.abos.twi.gatcha.core.CharacterBase;
+import org.abos.twi.gatcha.core.Group;
 import org.abos.twi.gatcha.core.battle.Attack;
 import org.abos.twi.gatcha.core.battle.Level;
 
@@ -15,6 +16,7 @@ public interface Lookups {
     Map<String, Attack> ATTACKS = new HashMap<>();
     Map<String, Booster> BOOSTERS = new HashMap<>();
     Map<String, CharacterBase> CHARACTERS = new HashMap<>();
+    Map<String, Group> GROUPS = new HashMap<>();
     Map<String, Level> LEVELS = new HashMap<>();
 
     static void registerAll() throws IllegalAccessException {
@@ -26,6 +28,9 @@ public interface Lookups {
         }
         for (final Field characterField : Characters.class.getFields()) {
             ((CharacterBase)characterField.get(null)).registerWith(CHARACTERS);
+        }
+        for (final Field groupField : Groups.class.getFields()) {
+            ((Group) groupField.get(null)).registerWith(GROUPS);
         }
         for (final Field levelField : Levels.class.getFields()) {
             ((Level)levelField.get(null)).registerWith(LEVELS);

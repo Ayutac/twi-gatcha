@@ -32,7 +32,7 @@ public class DirectRandomAttacker extends AiCharacter {
     public void turn() {
         // get all visible enemies on the map
         final List<Vec2i> enemyPositions = battle.getCharacterOrder().stream()
-                .filter(character -> character.getTeam() != team && !character.isInvisible())
+                .filter(character -> team.attacks(character.getTeam()) && !character.isInvisible())
                 .map(CharacterInBattle::getPosition)
                 .toList();
         if (enemyPositions.isEmpty()) {
