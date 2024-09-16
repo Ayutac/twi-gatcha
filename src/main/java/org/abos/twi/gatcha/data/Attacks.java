@@ -126,7 +126,7 @@ public interface Attacks {
             "Turn Skeleton",
             "Turn a skeleton friendly.",
             1, 3, 5,
-            List.of(new GroupAttackEffect(EffectType.TURN_FRIENDLY, 3, "Weak Skeletons")));
+            List.of(new GroupAttackEffect(EffectType.TURN_FRIENDLY, 3, Groups.WEAK_SKELETONS_ID)));
 
     Attack UNDEAD_CLAW = new Attack(
             "Undead Claw",

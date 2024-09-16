@@ -6,27 +6,33 @@ import java.util.Set;
 
 public interface Groups {
 
-    Group MELEE = new Group("Melee", "Characters who fight in close range.", Set.of(
+    String MELEE_ID = "Melee";
+    Group MELEE = new Group(MELEE_ID, "Characters who fight in close range.", Set.of(
             Characters.KSMVR,
             Characters.YVLON,
             Characters.SKELETON,
             Characters.ZOMBIE));
 
-    Group RANGED = new Group("Ranged", "Characters who fight in long range.", Set.of(
+    String RANGED_ID = "Ranged";
+    Group RANGED = new Group(RANGED_ID, "Characters who fight in long range.", Set.of(
             Characters.SKELETON_ARCHER));
 
-    Group MAGE = new Group("Mage", "Characters who use magic.", Set.of(
+    String MAGE_ID = "Mage";
+    Group MAGE = new Group(MAGE_ID, "Characters who use magic.", Set.of(
             Characters.PISCES,
             Characters.CERIA));
 
-    Group SUPPORT = new Group("Support", "Characters who support others.", Set.of(
+    String SUPPORT_ID = "Support";
+    Group SUPPORT = new Group(SUPPORT_ID, "Characters who support others.", Set.of(
             Characters.ERIN));
 
-    Group WEAK_SKELETONS = new Group("Weak Skeletons", "Skeletons that can be turned easily.", Set.of(
+    String WEAK_SKELETONS_ID = "Weak Skeletons";
+    Group WEAK_SKELETONS = new Group(WEAK_SKELETONS_ID, "Skeletons that can be turned easily.", Set.of(
             Characters.SKELETON,
             Characters.SKELETON_ARCHER));
 
-    Group UNDEAD = new Group("Undead", "The Walking Dead.", Set.of(
+    String UNDEAD_ID = "Undead";
+    Group UNDEAD = new Group(UNDEAD_ID, "The Walking Dead.", Set.of(
             Characters.SKELETON,
             Characters.SKELETON_ARCHER,
             Characters.ZOMBIE));

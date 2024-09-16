@@ -30,7 +30,9 @@ public interface Lookups {
             ((CharacterBase)characterField.get(null)).registerWith(CHARACTERS);
         }
         for (final Field groupField : Groups.class.getFields()) {
-            ((Group) groupField.get(null)).registerWith(GROUPS);
+            if (groupField.getType() == Group.class) {
+                ((Group) groupField.get(null)).registerWith(GROUPS);
+            }
         }
         for (final Field levelField : Levels.class.getFields()) {
             ((Level)levelField.get(null)).registerWith(LEVELS);
