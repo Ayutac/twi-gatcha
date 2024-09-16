@@ -54,6 +54,20 @@ public class CharacterInBattle implements Describable {
     }
 
     public @NotNull TeamKind getTeam() {
+        int count = 0;
+        for (final Effect effect : activeEffects) {
+            if (effect.getEffectType() == EffectType.TURN_FRIENDLY && effect instanceof SimpleDurationEffect sde) {
+                count++;
+            }
+        }
+        if (count % 2 == 1) {
+            if (team == TeamKind.ENEMY) {
+                return TeamKind.ALLY;
+            }
+            else {
+                return TeamKind.ENEMY;
+            }
+        }
         return team;
     }
 
