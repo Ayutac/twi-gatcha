@@ -35,7 +35,7 @@ public interface Characters {
 
     CharacterBase CERIA = new CharacterBase("ceria_pre",
             "Ceria Springwalker",
-            "The cheerful and infamous Ice Squirrel, eyes open for any kind of treasure.",
+            "The Ice mage and Captain of the new Horns of Hammerad.",
             "she", "her",
             new CharacterStats(10, 9, 10, 7),
             new CharacterStats(100, 11, 60, 42),
