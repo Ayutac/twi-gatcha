@@ -36,7 +36,7 @@ public interface BattleUi {
      * Gets called when a character attacked another.
      * @param attacker who started the attack, not {@code null}
      * @param defender who was attacked, may be {@code null} if nothing was attacked
-     * @param type the effect type applied
+     * @param type the effect effectType applied
      * @param damage the damage (or heal amount), not negative
      */
     void characterAttacked(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender, final @NotNull EffectType type, final @Range(from = 0, to = Integer.MAX_VALUE) int damage);

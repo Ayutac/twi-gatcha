@@ -4,8 +4,8 @@ import org.abos.twi.gatcha.core.CharacterAttacks;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterStats;
 import org.abos.twi.gatcha.core.Rarity;
-import org.abos.twi.gatcha.core.effect.DurationEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
+import org.abos.twi.gatcha.core.effect.PersistentEffect;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public interface Characters {
             new CharacterStats(10, 5, 5, 2),
             new CharacterStats(100, 7, 30, 12),
             new CharacterAttacks(Attacks.MEDIUM_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
-            List.of(new DurationEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE)),
+            List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
             "placeholder.png");
 
@@ -84,7 +84,7 @@ public interface Characters {
             new CharacterStats(13, 5, 3, 1),
             new CharacterStats(130, 7, 18, 6),
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.QUICK_SLASH, Attacks.UNDEAD_BITE),
-            List.of(new DurationEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE)),
+            List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
             "placeholder.png");
 
@@ -95,7 +95,7 @@ public interface Characters {
             new CharacterStats(7, 2, 8, 1),
             new CharacterStats(70, 4, 48, 6),
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
-            List.of(new DurationEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE)),
+            List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
             "placeholder.png");
 

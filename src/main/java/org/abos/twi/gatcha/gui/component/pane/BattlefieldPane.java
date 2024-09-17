@@ -16,7 +16,7 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.BattleUi;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
-import org.abos.twi.gatcha.core.effect.AttackEffect;
+import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.gui.component.CharacterView;
 import org.abos.twi.gatcha.gui.shape.Hexagon;
@@ -99,7 +99,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
                     }
                     // attack with the player character
                     else if (isPlayerAttacking() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
-                        for (final AttackEffect effect : battle.getSelectedAttack().effects()) {
+                        for (final ApplicableEffect effect : battle.getSelectedAttack().effects()) {
                             effect.apply(battle.getCurrentCharacter(), position, battle);
                         }
                         playerAttacking = false;
@@ -185,7 +185,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
             case TURN_FRIENDLY -> String.format("%s made %s friendly.\n", attacker.getName(), defenderString(attacker, defender));
-            default -> throw new AssertionError("Unknown effect type encountered!\n"); // shouldn't happen
+            default -> throw new AssertionError("Unknown effect effectType encountered!\n"); // shouldn't happen
         };
         screen.getBattleLog().appendText(msg);
         Platform.runLater(screen::update);

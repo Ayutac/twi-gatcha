@@ -18,7 +18,7 @@ public final class CollectionUtil {
      *
      * @param collection the collection to get an entry from
      * @param random     a {@link Random} instance
-     * @param <T>        the type of elements in the collection
+     * @param <T>        the effectType of elements in the collection
      * @return a random entry of the collection, might be {@code null} if the collection contains {@code null}
      * @throws NullPointerException     If {@code collection} or {@code random} refers to {@code null}.
      * @throws IllegalArgumentException If the collection is empty.

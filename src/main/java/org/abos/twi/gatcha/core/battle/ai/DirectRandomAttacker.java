@@ -8,7 +8,7 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
 import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.battle.WaveUnit;
-import org.abos.twi.gatcha.core.effect.AttackEffect;
+import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultEdge;
@@ -123,7 +123,7 @@ public class DirectRandomAttacker extends AiCharacter {
         final Attack chosenAttack = CollectionUtil.getRandomEntry(possibleTargets.keySet(), random);
         battle.setSelectedAttack(chosenAttack);
         final Vec2i chosenTarget = CollectionUtil.getRandomEntry(possibleTargets.get(chosenAttack), random);
-        for (final AttackEffect effect : chosenAttack.effects()) {
+        for (final ApplicableEffect effect : chosenAttack.effects()) {
             effect.apply(battle.getCurrentCharacter(), chosenTarget, battle);
         }
     }

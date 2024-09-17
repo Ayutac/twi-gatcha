@@ -3,11 +3,10 @@ package org.abos.twi.gatcha.core.battle;
 import org.abos.common.Describable;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
-import org.abos.twi.gatcha.core.effect.DurationEffect;
+import org.abos.twi.gatcha.core.effect.DeterioratingEffect;
 import org.abos.twi.gatcha.core.effect.Effect;
 import org.abos.twi.gatcha.core.effect.EffectType;
-import org.abos.twi.gatcha.core.effect.HealthDurationEffect;
-import org.abos.twi.gatcha.core.effect.SimpleDurationEffect;
+import org.abos.twi.gatcha.core.effect.PersistentEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -20,7 +19,7 @@ public class CharacterInBattle implements Describable {
 
     protected final @NotNull CharacterModified modified;
     protected final @NotNull Battle battle;
-    protected final @NotNull List<Effect> activeEffects = new LinkedList<>();
+    protected final @NotNull List<PersistentEffect> persistentEffects = new LinkedList<>();
 
     protected @NotNull TeamKind team;
     protected @NotNull Vec2i position;
@@ -36,7 +35,7 @@ public class CharacterInBattle implements Describable {
         this.team = Objects.requireNonNull(team);
         this.position = Objects.requireNonNull(position);
         this.health = getMaxHealth();
-        activeEffects.addAll(this.modified.getBase().effects());
+        persistentEffects.addAll(this.modified.getBase().effects());
     }
 
     @Override
@@ -55,8 +54,8 @@ public class CharacterInBattle implements Describable {
 
     public @NotNull TeamKind getTeam() {
         int count = 0;
-        for (final Effect effect : activeEffects) {
-            if (effect.getEffectType() == EffectType.TURN_FRIENDLY && effect instanceof SimpleDurationEffect sde) {
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.TURN_FRIENDLY) {
                 count++;
             }
         }
@@ -81,9 +80,9 @@ public class CharacterInBattle implements Describable {
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getSpeed() {
         int speed = modified.getSpeed();
-        for (final Effect effect : activeEffects) {
-            if (effect.getEffectType() == EffectType.DEBUFF_SPEED && effect instanceof DurationEffect debuff) {
-                speed -= debuff.getPower();
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.DEBUFF_SPEED) {
+                speed -= effect.getMaxPower();
             }
         }
         return Math.max(0, speed);
@@ -91,9 +90,9 @@ public class CharacterInBattle implements Describable {
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack() {
         int attack = modified.getAttack();
-        for (final Effect effect : activeEffects) {
-            if (effect.getEffectType() == EffectType.BUFF_ATTACK && effect instanceof DurationEffect buff) {
-                attack += buff.getPower();
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.BUFF_ATTACK) {
+                attack += effect.getMaxPower();
             }
         }
         return attack;
@@ -101,9 +100,9 @@ public class CharacterInBattle implements Describable {
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense() {
         int defense = modified.getDefense();
-        for (final Effect effect : activeEffects) {
-            if (effect.getEffectType() == EffectType.BUFF_DEFENSE && effect instanceof DurationEffect buff) {
-                defense += buff.getPower();
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.BUFF_DEFENSE) {
+                defense += effect.getMaxPower();
             }
         }
         return defense;
@@ -136,8 +135,8 @@ public class CharacterInBattle implements Describable {
         this.position = Objects.requireNonNull(position);
     }
 
-    public @NotNull List<Effect> getActiveEffects() {
-        return activeEffects;
+    public @NotNull List<PersistentEffect> getPersistentEffects() {
+        return persistentEffects;
     }
 
     public boolean isAt(final Vec2i position) {
@@ -160,21 +159,21 @@ public class CharacterInBattle implements Describable {
         if (amount < 0) {
             throw new IllegalArgumentException("Amount of damage must be positive!");
         }
-        Optional<Effect> invulnerability = activeEffects.stream().filter(effect -> effect.getEffectType() == EffectType.INVULNERABILITY).findFirst();
+        Optional<PersistentEffect> invulnerability = persistentEffects.stream().filter(effect -> effect.getEffectType() == EffectType.INVULNERABILITY).findFirst();
         if (invulnerability.isPresent()) {
-            activeEffects.remove(invulnerability.get());
+            persistentEffects.remove(invulnerability.get());
             return;
         }
         int remainingAmount = amount;
-        for (final Effect effect : activeEffects) {
-            if (effect instanceof HealthDurationEffect hde && hde.getHealth() > 0) {
-                if (hde.getHealth() >= remainingAmount) {
-                    hde.setHealth(hde.getHealth() - remainingAmount);
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.BUFF_HEALTH && effect instanceof DeterioratingEffect de && de.getRemainingPower() > 0) {
+                if (de.getRemainingPower() >= remainingAmount) {
+                    de.setRemainingPower(de.getRemainingPower() - remainingAmount);
                     remainingAmount = 0;
                 }
                 else {
-                    remainingAmount -= hde.getHealth();
-                    hde.setHealth(0);
+                    remainingAmount -= de.getRemainingPower();
+                    de.setRemainingPower(0);
                 }
             }
         }
@@ -195,7 +194,7 @@ public class CharacterInBattle implements Describable {
     }
 
     public boolean isInvisible() {
-        for (final Effect effect : activeEffects) {
+        for (final Effect effect : persistentEffects) {
             if (effect.getEffectType() == EffectType.INVISIBILITY) {
                 return true;
             }
@@ -217,16 +216,14 @@ public class CharacterInBattle implements Describable {
 
     public void startTurn() {
         setMoved(0);
-        final List<Effect> expiredEffects = new LinkedList<>();
-        for (final Effect effect : activeEffects) {
-            if (effect instanceof SimpleDurationEffect durationEffect) {
-                durationEffect.decreaseRemainingDuration();
-                if (durationEffect.getDuration() == 0) {
-                    expiredEffects.add(durationEffect);
-                }
+        final List<PersistentEffect> expiredEffects = new LinkedList<>();
+        for (final PersistentEffect effect : persistentEffects) {
+            effect.decreaseRemainingDuration();
+            if (effect.getRemainingDuration() == 0) {
+                expiredEffects.add(effect);
             }
         }
-        activeEffects.removeAll(expiredEffects);
+        persistentEffects.removeAll(expiredEffects);
         attacksCoolDown();
     }
 

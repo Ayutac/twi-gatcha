@@ -2,7 +2,7 @@ package org.abos.twi.gatcha.core.battle;
 
 import org.abos.common.Describable;
 import org.abos.common.Registerable;
-import org.abos.twi.gatcha.core.effect.AttackEffect;
+import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Representation of an attack a {@link CharacterInBattle} can do. The attacks are already saved with {@link org.abos.twi.gatcha.core.CharacterBase}.
  */
-public record Attack(String name, String description, int rangeMin, int rangeMax, int cooldown, List<AttackEffect> effects) implements Describable, Registerable<Attack> {
+public record Attack(String name, String description, int rangeMin, int rangeMax, int cooldown, List<ApplicableEffect> effects) implements Describable, Registerable<Attack> {
 
     /**
      * Constructs a new {@link Attack} instance,
@@ -29,7 +29,7 @@ public record Attack(String name, String description, int rangeMin, int rangeMax
                   final @Range(from = 0, to = Integer.MAX_VALUE) int rangeMin,
                   final @Range(from = 0, to = Integer.MAX_VALUE) int rangeMax,
                   final @Range(from = 1, to = Integer.MAX_VALUE) int cooldown,
-                  final @NotNull List<AttackEffect> effects) {
+                  final @NotNull List<ApplicableEffect> effects) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         if (rangeMin < 0 || rangeMax < 0 || cooldown < 1) {
