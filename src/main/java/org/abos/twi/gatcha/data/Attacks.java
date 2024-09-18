@@ -124,6 +124,12 @@ public interface Attacks {
             1, 3, 5,
             List.of(new ApplicableEffect(EffectType.TURN_FRIENDLY, 0, 3, 0, 0, null, Groups.WEAK_SKELETONS_ID)));
 
+    Attack CONSTANT_FOE_UNDEAD = new Attack(
+            "Constant Foe (Undead)",
+            "Increases Attack against undead enemies.",
+            0, 0, 5,
+            List.of(new ApplicableEffect(EffectType.BUFF_ATTACK, 15, 3, 0, 0, null, Groups.UNDEAD_ID)));
+
     Attack UNDEAD_CLAW = new Attack(
             "Undead Claw",
             "Attack with a foul claw.",

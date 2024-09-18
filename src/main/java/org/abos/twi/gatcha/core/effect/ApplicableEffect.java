@@ -92,11 +92,11 @@ public class ApplicableEffect extends Effect {
             int dmg = 0;
             switch (effectType) {
                 case DAMAGE_BLUNT, DAMAGE_SLASH -> {
-                    dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + maxPower);
+                    dmg = Math.max(1, from.getAttack(aoeTarget) - aoeTarget.getDefense(from) + maxPower);
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_PIERCE -> {
-                    dmg = Math.max(1, from.getAttack() - aoeTarget.getDefense() + maxPower) * 2;
+                    dmg = Math.max(1, from.getAttack(aoeTarget) - aoeTarget.getDefense(from) + maxPower) * 2;
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_DEATH -> {
@@ -110,11 +110,11 @@ public class ApplicableEffect extends Effect {
                     aoeTarget.takeDamage(dmg);
                 }
                 case DAMAGE_FROST -> {
-                    dmg = Math.max(1, (from.getAttack() + maxPower) / 3);
+                    dmg = Math.max(1, (from.getAttack(aoeTarget) + maxPower) / 3);
                     aoeTarget.takeDamage(dmg);
                 }
                 case HEALING -> {
-                    final int heal = from.getAttack() + maxPower;
+                    final int heal = from.getAttack(aoeTarget) + maxPower;
                     aoeTarget.heal(heal);
                     dmg = heal;
                 }

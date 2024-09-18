@@ -3,6 +3,7 @@ package org.abos.twi.gatcha.core.battle;
 import org.abos.common.Describable;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.Group;
 import org.abos.twi.gatcha.core.effect.DeterioratingEffect;
 import org.abos.twi.gatcha.core.effect.Effect;
 import org.abos.twi.gatcha.core.effect.EffectType;
@@ -88,21 +89,27 @@ public class CharacterInBattle implements Describable {
         return Math.max(0, speed);
     }
 
-    public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getAttack(final @NotNull CharacterInBattle against) {
         int attack = modified.getAttack();
         for (final PersistentEffect effect : persistentEffects) {
             if (effect.getEffectType() == EffectType.BUFF_ATTACK) {
-                attack += effect.getMaxPower();
+                final Optional<Group> affectedGroup = effect.getAffectedGroup();
+                if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
+                    attack += effect.getMaxPower();
+                }
             }
         }
         return attack;
     }
 
-    public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense() {
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getDefense(final @NotNull CharacterInBattle against) {
         int defense = modified.getDefense();
         for (final PersistentEffect effect : persistentEffects) {
             if (effect.getEffectType() == EffectType.BUFF_DEFENSE) {
-                defense += effect.getMaxPower();
+                final Optional<Group> affectedGroup = effect.getAffectedGroup();
+                if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
+                    defense += effect.getMaxPower();
+                }
             }
         }
         return defense;

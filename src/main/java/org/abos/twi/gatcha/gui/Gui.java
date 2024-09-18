@@ -173,6 +173,7 @@ public final class Gui extends Application {
         }
         player.addToRooster(Characters.CERIA);
         player.addToRooster(Characters.PISCES);
+        player.addToRooster(Characters.PISCES_CRELER);
         player.addToRooster(Characters.KSMVR);
         player.addToRooster(Characters.YVLON);
         player.addToRooster(Characters.ZOMBIE);

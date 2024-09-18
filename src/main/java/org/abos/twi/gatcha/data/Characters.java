@@ -33,6 +33,17 @@ public interface Characters {
             Rarity.RARE,
             "placeholder.png");
 
+    CharacterBase PISCES_CRELER = new CharacterBase("pisces_post",
+            "Pisces",
+            "The necromancer of the new Horns of Hammerad. He fears Wistram no longer.",
+            "he", "him",
+            new CharacterStats(10, 23, 14, 9),
+            new CharacterStats(100, 25, 72, 54),
+            new CharacterAttacks(Attacks.DEATH_BOLT, Attacks.TURN_SKELETON, Attacks.CONSTANT_FOE_UNDEAD),
+            List.of(),
+            Rarity.SUPER_RARE,
+            "placeholder.png");
+
     CharacterBase CERIA = new CharacterBase("ceria_pre",
             "Ceria Springwalker",
             "The Ice mage and Captain of the new Horns of Hammerad.",
