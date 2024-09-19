@@ -34,7 +34,7 @@ public interface Characters {
             "placeholder.png");
 
     CharacterBase PISCES_CRELER = new CharacterBase("pisces_post",
-            "Pisces",
+            "Pisces Jealnet, [Deathbane Necromancer]",
             "The necromancer of the new Horns of Hammerad. He fears Wistram no longer.",
             "he", "him",
             new CharacterStats(10, 23, 14, 9),
