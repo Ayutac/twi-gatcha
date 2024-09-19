@@ -21,6 +21,7 @@ public class LabelledCharacterView extends VBox {
     protected @Nullable Hexagon hexagon;
     protected final @NotNull Label label = new Label();
     protected final @NotNull Tooltip tooltip = new Tooltip();
+    protected boolean tooltipInstalled = false;
 
     public LabelledCharacterView(final @Nullable CharacterModified character, final boolean hex, final double size) {
         this.hex = hex;
@@ -29,7 +30,6 @@ public class LabelledCharacterView extends VBox {
             hexagon = new Hexagon((int) Math.round(size / 2), new Vec2d(0d, 0d));
         }
         label.setTextAlignment(TextAlignment.CENTER);
-        Tooltip.install(this, tooltip);
         setCharacter(character);
         setAlignment(Pos.CENTER);
     }
@@ -47,12 +47,19 @@ public class LabelledCharacterView extends VBox {
         if (character != null) {
             view = new CharacterView(character.getBase(), hex, size);
             label.setText(character.getName().replace(", ", ",\n"));
+            if (!tooltipInstalled) {
+                Tooltip.install(this, tooltip);
+                tooltipInstalled = true;
+            }
             tooltip.setText(character.getDescription().replace(". ", ".\n"));
             getChildren().addAll(view, label);
         }
         else if (hex) {
             label.setText("empty");
-            tooltip.setText("");
+            if (tooltipInstalled) {
+                Tooltip.uninstall(this, tooltip);
+                tooltipInstalled = false;
+            }
             getChildren().addAll(hexagon, label);
         }
     }
