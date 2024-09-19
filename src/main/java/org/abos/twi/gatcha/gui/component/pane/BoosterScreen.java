@@ -24,7 +24,7 @@ public final class BoosterScreen extends AbstractScreen {
     private final @NotNull Label boosterDescLabel = new Label();
     private final @NotNull Label boosterPriceLabel = new Label();
     private final @NotNull ComboBox<String> comboBox = new ComboBox<>();
-    private final @NotNull Button buyBtn = new Button("Buy");
+    private final @NotNull Button buyBtn = new Button("Summon");
 
     public BoosterScreen(@NotNull Gui gui) {
         super(gui);
