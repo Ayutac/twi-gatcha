@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.core;
 
 import org.abos.common.Describable;
 import org.abos.twi.gatcha.data.Lookups;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -97,5 +98,15 @@ public class CharacterModified implements Describable {
         final CharacterModified character = new CharacterModified(base);
         character.level = ois.readInt();
         return character;
+    }
+
+    @Contract(pure = true)
+    public static @Range(from = 0, to = Integer.MAX_VALUE) int calculateXpForLevelUp(final @Range(from = 1, to = MAX_LEVEL-1) int currentLevel) {
+        return currentLevel * currentLevel * 10;
+    }
+
+    @Contract(pure = true)
+    public static @Range(from = 0, to = Integer.MAX_VALUE) int calculateGoldForLevelUp(final @Range(from = 1, to = MAX_LEVEL-1) int currentLevel) {
+        return (int)Math.ceil(currentLevel * currentLevel * currentLevel / Math.sqrt(10));
     }
 }
