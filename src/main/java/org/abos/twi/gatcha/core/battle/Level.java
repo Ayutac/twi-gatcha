@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record Level(String id, int width, int height, List<Terrain> terrainList, Set<Wave> waves, Set<Vec2i> playerSpawns, InventoryMap reward) implements Named, Registerable<Level> {
+public record Level(String id, int width, int height, List<Terrain> terrainList, Set<Wave> waves, Set<Vec2i> playerSpawns, InventoryMap reward, int staminaNeeded, Set<Level> requirements) implements Named, Registerable<Level> {
 
     public Level(final @NotNull String id,
                  final @Range(from = 1, to = Integer.MAX_VALUE) int width,
@@ -19,7 +19,9 @@ public record Level(String id, int width, int height, List<Terrain> terrainList,
                  final @NotNull List<Terrain> terrainList,
                  final @NotNull Set<Wave> waves,
                  final @NotNull Set<Vec2i> playerSpawns,
-                 final @NotNull InventoryMap reward) {
+                 final @NotNull InventoryMap reward,
+                 final @Range(from = 0, to = Integer.MAX_VALUE) int staminaNeeded,
+                 final @NotNull Set<Level> requirements) {
         this.id = Objects.requireNonNull(id);
         this.height = height;
         this.width = width;
@@ -27,6 +29,11 @@ public record Level(String id, int width, int height, List<Terrain> terrainList,
         this.waves = Set.copyOf(waves);
         this.playerSpawns = Set.copyOf(playerSpawns);
         this.reward = Objects.requireNonNull(reward);
+        if (staminaNeeded < 0) {
+            throw new IllegalArgumentException("Stamina needed cannot be negative!");
+        }
+        this.staminaNeeded = staminaNeeded;
+        this.requirements = Set.copyOf(requirements);
     }
 
     @Override
