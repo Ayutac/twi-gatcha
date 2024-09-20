@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Level;
 import org.abos.twi.gatcha.data.Levels;
 import org.abos.twi.gatcha.gui.Gui;
@@ -27,15 +28,22 @@ public final class CampaignScreen extends AbstractScreen {
         });
         zeroOneBtn.setPrefWidth(BUTTON_WIDTH);
         zeroOneBtn.setOnMouseClicked(enterLevelEvent(Levels.ZERO_ONE));
+        zeroOneBtn.setDisable(true);
         zeroTwoBtn.setPrefWidth(BUTTON_WIDTH);
         zeroTwoBtn.setOnMouseClicked(enterLevelEvent(Levels.ZERO_TWO));
+        zeroTwoBtn.setDisable(true);
         final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn);
         centerBox.setAlignment(Pos.CENTER);
         setCenter(centerBox);
     }
 
     public void update() {
-
+        final Player player = gui.getPlayer();
+        if (player == null) {
+            return;
+        }
+        zeroOneBtn.setDisable(!Levels.ZERO_ONE.satisfiesRequirements(player));
+        zeroTwoBtn.setDisable(!Levels.ZERO_TWO.satisfiesRequirements(player));
     }
 
     private EventHandler<? super MouseEvent> enterLevelEvent(final @NotNull Level level) {

@@ -4,6 +4,7 @@ import org.abos.common.Named;
 import org.abos.common.Registerable;
 import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.InventoryMap;
+import org.abos.twi.gatcha.core.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -46,7 +47,16 @@ public record Level(String id, int width, int height, List<Terrain> terrainList,
         return id;
     }
 
-    public Battle prepareBattle() {
+    public @NotNull Battle prepareBattle() {
         return new Battle(id, width, height, terrainList, waves, playerSpawns, reward);
+    }
+
+    public boolean satisfiesRequirements(final @NotNull Player player) {
+        for (final Level level : requirements) {
+            if (player.getStats().getLevelWon(level.id) == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }
