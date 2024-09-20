@@ -269,6 +269,7 @@ public final class Gui extends Application {
     }
 
     public void showCampaignScreen() {
+        campaignScreen.update();
         stage.setScene(campaignScreenScene);
     }
 
