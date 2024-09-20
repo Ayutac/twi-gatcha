@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Range;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,7 +28,9 @@ public class Player implements Named {
     /**
      * @see #getName()
      */
-    protected String name;
+    protected @NotNull String name;
+
+    protected @NotNull Instant lastAutoFill;
 
     protected @Range(from = 1, to = Integer.MAX_VALUE) int maxStamina;
 
@@ -40,9 +44,10 @@ public class Player implements Named {
 
     protected final PlayerStats stats = new PlayerStats();
 
-    public Player(final @NotNull String name) {
+    public Player(final @NotNull String name, final @NotNull Instant lastAutoFill) {
         this.name = Objects.requireNonNull(name);
         this.stamina = this.maxStamina = DEFAULT_MAX_STAMINA;
+        this.lastAutoFill = lastAutoFill;
     }
 
     @Override
@@ -82,6 +87,7 @@ public class Player implements Named {
 
     public void fillStamina() {
         stamina = Math.max(maxStamina, stamina);
+        lastAutoFill = Instant.now().truncatedTo(ChronoUnit.HALF_DAYS);
     }
 
     /**
@@ -139,6 +145,7 @@ public class Player implements Named {
 
     public void save(final @NotNull ObjectOutputStream oos) throws IOException {
         oos.writeUTF(name);
+        oos.writeLong(lastAutoFill.getEpochSecond());
         oos.writeInt(maxStamina);
         oos.writeInt(stamina);
         inventory.save(oos);
@@ -159,9 +166,13 @@ public class Player implements Named {
 
     public static Player load(final @NotNull ObjectInputStream ois) throws IOException {
         final String name = ois.readUTF();
-        final Player player = new Player(name);
+        final Instant lastAutoFill = Instant.ofEpochSecond(ois.readLong());
+        final Player player = new Player(name, lastAutoFill);
         player.maxStamina = ois.readInt();
         player.stamina = ois.readInt();
+        if (Instant.now().truncatedTo(ChronoUnit.HALF_DAYS).isAfter(lastAutoFill)) {
+            player.fillStamina();
+        }
         final InventoryMap inventory = InventoryMap.load(ois);
         player.inventory.addAll(inventory);
         final int roosterSize = ois.readInt();

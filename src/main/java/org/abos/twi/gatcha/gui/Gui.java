@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +162,7 @@ public final class Gui extends Application {
     }
 
     public void newGame() {
-        final Player newPlayer = new Player("Dev");
+        final Player newPlayer = new Player("Dev", Instant.now().truncatedTo(ChronoUnit.HALF_DAYS));
         newPlayer.addToRooster(Characters.ERIN);
         newPlayer.addParty(new Party("First Party", List.of(
                 newPlayer.getCharacter(Characters.ERIN))));
@@ -179,21 +181,6 @@ public final class Gui extends Application {
         player.addToRooster(Characters.ZOMBIE);
         player.addToRooster(Characters.SKELETON);
         player.addToRooster(Characters.SKELETON_ARCHER);
-        /*final Level level = new Level(10, 10, List.of(), Set.of(
-                new Wave(0, List.of(
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 9), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 8), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 7), DirectRandomAttacker::new),
-                        new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(9, 5), DirectRandomAttacker::new)))),
-                Set.of(new Vec2i(0, 0), new Vec2i(0, 1), new Vec2i(0, 2), new Vec2i(1, 0), new Vec2i(1, 1), new Vec2i(1, 2)));
-        final Battle battle = level.prepareBattle();
-        battle.startPlacement(List.of(
-                new CharacterModified(Characters.PISCES),
-                new CharacterModified(Characters.CERIA),
-                new CharacterModified(Characters.KSMVR),
-                new CharacterModified(Characters.YVLON)));
-        stage.setScene(battleScreenScene);
-        battleScreen.setBattle(battle);*/
     }
 
     public void saveGame() {
