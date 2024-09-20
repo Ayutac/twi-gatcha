@@ -32,4 +32,15 @@ public interface Levels {
             new InventoryMap(InventoryKind.GOLD, 5),
             5,
             Set.of(ZERO_ONE));
+
+    Level ZERO_THREE = new Level("0-3", 4, 3,
+            List.of(),
+            Set.of(new Wave(0, List.of(
+                    new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(3, 2), SlowWanderer::new))),
+                   new Wave(1, List.of(
+                    new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(3, 2), DirectRandomAttacker::new)))),
+            Set.of(new Vec2i(0, 0), new Vec2i(0, 1), new Vec2i(0, 2)),
+            new InventoryMap(InventoryKind.GOLD, 5),
+            5,
+            Set.of(ZERO_TWO));
 }

@@ -22,6 +22,7 @@ public final class CampaignScreen extends AbstractScreen {
     private final @NotNull Label staminaLabel = new Label();
     private final @NotNull Button zeroOneBtn;
     private final @NotNull Button zeroTwoBtn;
+    private final @NotNull Button zeroThreeBtn;
 
     public CampaignScreen(@NotNull Gui gui) {
         super(gui);
@@ -37,18 +38,10 @@ public final class CampaignScreen extends AbstractScreen {
         // center menu
         zeroOneBtn = installLevelButton(Levels.ZERO_ONE);
         zeroTwoBtn = installLevelButton(Levels.ZERO_TWO);
-        final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn);
+        zeroThreeBtn = installLevelButton(Levels.ZERO_THREE);
+        final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn, zeroThreeBtn);
         centerBox.setAlignment(Pos.CENTER);
         setCenter(centerBox);
-    }
-
-    private Button installLevelButton(final @NotNull Level level) {
-        final Button result = new Button(level.getName());
-        result.setPrefWidth(BUTTON_WIDTH);
-        result.setOnMouseClicked(enterLevelEvent(level));
-        result.setTooltip(new Tooltip(String.format("%d Stamina", level.staminaNeeded())));
-        result.setDisable(true);
-        return result;
     }
 
     public void update() {
@@ -60,6 +53,16 @@ public final class CampaignScreen extends AbstractScreen {
         staminaLabel.setText(String.format("%d/%d", player.getStamina(), player.getMaxStamina()));
         zeroOneBtn.setDisable(!Levels.ZERO_ONE.satisfiesRequirements(player));
         zeroTwoBtn.setDisable(!Levels.ZERO_TWO.satisfiesRequirements(player));
+        zeroThreeBtn.setDisable(!Levels.ZERO_THREE.satisfiesRequirements(player));
+    }
+
+    private Button installLevelButton(final @NotNull Level level) {
+        final Button result = new Button(level.getName());
+        result.setPrefWidth(BUTTON_WIDTH);
+        result.setOnMouseClicked(enterLevelEvent(level));
+        result.setTooltip(new Tooltip(String.format("%d Stamina", level.staminaNeeded())));
+        result.setDisable(true);
+        return result;
     }
 
     private EventHandler<? super MouseEvent> enterLevelEvent(final @NotNull Level level) {
