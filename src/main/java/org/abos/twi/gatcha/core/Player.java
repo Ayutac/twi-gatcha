@@ -58,6 +58,32 @@ public class Player implements Named {
         this.name = Objects.requireNonNull(name);
     }
 
+    public @Range(from = 1, to = Integer.MAX_VALUE) int getMaxStamina() {
+        return maxStamina;
+    }
+
+    public void setMaxStamina(final @Range(from = 1, to = Integer.MAX_VALUE) int maxStamina) {
+        if (maxStamina < 1) {
+            throw new IllegalArgumentException("Maximal Stamina must be positive!");
+        }
+        this.maxStamina = maxStamina;
+    }
+
+    public @Range(from = 0, to = Integer.MAX_VALUE) int getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(final @Range(from = 0, to = Integer.MAX_VALUE) int stamina) {
+        if (stamina < 0) {
+            throw new IllegalArgumentException("Stamina cannot be negative!");
+        }
+        this.stamina = stamina;
+    }
+
+    public void fillStamina() {
+        stamina = Math.max(maxStamina, stamina);
+    }
+
     /**
      * This {@link Player}'s inventory.
      * @return the inventory, not {@code null}.

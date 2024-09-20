@@ -2,7 +2,9 @@ package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -17,6 +19,7 @@ public final class CampaignScreen extends AbstractScreen {
 
     private static final int BUTTON_WIDTH = 100;
 
+    private final @NotNull Label staminaLabel = new Label();
     private final @NotNull Button zeroOneBtn = new Button(Levels.ZERO_ONE.getName());
     private final @NotNull Button zeroTwoBtn = new Button(Levels.ZERO_TWO.getName());
 
@@ -27,6 +30,11 @@ public final class CampaignScreen extends AbstractScreen {
                 this.gui.showMissionModeScreen();
             }
         });
+        // top menu
+        final VBox topBox = new VBox(new Label("Stamina"), staminaLabel);
+        topBox.setAlignment(Pos.CENTER);
+        setTop(topBox);
+        // center menu
         zeroOneBtn.setPrefWidth(BUTTON_WIDTH);
         zeroOneBtn.setOnMouseClicked(enterLevelEvent(Levels.ZERO_ONE));
         zeroOneBtn.setTooltip(new Tooltip(String.format("%d Stamina", Levels.ZERO_ONE.staminaNeeded())));
@@ -43,8 +51,10 @@ public final class CampaignScreen extends AbstractScreen {
     public void update() {
         final Player player = gui.getPlayer();
         if (player == null) {
+            staminaLabel.setText("");
             return;
         }
+        staminaLabel.setText(String.format("%d/%d", player.getStamina(), player.getMaxStamina()));
         zeroOneBtn.setDisable(!Levels.ZERO_ONE.satisfiesRequirements(player));
         zeroTwoBtn.setDisable(!Levels.ZERO_TWO.satisfiesRequirements(player));
     }
@@ -54,7 +64,19 @@ public final class CampaignScreen extends AbstractScreen {
             if (mouseEvent.getButton() != MouseButton.PRIMARY) {
                 return;
             }
-            gui.showBattleScreen(this, level.prepareBattle());
+            final Player player = gui.getPlayer();
+            if (player == null) {
+                return;
+            }
+            if (player.getStamina() < level.staminaNeeded()) {
+                final Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setContentText("You don't have enough stamina for this mission!");
+                alert.showAndWait();
+            }
+            else {
+                player.setStamina(player.getStamina() - level.staminaNeeded());
+                gui.showBattleScreen(this, level.prepareBattle());
+            }
         };
     }
 
