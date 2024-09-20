@@ -20,8 +20,8 @@ public final class CampaignScreen extends AbstractScreen {
     private static final int BUTTON_WIDTH = 100;
 
     private final @NotNull Label staminaLabel = new Label();
-    private final @NotNull Button zeroOneBtn = new Button(Levels.ZERO_ONE.getName());
-    private final @NotNull Button zeroTwoBtn = new Button(Levels.ZERO_TWO.getName());
+    private final @NotNull Button zeroOneBtn;
+    private final @NotNull Button zeroTwoBtn;
 
     public CampaignScreen(@NotNull Gui gui) {
         super(gui);
@@ -35,17 +35,20 @@ public final class CampaignScreen extends AbstractScreen {
         topBox.setAlignment(Pos.CENTER);
         setTop(topBox);
         // center menu
-        zeroOneBtn.setPrefWidth(BUTTON_WIDTH);
-        zeroOneBtn.setOnMouseClicked(enterLevelEvent(Levels.ZERO_ONE));
-        zeroOneBtn.setTooltip(new Tooltip(String.format("%d Stamina", Levels.ZERO_ONE.staminaNeeded())));
-        zeroOneBtn.setDisable(true);
-        zeroTwoBtn.setPrefWidth(BUTTON_WIDTH);
-        zeroTwoBtn.setOnMouseClicked(enterLevelEvent(Levels.ZERO_TWO));
-        zeroTwoBtn.setTooltip(new Tooltip(String.format("%d Stamina", Levels.ZERO_TWO.staminaNeeded())));
-        zeroTwoBtn.setDisable(true);
+        zeroOneBtn = installLevelButton(Levels.ZERO_ONE);
+        zeroTwoBtn = installLevelButton(Levels.ZERO_TWO);
         final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn);
         centerBox.setAlignment(Pos.CENTER);
         setCenter(centerBox);
+    }
+
+    private Button installLevelButton(final @NotNull Level level) {
+        final Button result = new Button(level.getName());
+        result.setPrefWidth(BUTTON_WIDTH);
+        result.setOnMouseClicked(enterLevelEvent(level));
+        result.setTooltip(new Tooltip(String.format("%d Stamina", level.staminaNeeded())));
+        result.setDisable(true);
+        return result;
     }
 
     public void update() {
