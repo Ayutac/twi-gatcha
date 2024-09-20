@@ -50,6 +50,7 @@ public final class CampaignScreen extends AbstractScreen {
             staminaLabel.setText("");
             return;
         }
+        player.maybeAutofillStamina();
         staminaLabel.setText(String.format("%d/%d", player.getStamina(), player.getMaxStamina()));
         zeroOneBtn.setDisable(!Levels.ZERO_ONE.satisfiesRequirements(player));
         zeroTwoBtn.setDisable(!Levels.ZERO_TWO.satisfiesRequirements(player));

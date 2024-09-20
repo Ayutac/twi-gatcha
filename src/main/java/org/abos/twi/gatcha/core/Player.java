@@ -90,6 +90,12 @@ public class Player implements Named {
         lastAutoFill = Instant.now().truncatedTo(ChronoUnit.HALF_DAYS);
     }
 
+    public void maybeAutofillStamina() {
+        if (Instant.now().truncatedTo(ChronoUnit.HALF_DAYS).isAfter(lastAutoFill)) {
+            fillStamina();
+        }
+    }
+
     /**
      * This {@link Player}'s inventory.
      * @return the inventory, not {@code null}.
@@ -170,9 +176,7 @@ public class Player implements Named {
         final Player player = new Player(name, lastAutoFill);
         player.maxStamina = ois.readInt();
         player.stamina = ois.readInt();
-        if (Instant.now().truncatedTo(ChronoUnit.HALF_DAYS).isAfter(lastAutoFill)) {
-            player.fillStamina();
-        }
+        player.maybeAutofillStamina();
         final InventoryMap inventory = InventoryMap.load(ois);
         player.inventory.addAll(inventory);
         final int roosterSize = ois.readInt();
