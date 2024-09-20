@@ -72,11 +72,12 @@ public class Battle {
     /**
      * A list of all characters that were introduced to this battle, in introduction order.
      */
-    protected final List<CharacterInBattle> characters = new LinkedList<>();
+    protected final @NotNull List<CharacterInBattle> characters = new LinkedList<>();
+    protected final @NotNull List<Terrain> terrainList;
     /**
      * @see #getTerrainGraph()
      */
-    protected final AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
+    protected final @NotNull AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
     /**
      * All the places where the player can place their characters at the beginning of the battle.
      */
@@ -161,6 +162,7 @@ public class Battle {
                 throw new IllegalArgumentException("Terrain must be within field!");
             }
         }
+        this.terrainList = List.copyOf(terrainList);
         if (waves.size() != waves.stream().mapToInt(Wave::turn).distinct().count()) {
             throw new IllegalArgumentException("A turn can have at most one wave!");
         }
@@ -338,6 +340,18 @@ public class Battle {
 
     public boolean contains(final @NotNull Vec2i position) {
         return position.x() >= 0 && position.y() >= 0 && position.x() < width && position.y() < height;
+    }
+
+    public TerrainType getTerrainTypeAt(final @NotNull Vec2i position) {
+        if (!contains(position)) {
+            throw new IllegalArgumentException("Position isn't part of the battlefield!");
+        }
+        for (final Terrain terrain : terrainList) {
+            if (position.equals(terrain.position())) {
+                return terrain.type();
+            }
+        }
+        return TerrainType.DEFAULT;
     }
 
     public boolean isCharacterAt(final @NotNull Vec2i position) {

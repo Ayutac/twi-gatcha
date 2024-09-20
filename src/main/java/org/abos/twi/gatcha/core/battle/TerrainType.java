@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Range;
 public enum TerrainType {
 
     BLOCKED(Integer.MAX_VALUE),
+    HILL(2),
     DEFAULT(1);
 
     final @Range(from = 1, to = Integer.MAX_VALUE) int movementCost;

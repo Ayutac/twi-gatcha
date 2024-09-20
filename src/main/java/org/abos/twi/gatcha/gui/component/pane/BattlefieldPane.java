@@ -16,6 +16,7 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.BattleUi;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
+import org.abos.twi.gatcha.core.battle.TerrainType;
 import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.gui.component.CharacterView;
@@ -302,7 +303,11 @@ public class BattlefieldPane extends Pane implements BattleUi {
                     other.getValue().setFill(Color.MISTYROSE);
                 }
                 else {
-                    other.getValue().setFill(Color.TRANSPARENT);
+                    switch (battle.getTerrainTypeAt(other.getKey())) {
+                        case BLOCKED -> other.getValue().setFill(Color.BLACK);
+                        case HILL -> other.getValue().setFill(Color.GREY);
+                        default -> other.getValue().setFill(Color.TRANSPARENT);
+                    }
                 }
                 tooltips.get(other.getValue()).setText("empty");
             }
