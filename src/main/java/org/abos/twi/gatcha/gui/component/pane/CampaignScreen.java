@@ -23,6 +23,7 @@ public final class CampaignScreen extends AbstractScreen {
     private final @NotNull Button zeroOneBtn;
     private final @NotNull Button zeroTwoBtn;
     private final @NotNull Button zeroThreeBtn;
+    private final @NotNull Button zeroFourBtn;
 
     public CampaignScreen(@NotNull Gui gui) {
         super(gui);
@@ -39,7 +40,8 @@ public final class CampaignScreen extends AbstractScreen {
         zeroOneBtn = installLevelButton(Levels.ZERO_ONE);
         zeroTwoBtn = installLevelButton(Levels.ZERO_TWO);
         zeroThreeBtn = installLevelButton(Levels.ZERO_THREE);
-        final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn, zeroThreeBtn);
+        zeroFourBtn = installLevelButton(Levels.ZERO_FOUR);
+        final VBox centerBox = new VBox(zeroOneBtn, zeroTwoBtn, zeroThreeBtn, zeroFourBtn);
         centerBox.setAlignment(Pos.CENTER);
         setCenter(centerBox);
     }
@@ -55,6 +57,7 @@ public final class CampaignScreen extends AbstractScreen {
         zeroOneBtn.setDisable(!Levels.ZERO_ONE.satisfiesRequirements(player));
         zeroTwoBtn.setDisable(!Levels.ZERO_TWO.satisfiesRequirements(player));
         zeroThreeBtn.setDisable(!Levels.ZERO_THREE.satisfiesRequirements(player));
+        zeroFourBtn.setDisable(!Levels.ZERO_FOUR.satisfiesRequirements(player));
     }
 
     private Button installLevelButton(final @NotNull Level level) {
