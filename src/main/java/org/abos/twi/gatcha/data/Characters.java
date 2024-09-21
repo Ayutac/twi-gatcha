@@ -20,7 +20,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.MINOTAUR_PUNCH, Attacks.UNERRING_KNIFE_THROW, Attacks.PASTA),
             List.of(),
             Rarity.RARE,
-            "erin.png");
+            "erin_1.png");
 
     CharacterBase PISCES = new CharacterBase("pisces_pre",
             "Pisces",
@@ -64,7 +64,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.QUICK_MOVEMENT, Attacks.SIDE_STEP),
             List.of(),
             Rarity.RARE,
-            "placeholder.png");
+            "ksmvr_pre.png");
 
     CharacterBase YVLON = new CharacterBase("yvlon_pre",
             "Yvlon Byres",
