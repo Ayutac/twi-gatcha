@@ -53,6 +53,7 @@ public class DirectRandomAttacker extends AiCharacter {
         final Vec2i movementTarget = CollectionUtil.getRandomEntry(neighborTiles, random);
         final var movementGraph = battle.getCharacterMovementGraph(this);
         if (new ConnectivityInspector<>(movementGraph).connectedSetOf(position).contains(movementTarget)) {
+            /* BFSP doesn't terminate if the source and sink are not weakly connected */
             final var graphPath = BellmanFordShortestPath.findPathBetween(movementGraph, position, movementTarget);
             if (graphPath.getWeight() != Double.POSITIVE_INFINITY) {
                 final List<DefaultEdge> pathEdges = graphPath.getEdgeList();
