@@ -10,6 +10,7 @@ import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.battle.WaveUnit;
 import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.jetbrains.annotations.NotNull;
+import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -51,28 +52,30 @@ public class DirectRandomAttacker extends AiCharacter {
         final Vec2i oldPosition = position;
         final Vec2i movementTarget = CollectionUtil.getRandomEntry(neighborTiles, random);
         final var movementGraph = battle.getCharacterMovementGraph(this);
-        final var graphPath = BellmanFordShortestPath.findPathBetween(movementGraph, position, movementTarget);
-        if (graphPath.getWeight() != Double.POSITIVE_INFINITY) {
-            final List<DefaultEdge> pathEdges = graphPath.getEdgeList();
-            double pathWeight = 0d;
-            int count = 0;
-            // we go as far as possible
-            for (final DefaultEdge e : pathEdges) {
-                if (pathWeight + movementGraph.getEdgeWeight(e) <= getMovement()) {
-                    pathWeight += movementGraph.getEdgeWeight(e);
-                    count++;
-                } else {
-                    break;
+        if (new ConnectivityInspector<>(movementGraph).connectedSetOf(position).contains(movementTarget)) {
+            final var graphPath = BellmanFordShortestPath.findPathBetween(movementGraph, position, movementTarget);
+            if (graphPath.getWeight() != Double.POSITIVE_INFINITY) {
+                final List<DefaultEdge> pathEdges = graphPath.getEdgeList();
+                double pathWeight = 0d;
+                int count = 0;
+                // we go as far as possible
+                for (final DefaultEdge e : pathEdges) {
+                    if (pathWeight + movementGraph.getEdgeWeight(e) <= getMovement()) {
+                        pathWeight += movementGraph.getEdgeWeight(e);
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
+                // even one step could be too much
+                if (count != 0) {
+                    setMoved((int) Math.round(pathWeight));
+                    setPosition(movementGraph.getEdgeTarget(pathEdges.get(count - 1)));
                 }
             }
-            // even one step could be too much
-            if (count != 0) {
-                setMoved((int)Math.round(pathWeight));
-                setPosition(movementGraph.getEdgeTarget(pathEdges.get(count-1)));
+            if (battle.getUi() != null && !oldPosition.equals(position)) {
+                battle.getUi().characterMoved(this, oldPosition, position);
             }
-        }
-        if (battle.getUi() != null && !oldPosition.equals(position)) {
-            battle.getUi().characterMoved(this, oldPosition, position);
         }
         // attack something in range
         final Map<Attack, List<Vec2i>> possibleTargets = new HashMap<>();
