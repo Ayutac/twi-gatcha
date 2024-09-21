@@ -31,7 +31,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.BONE_DART, Attacks.INVISIBILITY, Attacks.BONE_FRACTURE),
             List.of(),
             Rarity.RARE,
-            "placeholder.png");
+            "pisces_pre.png");
 
     CharacterBase PISCES_CRELER = new CharacterBase("pisces_post",
             "Pisces Jealnet, [Deathbane Necromancer]",
