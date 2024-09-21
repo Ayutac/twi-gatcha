@@ -72,10 +72,8 @@ public final class BattleScreen extends AbstractScreen {
         this.battle = battle;
         battleLog.setText("");
         if (this.battle != null) {
-            battlefieldPane = new BattlefieldPane(this, battle, 30);
-            final HBox box = new HBox(battlefieldPane);
-            box.setAlignment(Pos.CENTER);
-            setCenter(box);
+            battlefieldPane = new BattlefieldPane(this, battle, 200);
+            setCenter(new ZoomableScrollPane(battlefieldPane));
         }
         else {
             battlefieldPane = null;

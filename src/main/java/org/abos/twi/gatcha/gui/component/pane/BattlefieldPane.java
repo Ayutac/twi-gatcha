@@ -72,7 +72,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
                     if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
                         CharacterModified character = battle.getPlacementParty().poll();
                         final CharacterInBattle cib = battle.placePlayerCharacterAt(character, position);
-                        final CharacterView characterView = new CharacterView(character.getBase(), true, 60d);
+                        final CharacterView characterView = new CharacterView(character.getBase(), true, 2*radius);
                         characterView.setX(hexagon.get().getLeftUpperCorner().x());
                         characterView.setY(hexagon.get().getLeftUpperCorner().y());
                         BattlefieldPane.this.characterViews.put(cib, characterView);
