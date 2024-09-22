@@ -16,7 +16,7 @@
 * Ayutac
 
 ## Art
-* Pontastic: Erin
+* Pontastic: Erin 1, Horns Pre Creler
 
 ## Game Tester
 * Ceburi
