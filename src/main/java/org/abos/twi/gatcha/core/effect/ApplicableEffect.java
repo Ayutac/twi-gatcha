@@ -87,7 +87,6 @@ public class ApplicableEffect extends Effect {
 
     public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
         List<CharacterInBattle> aoeTargets = getApplicableTargets(target, battle);
-        // changes here should be reflected in SimpleAttackEffect
         for (final CharacterInBattle aoeTarget : aoeTargets) {
             int dmg = 0;
             switch (effectType) {
