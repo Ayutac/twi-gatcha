@@ -53,7 +53,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.ICE_SHARD, Attacks.FROST_ARMOR, Attacks.FROZEN_WIND),
             List.of(),
             Rarity.RARE,
-            "placeholder.png");
+            "ceria_pre.png");
 
     CharacterBase KSMVR = new CharacterBase("ksmvr_pre",
             "Ksmvr",
@@ -75,7 +75,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.KEEN_EDGE, Attacks.IGNORE_PAIN),
             List.of(),
             Rarity.RARE,
-            "placeholder.png");
+            "yvlon_pre.png");
 
     CharacterBase ZOMBIE = new CharacterBase("zombie",
             "Zombie",
