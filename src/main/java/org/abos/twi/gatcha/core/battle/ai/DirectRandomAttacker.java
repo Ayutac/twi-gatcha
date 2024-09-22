@@ -62,42 +62,15 @@ public class DirectRandomAttacker extends AiCharacter {
         final Map<Attack, List<Vec2i>> possibleTargets = new HashMap<>();
         // … with normal attack
         if (cooldownNormal == 0) { // should always be the case
-            battle.setSelectedAttack(modified.getBase().attacks().normal());
-            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-                final List<Vec2i> targets = new LinkedList<>();
-                for (final Vec2i enemyPos : enemyPositions) {
-                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                        targets.add(enemyPos);
-                    }
-                }
-                possibleTargets.put(modified.getBase().attacks().normal(), targets);
-            }
+            savePossibleTargetsForAttack(modified.getBase().attacks().normal(), enemyPositions, possibleTargets);
         }
         // … with special 1 attack
         if (cooldownSpecial1 == 0) {
-            battle.setSelectedAttack(modified.getBase().attacks().special1());
-            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-                final List<Vec2i> targets = new LinkedList<>();
-                for (final Vec2i enemyPos : enemyPositions) {
-                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                        targets.add(enemyPos);
-                    }
-                }
-                possibleTargets.put(modified.getBase().attacks().special1(), targets);
-            }
+            savePossibleTargetsForAttack(modified.getBase().attacks().special1(), enemyPositions, possibleTargets);
         }
         // … with special 2 attack
         if (cooldownSpecial2 == 0) {
-            battle.setSelectedAttack(modified.getBase().attacks().special2());
-            if (!Collections.disjoint(battle.getPossibleAttackFields(), enemyPositions)) {
-                final List<Vec2i> targets = new LinkedList<>();
-                for (final Vec2i enemyPos : enemyPositions) {
-                    if (battle.getPossibleAttackFields().contains(enemyPos)) {
-                        targets.add(enemyPos);
-                    }
-                }
-                possibleTargets.put(modified.getBase().attacks().special2(), targets);
-            }
+            savePossibleTargetsForAttack(modified.getBase().attacks().special2(), enemyPositions, possibleTargets);
         }
         // if no targets, no attack
         if (possibleTargets.isEmpty()) {

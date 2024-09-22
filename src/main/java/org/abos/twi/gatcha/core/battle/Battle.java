@@ -73,11 +73,19 @@ public class Battle {
      * A list of all characters that were introduced to this battle, in introduction order.
      */
     protected final @NotNull List<CharacterInBattle> characters = new LinkedList<>();
+    /**
+     * A list of all the non-default terrains on the map.
+     * @see #getTerrainTypeAt(Vec2i)
+     */
     protected final @NotNull List<Terrain> terrainList;
     /**
      * @see #getTerrainGraph()
      */
     protected final @NotNull AbstractBaseGraph<Vec2i, DefaultEdge> terrainGraph;
+    /**
+     * Shortest paths on the terrain graph.
+     */
+    protected final @NotNull BFSShortestPath<Vec2i, DefaultEdge> terrainShortestPaths;
     /**
      * All the places where the player can place their characters at the beginning of the battle.
      */
@@ -203,6 +211,8 @@ public class Battle {
                 }
             }
         }
+        // misc
+        terrainShortestPaths = new BFSShortestPath<>(terrainGraph);
         random = new Random((long) size * (1 + terrainList.size()));
     }
 
@@ -329,7 +339,7 @@ public class Battle {
         if (currentCharacter == null || selectedAttack == null) {
             return;
         }
-        var paths = new BFSShortestPath<>(terrainGraph).getPaths(currentCharacter.getPosition());
+        var paths = terrainShortestPaths.getPaths(currentCharacter.getPosition());
         for (final Vec2i position : terrainGraph.vertexSet()) {
             final int length = paths.getPath(position).getLength();
             if (selectedAttack.rangeMin() <= length && length <= selectedAttack.rangeMax()) {
