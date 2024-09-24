@@ -430,8 +430,13 @@ public class Battle {
     public void removeCharacter(final @NotNull CharacterInBattle character) {
         characters.remove(character);
         characterOrder.remove(character);
-        if (character.getTeam() == TeamKind.PLAYER && stats != null) {
-            stats.increaseCharacterDeployedDefeated(character.getModified());
+        if (stats != null) {
+            if (character.getTeam() == TeamKind.PLAYER) {
+                stats.increaseCharacterDeployedDefeated(character.getModified());
+            }
+            else if (character.getTeam() == TeamKind.ENEMY) {
+                stats.increaseEnemyDefeated(character.getModified());
+            }
         }
     }
 
