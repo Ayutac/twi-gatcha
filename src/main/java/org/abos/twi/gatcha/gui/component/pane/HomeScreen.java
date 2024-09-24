@@ -19,7 +19,8 @@ public final class HomeScreen extends AbstractScreen {
     private final @NotNull Button roosterBtn = new Button("Garden of Sanctuary");
     private final @NotNull Button partyBtn = new Button("Pavilion of Secrets");
     private final @NotNull Button pullBtn = new Button("Palace of Fates");
-    private final @NotNull Button missionBtn = new Button("<Quests>");
+    private final @NotNull Button missionBtn = new Button("Missions");
+    private final @NotNull Button questBtn = new Button("<Quests>");
 
     public HomeScreen(@NotNull Gui gui) {
         super(gui);
@@ -51,7 +52,9 @@ public final class HomeScreen extends AbstractScreen {
                 this.gui.showMissionModeScreen();
             }
         });
-        final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn);
+        questBtn.setPrefWidth(BUTTON_WIDTH);
+        questBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn, questBtn);
         setRight(rightBox);
     }
 
