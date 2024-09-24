@@ -16,21 +16,18 @@ import java.util.Objects;
 public record CharacterBase(String id, String name, String description, String pronoun, String genitive,
                             CharacterStats startStats, CharacterStats endStats, CharacterAttacks attacks, List<PersistentEffect> effects, Rarity rarity, String imageName) implements Describable, Registerable<CharacterBase> {
 
-    public CharacterBase(final @NotNull String id, final @NotNull String name, final @NotNull String description, final @NotNull String pronoun, final @NotNull String genitive,
-                         final @NotNull CharacterStats startStats, final @NotNull CharacterStats endStats,
-                         final @NotNull CharacterAttacks attacks, final @NotNull List<PersistentEffect> effects,
-                         final @NotNull Rarity rarity, final @NotNull String imageName) {
-        this.id = Objects.requireNonNull(id);
-        this.name = Objects.requireNonNull(name);
-        this.description = Objects.requireNonNull(description);
-        this.pronoun = Objects.requireNonNull(pronoun);
-        this.genitive = Objects.requireNonNull(genitive);
-        this.startStats = Objects.requireNonNull(startStats);
-        this.endStats = Objects.requireNonNull(endStats);
-        this.attacks = Objects.requireNonNull(attacks);
-        this.effects = Objects.requireNonNull(effects);
-        this.rarity = Objects.requireNonNull(rarity);
-        this.imageName = Objects.requireNonNull(imageName);
+    public CharacterBase {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(description);
+        Objects.requireNonNull(pronoun);
+        Objects.requireNonNull(genitive);
+        Objects.requireNonNull(startStats);
+        Objects.requireNonNull(endStats);
+        Objects.requireNonNull(attacks);
+        Objects.requireNonNull(effects);
+        Objects.requireNonNull(rarity);
+        Objects.requireNonNull(imageName);
     }
 
     @Override

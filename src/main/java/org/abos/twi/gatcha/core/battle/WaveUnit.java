@@ -9,12 +9,11 @@ import java.util.function.BiFunction;
 
 public record WaveUnit(CharacterModified character, TeamKind team, Vec2i startPos, BiFunction<WaveUnit, Battle, CharacterInBattle> cibCreator) {
 
-    public WaveUnit(final @NotNull CharacterModified character, @NotNull TeamKind team, @NotNull Vec2i startPos,
-                    final @NotNull BiFunction<WaveUnit, Battle, CharacterInBattle> cibCreator) {
-        this.character = Objects.requireNonNull(character);
-        this.team = Objects.requireNonNull(team);
-        this.startPos = Objects.requireNonNull(startPos);
-        this.cibCreator = Objects.requireNonNull(cibCreator);
+    public WaveUnit {
+        Objects.requireNonNull(character);
+        Objects.requireNonNull(team);
+        Objects.requireNonNull(startPos);
+        Objects.requireNonNull(cibCreator);
     }
 
     public WaveUnit(final @NotNull CharacterModified character, @NotNull Vec2i startPos,
