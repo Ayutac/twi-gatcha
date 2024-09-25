@@ -4,14 +4,17 @@ import org.abos.common.Vec2i;
 import org.abos.twi.gatcha.core.Group;
 import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
+import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.data.Lookups;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ApplicableEffect extends Effect {
@@ -20,6 +23,7 @@ public class ApplicableEffect extends Effect {
     protected final @Range(from = 0, to = Integer.MAX_VALUE) int terrainAoeRadius;
     protected final @Nullable String applicableGroupId;
     private @Nullable Optional<Group> applicableGroup;
+    protected final @NotNull List<TeamKind> applicableTeam;
 
     public ApplicableEffect(final @NotNull EffectType effectType,
                             final @Range(from = 0, to = Integer.MAX_VALUE) int maxPower,
@@ -27,7 +31,8 @@ public class ApplicableEffect extends Effect {
                             final @Range(from = 0, to = Integer.MAX_VALUE) int characterAoeRadius,
                             final @Range(from = 0, to = Integer.MAX_VALUE) int terrainAoeRadius,
                             final @Nullable String affectedGroupId,
-                            final @Nullable String applicableGroupId) {
+                            final @Nullable String applicableGroupId,
+                            final @Nullable List<TeamKind> applicableTeam) {
         super(effectType, maxPower, maxDuration, affectedGroupId);
         if (characterAoeRadius < 0 || terrainAoeRadius < 0) {
             throw new IllegalArgumentException("Radius cannot be negative!");
@@ -35,6 +40,7 @@ public class ApplicableEffect extends Effect {
         this.characterAoeRadius = characterAoeRadius;
         this.terrainAoeRadius = terrainAoeRadius;
         this.applicableGroupId = applicableGroupId;
+        this.applicableTeam = Objects.requireNonNullElseGet(applicableTeam, () -> Arrays.asList(TeamKind.values()));
     }
 
     public @Range(from = 0, to = Integer.MAX_VALUE) int getCharacterAoeRadius() {
@@ -62,7 +68,8 @@ public class ApplicableEffect extends Effect {
         // if no AoE effect, just return character at target position
         if (characterAoeRadius == 0) {
             final Optional<CharacterInBattle> character = battle.getCharacterAt(center);
-            if (character.isPresent() && (applicableGroup.isEmpty() || applicableGroup.get().characters().contains(character.get().getModified().getBase()))) {
+            if (character.isPresent() && (applicableGroup.isEmpty() || applicableGroup.get().characters().contains(character.get().getModified().getBase()))
+                    && applicableTeam.contains(character.get().getTeam())) {
                 return List.of(character.get());
             }
             else {
@@ -80,9 +87,10 @@ public class ApplicableEffect extends Effect {
             }
         }
         // filter through applicable targets if needed
-        return applicableGroup.map(group -> aoeTargets.stream()
-                .filter(character -> group.characters().contains(character.getModified().getBase()))
-                .toList()).orElse(aoeTargets);
+        return aoeTargets.stream()
+                .filter(character -> applicableTeam.contains(character.getTeam()))
+                .filter(character -> applicableGroup.isEmpty() || applicableGroup.get().characters().contains(character.getModified().getBase()))
+                .toList();
     }
 
     public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
