@@ -26,6 +26,7 @@ import org.abos.twi.gatcha.gui.component.pane.MainMenu;
 import org.abos.twi.gatcha.gui.component.pane.HomeScreen;
 import org.abos.twi.gatcha.gui.component.pane.MissionModeScreen;
 import org.abos.twi.gatcha.gui.component.pane.PartyScreen;
+import org.abos.twi.gatcha.gui.component.pane.QuestScreen;
 import org.abos.twi.gatcha.gui.component.pane.RoosterScreen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,6 +70,8 @@ public final class Gui extends Application {
     private final @NotNull Scene campaignScreenScene = new Scene(campaignScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final @NotNull BattleScreen battleScreen = new BattleScreen(this);
     private final @NotNull Scene battleScreenScene = new Scene(battleScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    private final @NotNull QuestScreen questScreen = new QuestScreen(this);
+    private final @NotNull Scene questScreenScene = new Scene(questScreen, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     private final @NotNull FileChooser chooser = new FileChooser();
     private Stage stage;
 
@@ -142,6 +145,7 @@ public final class Gui extends Application {
                 showMissionModeScreen();
             }
         });
+        questScreenScene.setOnKeyReleased(simplyReturnHome);
     }
 
     @Override
@@ -268,6 +272,11 @@ public final class Gui extends Application {
         battleScreen.setBattle(battle);
         stage.setScene(battleScreenScene);
         battle.startPlacement(player.getParty(0));
+    }
+
+    public void showQuestScreen() {
+        questScreen.update();
+        stage.setScene(questScreenScene);
     }
 
     public static void showNotImplemented() {

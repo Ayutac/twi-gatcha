@@ -1,5 +1,8 @@
 package org.abos.twi.gatcha.core;
 
+import org.abos.twi.gatcha.core.quest.QuestId;
+import org.abos.twi.gatcha.core.quest.QuestKind;
+import org.abos.twi.gatcha.core.quest.QuestLineId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -13,27 +16,25 @@ import java.util.logging.Logger;
 
 public class PlayerStats {
 
+    public static final @NotNull String ENEMIES_DEFEATED = "enemies_defeated";
+    public static final @NotNull String CHARACTER_LEVELLED_UP = "character_levelled_up";
+    public static final @NotNull String LEVELS_WON = "levels_won";
+    public static final @NotNull String BOOSTERS_PULLED = "boosters_pulled";
+
+    protected final @NotNull HashMap<QuestLineId, Integer> questTracker = new HashMap<>();
+    protected final @NotNull HashMap<QuestId, Boolean> questTaker = new HashMap<>();
+
     protected final @NotNull InventoryMap itemGot = new InventoryMap();
     protected final @NotNull HashMap<String, Integer> characterDeployed = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> characterInSquat = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> characterDeployedDefeated = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> enemyDefeated = new HashMap<>();
-    protected int dailyEnemyDefeated = 0;
-    protected boolean dailyEnemyDefeated5 = false;
-    protected boolean dailyEnemyDefeated50 = false;
+    // we don't track individual level ups because that's just the characters' levels
     protected int characterLevelledUp = 0;
-    protected int dailyCharacterLevelledUp = 0;
-    protected boolean dailyCharacterLevelledUp1 = false;
-    protected boolean dailyCharacterLevelledUp10 = false;
     protected final @NotNull HashMap<String, Integer> levelWon = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> levelTied = new HashMap<>();
     protected final @NotNull HashMap<String, Integer> levelLost = new HashMap<>();
-    protected int dailyLevelWon = 0;
-    protected boolean dailyLevelWon1 = false;
-    protected boolean dailyLevelWon10 = false;
     protected final @NotNull HashMap<String, Integer> boosterPulled = new HashMap<>();
-    protected int dailyBoosterPulled = 0;
-    protected boolean dailyBoosterPulled1 = false;
     protected final @NotNull EnumMap<Rarity, Integer> rarityPulled = new EnumMap<>(Rarity.class);
 
     public void increaseItemGot(final @NotNull InventoryKind item, final @Range(from = 0, to = Integer.MAX_VALUE) int amount) {
@@ -43,18 +44,29 @@ public class PlayerStats {
         itemGot.add(item, amount);
     }
 
+    public int getQuestCounter(final @NotNull QuestLineId qlId) {
+        return questTracker.getOrDefault(qlId, 0);
+    }
+
+    public boolean hasQuestBeenTaken(final @NotNull QuestId qId) {
+        return questTaker.getOrDefault(qId, false);
+    }
+
+    public void takeQuest(final @NotNull QuestId qId) {
+        questTaker.put(qId, true);
+    }
+
     public void resetDailies() {
-        dailyEnemyDefeated = 0;
-        dailyEnemyDefeated5 = false;
-        dailyEnemyDefeated50 = false;
-        dailyCharacterLevelledUp = 0;
-        dailyCharacterLevelledUp1 = false;
-        dailyCharacterLevelledUp10 = false;
-        dailyLevelWon = 0;
-        dailyLevelWon1 = false;
-        dailyLevelWon10 = false;
-        dailyBoosterPulled = 0;
-        dailyBoosterPulled1 = false;
+        for (final QuestLineId qlId : questTracker.keySet()) {
+            if (qlId.kind() == QuestKind.DAILY) {
+                questTracker.put(qlId, 0);
+            }
+        }
+        for (final QuestId qId : questTaker.keySet()) {
+            if (qId.kind() == QuestKind.DAILY) {
+                questTaker.put(qId, false);
+            }
+        }
     }
 
     public int getItemGot(final @NotNull InventoryKind item) {
@@ -91,65 +103,28 @@ public class PlayerStats {
     public void increaseEnemyDefeated(final @NotNull CharacterModified character) {
         final String id = character.getBase().getId();
         enemyDefeated.put(id, 1 + enemyDefeated.getOrDefault(id, 0));
-        dailyEnemyDefeated++;
+        final QuestLineId qlId = new QuestLineId(QuestKind.DAILY, ENEMIES_DEFEATED);
+        questTracker.put(qlId, 1 + questTracker.getOrDefault(qlId, 0));
     }
 
     public int getEnemyDefeated(final @NotNull CharacterModified character) {
         return enemyDefeated.getOrDefault(character.getBase().getId(), 0);
     }
 
-    public int getDailyEnemyDefeated() {
-        return dailyEnemyDefeated;
-    }
-
-    public boolean isDailyEnemyDefeated5() {
-        return dailyEnemyDefeated5;
-    }
-
-    public void useDailyEnemyDefeated5() {
-        dailyEnemyDefeated5 = true;
-    }
-
-    public boolean isDailyEnemyDefeated50() {
-        return dailyEnemyDefeated50;
-    }
-
-    public void useDailyEnemyDefeated50() {
-        dailyEnemyDefeated50 = true;
-    }
-
     public void increaseCharacterLevelledUp() {
         characterLevelledUp++;
-        dailyCharacterLevelledUp++;
+        final QuestLineId qlId = new QuestLineId(QuestKind.DAILY, CHARACTER_LEVELLED_UP);
+        questTracker.put(qlId, 1 + questTracker.getOrDefault(qlId, 0));
     }
 
     public int getCharacterLevelledUp() {
         return characterLevelledUp;
     }
 
-    public int getDailyCharacterLevelledUp() {
-        return dailyCharacterLevelledUp;
-    }
-
-    public boolean isDailyCharacterLevelledUp1() {
-        return dailyCharacterLevelledUp1;
-    }
-
-    public void useDailyCharacterLevelledUp1() {
-        dailyCharacterLevelledUp1 = true;
-    }
-
-    public boolean isDailyCharacterLevelledUp10() {
-        return dailyCharacterLevelledUp10;
-    }
-
-    public void useDailyCharacterLevelledUp10() {
-        dailyCharacterLevelledUp10 = true;
-    }
-
     public void increaseLevelWon(final @NotNull String levelId) {
         levelWon.put(levelId, 1 + levelWon.getOrDefault(levelId, 0));
-        dailyLevelWon++;
+        final QuestLineId qlId = new QuestLineId(QuestKind.DAILY, LEVELS_WON);
+        questTracker.put(qlId, 1 + questTracker.getOrDefault(qlId, 0));
     }
 
     public int getLevelWon(final @NotNull String levelId) {
@@ -172,46 +147,15 @@ public class PlayerStats {
         return levelLost.getOrDefault(levelId, 0);
     }
 
-    public int getDailyLevelWon() {
-        return dailyLevelWon;
-    }
-
-    public boolean isDailyLevelWon1() {
-        return dailyLevelWon1;
-    }
-
-    public void useDailyLevelWon1() {
-        dailyLevelWon1 = true;
-    }
-
-    public boolean isDailyLevelWon10() {
-        return dailyLevelWon10;
-    }
-
-    public void useDailyLevelWon10() {
-        dailyLevelWon10 = true;
-    }
-
     public void increaseBoosterPulled(final @NotNull Booster booster) {
         final String id = booster.getId();
         boosterPulled.put(id, 1 + boosterPulled.getOrDefault(id, 0));
-        dailyBoosterPulled++;
+        final QuestLineId qlId = new QuestLineId(QuestKind.DAILY, BOOSTERS_PULLED);
+        questTracker.put(qlId, 1 + questTracker.getOrDefault(qlId, 0));
     }
 
     public int getBoosterPulled(final @NotNull Booster booster) {
         return boosterPulled.getOrDefault(booster.getId(), 0);
-    }
-
-    public int getDailyBoosterPulled() {
-        return dailyBoosterPulled;
-    }
-
-    public boolean isDailyBoosterPulled1() {
-        return dailyBoosterPulled1;
-    }
-
-    public void useDailyBoosterPulled1() {
-        dailyBoosterPulled1 = true;
     }
 
     public void increaseRarityPulled(final @NotNull Rarity rarity) {
@@ -233,52 +177,36 @@ public class PlayerStats {
         characterDeployedDefeated.putAll(from.characterDeployedDefeated);
         enemyDefeated.clear();
         enemyDefeated.putAll(from.enemyDefeated);
-        dailyEnemyDefeated = from.dailyEnemyDefeated;
-        dailyEnemyDefeated5 = from.dailyEnemyDefeated5;
-        dailyEnemyDefeated50 = from.dailyEnemyDefeated50;
         characterLevelledUp = from.characterLevelledUp;
-        dailyCharacterLevelledUp = from.dailyCharacterLevelledUp;
-        dailyCharacterLevelledUp1 = from.dailyCharacterLevelledUp1;
-        dailyCharacterLevelledUp10 = from.dailyCharacterLevelledUp10;
         levelWon.clear();
         levelWon.putAll(from.levelWon);
         levelTied.clear();
         levelTied.putAll(from.levelTied);
         levelLost.clear();
         levelLost.putAll(from.levelLost);
-        dailyLevelWon = from.dailyLevelWon;
-        dailyLevelWon1 = from.dailyLevelWon1;
-        dailyLevelWon10 = from.dailyLevelWon10;
         boosterPulled.clear();
         boosterPulled.putAll(from.boosterPulled);
-        dailyBoosterPulled = from.dailyBoosterPulled;
-        dailyBoosterPulled1 = from.dailyBoosterPulled1;
         rarityPulled.clear();
         rarityPulled.putAll(from.rarityPulled);
+        questTracker.clear();
+        questTracker.putAll(from.questTracker);
+        questTaker.clear();
+        questTaker.putAll(from.questTaker);
     }
 
     public void save(final @NotNull ObjectOutputStream oos) throws IOException {
+        oos.writeObject(questTracker);
+        oos.writeObject(questTaker);
         itemGot.save(oos);
         oos.writeObject(characterDeployed);
         oos.writeObject(characterInSquat);
         oos.writeObject(characterDeployedDefeated);
         oos.writeObject(enemyDefeated);
-        oos.writeInt(dailyEnemyDefeated);
-        oos.writeBoolean(dailyEnemyDefeated5);
-        oos.writeBoolean(dailyEnemyDefeated50);
         oos.writeInt(characterLevelledUp);
-        oos.writeInt(dailyCharacterLevelledUp);
-        oos.writeBoolean(dailyCharacterLevelledUp1);
-        oos.writeBoolean(dailyCharacterLevelledUp10);
         oos.writeObject(levelWon);
         oos.writeObject(levelTied);
         oos.writeObject(levelLost);
-        oos.writeInt(dailyLevelWon);
-        oos.writeBoolean(dailyLevelWon1);
-        oos.writeBoolean(dailyLevelWon10);
         oos.writeObject(boosterPulled);
-        oos.writeInt(dailyBoosterPulled);
-        oos.writeBoolean(dailyBoosterPulled1);
         oos.writeObject(rarityPulled);
     }
 
@@ -287,26 +215,17 @@ public class PlayerStats {
         final InventoryMap itemGot = InventoryMap.load(ois);
         stats.itemGot.addAll(itemGot);
         try {
+            stats.questTracker.putAll((Map<QuestLineId, Integer>) ois.readObject());
+            stats.questTaker.putAll((Map<QuestId, Boolean>) ois.readObject());
             stats.characterDeployed.putAll((Map<String, Integer>) ois.readObject());
             stats.characterInSquat.putAll((Map<String, Integer>) ois.readObject());
             stats.characterDeployedDefeated.putAll((Map<String, Integer>) ois.readObject());
             stats.enemyDefeated.putAll((Map<String, Integer>) ois.readObject());
-            stats.dailyEnemyDefeated = ois.readInt();
-            stats.dailyEnemyDefeated5 = ois.readBoolean();
-            stats.dailyEnemyDefeated50 = ois.readBoolean();
             stats.characterLevelledUp = ois.readInt();
-            stats.dailyCharacterLevelledUp = ois.readInt();
-            stats.dailyCharacterLevelledUp1 = ois.readBoolean();
-            stats.dailyCharacterLevelledUp10 = ois.readBoolean();
             stats.levelWon.putAll((Map<String, Integer>) ois.readObject());
             stats.levelTied.putAll((Map<String, Integer>) ois.readObject());
             stats.levelLost.putAll((Map<String, Integer>) ois.readObject());
-            stats.dailyLevelWon = ois.readInt();
-            stats.dailyLevelWon1 = ois.readBoolean();
-            stats.dailyLevelWon10 = ois.readBoolean();
             stats.boosterPulled.putAll((Map<String, Integer>) ois.readObject());
-            stats.dailyBoosterPulled = ois.readInt();
-            stats.dailyBoosterPulled1 = ois.readBoolean();
             stats.rarityPulled.putAll((Map<Rarity, Integer>) ois.readObject());
         }
         catch (final ClassNotFoundException ex) {

@@ -53,7 +53,11 @@ public final class HomeScreen extends AbstractScreen {
             }
         });
         questBtn.setPrefWidth(BUTTON_WIDTH);
-        questBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        questBtn.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                this.gui.showQuestScreen();
+            }
+        });
         final VBox rightBox = new VBox(roosterBtn, partyBtn, pullBtn, missionBtn, questBtn);
         setRight(rightBox);
     }
