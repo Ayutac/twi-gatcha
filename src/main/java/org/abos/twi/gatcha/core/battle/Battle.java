@@ -540,22 +540,34 @@ public class Battle {
                 // update the position
                 character.setPosition(newPos);
             }
-            // actually set the character on the board
-            characters.add(character);
-            if (ui != null) {
-                ui.characterPlaced(character, character.getPosition());
-            }
-            // add character to the turn order
-            final double initiative = character.getInitiative();
-            final ListIterator<CharacterInBattle> it = characterOrder.listIterator(characterOrder.size());
-            CharacterInBattle other;
-            while (it.hasPrevious()) {
-                other = it.previous();
-                if (other.getInitiative() > initiative) {
-                    it.next();
-                    it.add(character);
-                    break;
-                }
+            summon(character);
+        }
+    }
+
+    public boolean summon(CharacterInBattle character) {
+        if (isCharacterAt(character.getPosition())) {
+            return false;
+        }
+        // actually set the character on the board
+        characters.add(character);
+        if (ui != null) {
+            ui.characterPlaced(character, character.getPosition());
+        }
+        // add character to the turn order
+        addCharacterToOrder(character);
+        return true;
+    }
+
+    private void addCharacterToOrder(CharacterInBattle character) {
+        final double initiative = character.getInitiative();
+        final ListIterator<CharacterInBattle> it = characterOrder.listIterator(characterOrder.size());
+        CharacterInBattle other;
+        while (it.hasPrevious()) {
+            other = it.previous();
+            if (other.getInitiative() > initiative) {
+                it.next();
+                it.add(character);
+                break;
             }
         }
     }

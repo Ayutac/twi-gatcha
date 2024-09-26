@@ -21,10 +21,18 @@ public class CharacterModified implements Describable {
 
     protected final @NotNull CharacterBase base;
 
-    protected @Range(from = 1, to = MAX_LEVEL) int level = 1;
+    protected @Range(from = 1, to = MAX_LEVEL) int level;
+
+    public CharacterModified(final @NotNull CharacterBase base, final @Range(from = 1, to = MAX_LEVEL) int level) {
+        this.base = Objects.requireNonNull(base);
+        if (level <= 0) {
+            throw new IllegalArgumentException("Level must be positive!");
+        }
+        this.level = level;
+    }
 
     public CharacterModified(final @NotNull CharacterBase base) {
-        this.base = Objects.requireNonNull(base);
+        this(base, 1);
     }
 
     @Range(from = 1, to = MAX_LEVEL)

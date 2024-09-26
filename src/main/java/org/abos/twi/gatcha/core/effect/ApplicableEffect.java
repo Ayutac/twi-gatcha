@@ -131,6 +131,7 @@ public class ApplicableEffect extends Effect {
                 case BUFF_HEALTH -> {
                     aoeTarget.getPersistentEffects().add(new DeterioratingEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
+                case SUMMON -> throw new IllegalStateException(String.format("Use %s for summon effects!", SummonEffect.class.getSimpleName()));
                 default -> throw new AssertionError("An unknown effect type has been associated with this " + ApplicableEffect.class.getSimpleName() + "!"); // shouldn't happen
             }
             if (battle.getUi() != null) {
