@@ -55,6 +55,17 @@ public interface Characters {
             Rarity.RARE,
             "ceria_pre.png");
 
+    CharacterBase CERIA_CRELER = new CharacterBase("ceria_post",
+            "Ceria Springwalker, [Arctic Cyromancer]",
+            "The Ice mage and Captain of the new Horns of Hammerad.",
+            "she", "her",
+            new CharacterStats(15, 10, 13, 9),
+            new CharacterStats(150, 12, 78, 54),
+            new CharacterAttacks(Attacks.ICE_SPRAY, Attacks.ICE_SPIKE, Attacks.BATTLEFIELD_OF_THE_FROZEN_WORLD),
+            List.of(),
+            Rarity.SUPER_RARE,
+            "placeholder.png");
+
     CharacterBase KSMVR = new CharacterBase("ksmvr_pre",
             "Ksmvr",
             "Former Prognugator of the Free Hive. Facing the shame of his failings, he now learns to fit in society.",

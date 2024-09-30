@@ -20,7 +20,9 @@ public interface Groups {
     String MAGE_ID = "Mage";
     Group MAGE = new Group(MAGE_ID, "Characters who use magic.", Set.of(
             Characters.PISCES,
-            Characters.CERIA));
+            Characters.CERIA,
+            Characters.PISCES_CRELER,
+            Characters.CERIA_CRELER));
 
     String SUPPORT_ID = "Support";
     Group SUPPORT = new Group(SUPPORT_ID, "Characters who support others.", Set.of(

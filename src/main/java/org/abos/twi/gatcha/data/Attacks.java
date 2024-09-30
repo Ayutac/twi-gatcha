@@ -1,6 +1,7 @@
 package org.abos.twi.gatcha.data;
 
 import org.abos.twi.gatcha.core.battle.Attack;
+import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 
@@ -83,10 +84,31 @@ public interface Attacks {
 
     Attack FROZEN_WIND = new Attack(
             "Frozen Wind",
-            "Cover yourself in a layer of ice.",
+            "Shoot cold wind at your targets.",
             2, 4, 5,
             List.of(new ApplicableEffect(EffectType.DAMAGE_FROST, 2, 0, 1, 0, null, null, null),
                     new ApplicableEffect(EffectType.DEBUFF_SPEED, 2, 3, 1, 0, null, null, null)));
+
+    Attack ICE_SPRAY = new Attack(
+            "Ice Spray",
+            "Shot a spray of ice at your target",
+            1, 3, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 1, 0, 1, 0, null, null, null),
+                    new ApplicableEffect(EffectType.DAMAGE_FROST, 1, 0, 1, 0, null, null, null)));
+
+    Attack ICE_SPIKE = new Attack(
+            "[Ice Spike]",
+            "Shoot a sharp piece of ice at your target.",
+            2, 5, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, null, null, null),
+                    new ApplicableEffect(EffectType.DAMAGE_FROST, 1, 0, 0, 0, null, null, null)));
+
+    Attack BATTLEFIELD_OF_THE_FROZEN_WORLD = new Attack(
+            "Battlefield of the Frozen World",
+            "Freezes the entire battlefield.",
+            0, 0, 6,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_FROST, 5, 0, Integer.MAX_VALUE, 0, null, null, List.of(TeamKind.ENEMY)),
+                    new ApplicableEffect(EffectType.DEBUFF_SPEED, 5, 4, Integer.MAX_VALUE, 0, null, null, List.of(TeamKind.ENEMY))));
 
     Attack QUICK_MOVEMENT = new Attack(
             "Quick Movement",
