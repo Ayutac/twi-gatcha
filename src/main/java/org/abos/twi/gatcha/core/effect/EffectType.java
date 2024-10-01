@@ -17,6 +17,7 @@ public enum EffectType {
     HEALING,
     INVISIBILITY,
     INVULNERABILITY,
+    STUN,
     SUMMON,
     TURN_FRIENDLY
 

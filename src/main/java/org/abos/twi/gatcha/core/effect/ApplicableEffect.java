@@ -143,7 +143,7 @@ public class ApplicableEffect extends Effect {
                     aoeTarget.heal(heal);
                     dmg = heal;
                 }
-                case INVISIBILITY, INVULNERABILITY, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH, LOWER_ACCURANCY -> {
+                case INVISIBILITY, INVULNERABILITY, STUN, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH, LOWER_ACCURANCY -> {
                     aoeTarget.getPersistentEffects().add(new PersistentEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
                 case BUFF_HEALTH -> {

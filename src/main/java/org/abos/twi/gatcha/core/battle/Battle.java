@@ -8,6 +8,7 @@ import org.abos.twi.gatcha.core.PlayerStats;
 import org.abos.twi.gatcha.core.battle.ai.AiCharacter;
 import org.abos.twi.gatcha.core.battle.graph.GridSupplier;
 import org.abos.twi.gatcha.core.battle.graph.HexaGridGraphGenerator;
+import org.abos.twi.gatcha.core.effect.EffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -496,18 +497,21 @@ public class Battle {
         currentCharacter = characterOrder.getFirst();
         while (currentCharacter != null && !checkDone()) {
             currentCharacter.startTurn();
-            if (currentCharacter instanceof AiCharacter) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    Logger.getGlobal().warning(ex.getMessage());
+            // stunned characters don't get to execute their turn
+            if (currentCharacter.getPersistentEffects().stream().noneMatch(e -> e.getEffectType() == EffectType.STUN)) {
+                if (currentCharacter instanceof AiCharacter) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        Logger.getGlobal().warning(ex.getMessage());
+                    }
+                    currentCharacter.turn();
                 }
-                currentCharacter.turn();
-            }
-            // if no UI is set, the player character's turn is skipped
-            else if (ui != null) {
-                prepareForPlayer();
-                ui.waitForPlayer().join();
+                // if no UI is set, the player character's turn is skipped
+                else if (ui != null) {
+                    prepareForPlayer();
+                    ui.waitForPlayer().join();
+                }
             }
             currentCharacter.endTurn();
             // next character
