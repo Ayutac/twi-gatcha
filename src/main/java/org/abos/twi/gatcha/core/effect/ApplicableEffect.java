@@ -79,7 +79,7 @@ public class ApplicableEffect extends Effect {
                 // calculate miss chance
                 int lowerAcc = 0;
                 for (final PersistentEffect effect : from.getPersistentEffects()) {
-                    if (effect.getEffectType() == EffectType.LOWER_ACCURANCY) {
+                    if (effect.getEffectType() == EffectType.LOWER_ACCURACY) {
                         lowerAcc -= effect.maxPower;
                     }
                 }
@@ -147,7 +147,8 @@ public class ApplicableEffect extends Effect {
                     aoeTarget.heal(heal);
                     dmg = heal;
                 }
-                case INVISIBILITY, INVULNERABILITY, STUN, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH, LOWER_ACCURANCY -> {
+                case INVISIBILITY, INVULNERABILITY, STUN, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH,
+                     LOWER_ACCURACY -> {
                     aoeTarget.getPersistentEffects().add(new PersistentEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
                 case BUFF_HEALTH -> {
