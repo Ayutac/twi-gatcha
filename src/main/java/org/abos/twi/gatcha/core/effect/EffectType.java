@@ -6,6 +6,7 @@ public enum EffectType {
     DAMAGE_SLASH,
     DAMAGE_PIERCE,
     DAMAGE_DEATH,
+    DAMAGE_SOUND,
     DAMAGE_FROST,
     BUFF_ATTACK,
     BUFF_DEFENSE,

@@ -134,6 +134,10 @@ public class ApplicableEffect extends Effect {
                     dmg = (int)Math.round(maxPower * (1 - Math.min(100, resistance) / 100d));
                     aoeTarget.takeDamage(dmg);
                 }
+                case DAMAGE_SOUND -> {
+                    dmg = Math.max(1, (from.getAttack(aoeTarget) + maxPower) / 5);
+                    aoeTarget.takeDamage(dmg);
+                }
                 case DAMAGE_FROST -> {
                     dmg = Math.max(1, (from.getAttack(aoeTarget) + maxPower) / 3);
                     aoeTarget.takeDamage(dmg);
