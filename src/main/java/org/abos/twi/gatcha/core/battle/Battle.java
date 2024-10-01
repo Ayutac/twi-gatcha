@@ -124,7 +124,7 @@ public class Battle {
      */
     protected @NotNull BattlePhase phase = BattlePhase.INACTIVE;
     /**
-     * A {@link Random} instance for this battle.
+     * @see #getRandom()
      */
     protected @NotNull Random random;
     /**
@@ -323,6 +323,14 @@ public class Battle {
 
     public @NotNull List<Vec2i> getPossibleAttackFields() {
         return possibleAttackFields;
+    }
+
+    /**
+     * A {@link Random} instance for this battle.
+     * @return a random instance, not {@code null}
+     */
+    public @NotNull Random getRandom() {
+        return random;
     }
 
     public @Nullable CharacterInBattle getCurrentCharacter() {

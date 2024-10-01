@@ -13,6 +13,7 @@ public enum EffectType {
     BUFF_HEALTH,
     DEBUFF_SPEED,
     RESIST_DEATH,
+    LOWER_ACCURANCY,
     HEALING,
     INVISIBILITY,
     INVULNERABILITY,

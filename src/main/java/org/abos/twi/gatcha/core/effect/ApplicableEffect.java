@@ -63,18 +63,26 @@ public class ApplicableEffect extends Effect {
         return applicableGroup;
     }
 
-    protected List<CharacterInBattle> getApplicableTargets(final @NotNull Vec2i center, final @NotNull Battle battle) {
+    protected List<CharacterInBattle> getApplicableTargets(final CharacterInBattle from, final @NotNull Vec2i center, final @NotNull Battle battle) {
         final Optional<Group> applicableGroup = getApplicableGroup();
         // if no AoE effect, just return character at target position
         if (characterAoeRadius == 0) {
             final Optional<CharacterInBattle> character = battle.getCharacterAt(center);
             if (character.isPresent() && (applicableGroup.isEmpty() || applicableGroup.get().characters().contains(character.get().getModified().getBase()))
                     && applicableTeam.contains(character.get().getTeam())) {
-                return List.of(character.get());
+                // calculate miss chance
+                int lowerAcc = 0;
+                for (final PersistentEffect effect : from.getPersistentEffects()) {
+                    if (effect.getEffectType() == EffectType.LOWER_ACCURANCY) {
+                        lowerAcc -= effect.maxPower;
+                    }
+                }
+                // if hit, return the character
+                if (Math.max(0, 100-lowerAcc) / 100d > battle.getRandom().nextDouble()) {
+                    return List.of(character.get());
+                } // else we miss our single target
             }
-            else {
-                return List.of();
-            }
+            return List.of();
         }
         // else calculate all targets via BFS
         final var graph = battle.getTerrainGraph();
@@ -94,7 +102,7 @@ public class ApplicableEffect extends Effect {
     }
 
     public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
-        List<CharacterInBattle> aoeTargets = getApplicableTargets(target, battle);
+        List<CharacterInBattle> aoeTargets = getApplicableTargets(from, target, battle);
         for (final CharacterInBattle aoeTarget : aoeTargets) {
             int dmg = 0;
             switch (effectType) {
@@ -125,7 +133,7 @@ public class ApplicableEffect extends Effect {
                     aoeTarget.heal(heal);
                     dmg = heal;
                 }
-                case INVISIBILITY, INVULNERABILITY, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH -> {
+                case INVISIBILITY, INVULNERABILITY, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH, LOWER_ACCURANCY -> {
                     aoeTarget.getPersistentEffects().add(new PersistentEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
                 case BUFF_HEALTH -> {
