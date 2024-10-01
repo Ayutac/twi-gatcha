@@ -176,16 +176,21 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case DAMAGE_SLASH -> String.format("%s attacked %s for %d slash damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_PIERCE -> String.format("%s attacked %s for %d piercing damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_DEATH -> String.format("%s attacked %s for %d death damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
+            case DAMAGE_SOUND -> String.format("%s attacked %s for %d sound damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case DAMAGE_FROST -> String.format("%s attacked %s for %d frost damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case BUFF_ATTACK -> String.format("%s buffed the attack of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case BUFF_DEFENSE -> String.format("%s buffed the defense of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case BUFF_SPEED -> String.format("%s buffed the speed of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case BUFF_HEALTH -> String.format("%s buffed the health of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case DEBUFF_SPEED -> String.format("%s debuffed the speed of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case LOWER_ACCURACY -> String.format("%s lowered the accuracy of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case RESIST_DEATH -> String.format("%s increased the death resistance of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case HEALING -> String.format("%s healed %s for %d damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
+            case STUN -> String.format("%s stunned %s.\n", attacker.getName(), defenderString(attacker, defender));
             case TURN_FRIENDLY -> String.format("%s made %s friendly.\n", attacker.getName(), defenderString(attacker, defender));
+            case SUMMON -> String.format("%s summoned something.\n", attacker.getName());
             default -> throw new AssertionError("Unknown effect effectType encountered!\n"); // shouldn't happen
         };
         screen.getBattleLog().appendText(msg);

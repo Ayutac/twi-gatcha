@@ -182,9 +182,7 @@ public final class Gui extends Application {
         player.addToRooster(Characters.PISCES_CRELER);
         player.addToRooster(Characters.KSMVR);
         player.addToRooster(Characters.YVLON);
-        player.addToRooster(Characters.ZOMBIE);
-        player.addToRooster(Characters.SKELETON);
-        player.addToRooster(Characters.SKELETON_ARCHER);
+        player.addToRooster(Characters.RYOKA);
     }
 
     public void saveGame() {

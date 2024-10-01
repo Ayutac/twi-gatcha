@@ -134,6 +134,27 @@ public interface Attacks {
             0, 0, 5,
             List.of(new ApplicableEffect(EffectType.BUFF_ATTACK, 5, 3, 0, 0, 1d, null, null, null)));
 
+    Attack KARATE_KICK = new Attack(
+            "Karate Kick",
+            "Delivers a powerful kick aimed at taking down a target.",
+            1, 1, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 3, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.STUN, 0, 1, 0, 0, 0.1, null, null, null)));
+
+    Attack FLASHBANG = new Attack(
+            "Flashbang",
+            "Use light and sound to temporarily blind and disorient enemies.",
+            1, 1, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SOUND, 2, 0, 1, 0, 1d, null, null, List.of(TeamKind.ENEMY)),
+                    new ApplicableEffect(EffectType.LOWER_ACCURACY, 10, 2, 1, 0, 1d, null, null, List.of(TeamKind.ENEMY))));
+
+    Attack TRIPVINE_BAG = new Attack(
+            "Tripvine Bag",
+            "A small bag filled with tripvines to entangle people.",
+            1, 3, 3,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 1, 0, 1, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.DEBUFF_SPEED, 10, 2, 1, 0, 1d, null, null, null)));
+
     Attack INVISIBILITY = new Attack(
             "[Invisibility]",
             "Become invisible.",

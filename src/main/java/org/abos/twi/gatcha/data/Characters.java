@@ -4,6 +4,7 @@ import org.abos.twi.gatcha.core.CharacterAttacks;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterStats;
 import org.abos.twi.gatcha.core.Rarity;
+import org.abos.twi.gatcha.core.battle.Attack;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.core.effect.PersistentEffect;
 
@@ -87,6 +88,17 @@ public interface Characters {
             List.of(),
             Rarity.RARE,
             "yvlon_pre.png");
+
+    CharacterBase RYOKA = new CharacterBase("ryoka_1",
+            "Ryoka Griffin",
+            "An aspiring City Runner from another world.",
+            "she", "her",
+            new CharacterStats(10, 12, 5, 4),
+            new CharacterStats(100, 14, 30, 24),
+            new CharacterAttacks(Attacks.KARATE_KICK, Attacks.FLASHBANG, Attacks.TRIPVINE_BAG),
+            List.of(),
+            Rarity.COMMON,
+            "ryoka_1.png");
 
     CharacterBase ZOMBIE = new CharacterBase("zombie",
             "Zombie",
