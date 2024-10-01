@@ -21,6 +21,7 @@ public class ApplicableEffect extends Effect {
 
     protected final @Range(from = 0, to = Integer.MAX_VALUE) int characterAoeRadius;
     protected final @Range(from = 0, to = Integer.MAX_VALUE) int terrainAoeRadius;
+    protected final double applicableChance;
     protected final @Nullable String applicableGroupId;
     private @Nullable Optional<Group> applicableGroup;
     protected final @NotNull List<TeamKind> applicableTeam;
@@ -30,6 +31,7 @@ public class ApplicableEffect extends Effect {
                             final @Range(from = 0, to = Integer.MAX_VALUE) int maxDuration,
                             final @Range(from = 0, to = Integer.MAX_VALUE) int characterAoeRadius,
                             final @Range(from = 0, to = Integer.MAX_VALUE) int terrainAoeRadius,
+                            final double applicableChance,
                             final @Nullable String affectedGroupId,
                             final @Nullable String applicableGroupId,
                             final @Nullable List<TeamKind> applicableTeam) {
@@ -39,6 +41,10 @@ public class ApplicableEffect extends Effect {
         }
         this.characterAoeRadius = characterAoeRadius;
         this.terrainAoeRadius = terrainAoeRadius;
+        if (applicableChance < 0d || applicableChance > 1d) {
+            throw new IllegalArgumentException("Applicable Chance must be a probability!");
+        }
+        this.applicableChance = applicableChance;
         this.applicableGroupId = applicableGroupId;
         this.applicableTeam = Objects.requireNonNullElseGet(applicableTeam, () -> Arrays.asList(TeamKind.values()));
     }
@@ -104,6 +110,10 @@ public class ApplicableEffect extends Effect {
     public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
         List<CharacterInBattle> aoeTargets = getApplicableTargets(from, target, battle);
         for (final CharacterInBattle aoeTarget : aoeTargets) {
+            // applicable chance is tested for each target
+            if (applicableChance < battle.getRandom().nextDouble()) {
+                continue;
+            }
             int dmg = 0;
             switch (effectType) {
                 case DAMAGE_BLUNT, DAMAGE_SLASH -> {

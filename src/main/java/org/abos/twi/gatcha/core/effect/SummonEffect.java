@@ -18,7 +18,7 @@ public class SummonEffect extends ApplicableEffect {
     protected final @NotNull AiConstructor ai;
 
     public SummonEffect(@Range(from = 0, to = Integer.MAX_VALUE) int maxPower, @Range(from = 0, to = Integer.MAX_VALUE) int maxDuration, final @NotNull CharacterBase summon, final @NotNull AiConstructor ai) {
-        super(EffectType.SUMMON, maxPower, maxDuration, 0, 0, null, null, null);
+        super(EffectType.SUMMON, maxPower, maxDuration, 0, 0, 1d, null, null, null);
         this.summon = Objects.requireNonNull(summon);
         this.ai = Objects.requireNonNull(ai);
     }
