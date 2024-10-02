@@ -5,6 +5,7 @@ import org.abos.twi.gatcha.core.battle.TeamKind;
 import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 
+import java.util.Collections;
 import java.util.List;
 
 public interface Attacks {
@@ -154,6 +155,24 @@ public interface Attacks {
             1, 3, 3,
             List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 1, 0, 1, 0, 1d, null, null, null),
                     new ApplicableEffect(EffectType.DEBUFF_SPEED, 10, 2, 1, 0, 1d, null, null, null)));
+
+    Attack FAST_RELOADING_CROSSBOW_SHOT = new Attack(
+            "Crossbow Shot",
+            "A shoot from a preloaded crossbow.",
+            2, 5, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
+
+    Attack THREEFOLD_SHOT = new Attack(
+            "[Threefold Shot]",
+            "A triple shot from a crossbow.",
+            2, 5, 3,
+            Collections.nCopies(3, new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
+
+    Attack KNUCKLES_OF_IRON = new Attack(
+            "Knuckles of Iron",
+            "A Beatdown Combo",
+            1, 1, 6,
+            Collections.nCopies(6, new ApplicableEffect(EffectType.DAMAGE_BLUNT, 2, 0, 0, 0, 1d, null, null, null)));
 
     Attack INVISIBILITY = new Attack(
             "[Invisibility]",

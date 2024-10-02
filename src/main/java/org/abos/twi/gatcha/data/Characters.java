@@ -4,7 +4,6 @@ import org.abos.twi.gatcha.core.CharacterAttacks;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterStats;
 import org.abos.twi.gatcha.core.Rarity;
-import org.abos.twi.gatcha.core.battle.Attack;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.core.effect.PersistentEffect;
 
@@ -77,6 +76,17 @@ public interface Characters {
             List.of(),
             Rarity.RARE,
             "ksmvr_pre.png");
+
+    CharacterBase KSMVR_CRELER = new CharacterBase("ksvmr_post",
+            "Ksmvr – [Skirmisher]",
+            "Former Prognugator of the Free Hive. He would give anything for his team.",
+            "he", "him",
+            new CharacterStats(10, 18, 11, 13),
+            new CharacterStats(100, 20, 66, 78),
+            new CharacterAttacks(Attacks.FAST_RELOADING_CROSSBOW_SHOT, Attacks.THREEFOLD_SHOT, Attacks.KNUCKLES_OF_IRON),
+            List.of(),
+            Rarity.SUPER_RARE,
+            "placeholder.png");
 
     CharacterBase YVLON = new CharacterBase("yvlon_pre",
             "Yvlon Byres",
