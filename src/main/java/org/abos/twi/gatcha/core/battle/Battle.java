@@ -129,6 +129,10 @@ public class Battle {
      */
     protected @NotNull Random random;
     /**
+     * Helper index to get the next character in the order
+     */
+    protected @Range(from = 0, to = Integer.MAX_VALUE) int currentCharacterIndex = 0;
+    /**
      * @see #getCurrentCharacter()
      */
     protected @Nullable CharacterInBattle currentCharacter = null;
@@ -515,12 +519,24 @@ public class Battle {
             }
             currentCharacter.endTurn();
             // next character
-            final int index = characterOrder.indexOf(currentCharacter) + 1;
-            if (index == characterOrder.size()) {
+            // the cCindex is needed in case a character was defeated on their own turn
+            final int index = characterOrder.indexOf(currentCharacter);
+            if (index == -1) {
+                if (currentCharacterIndex + 1 >= characterOrder.size()) {
+                    currentCharacter = null;
+                    currentCharacterIndex = 0;
+                }
+                else {
+                    currentCharacter = characterOrder.get(++currentCharacterIndex);
+                }
+            }
+            else if (index + 1 == characterOrder.size()) {
                 currentCharacter = null;
+                currentCharacterIndex = 0;
             }
             else {
-                currentCharacter = characterOrder.get(index);
+                currentCharacter = characterOrder.get(index + 1);
+                currentCharacterIndex = index + 1;
             }
         }
         releaseWave(turn);
