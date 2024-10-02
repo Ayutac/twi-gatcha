@@ -148,7 +148,7 @@ public class ApplicableEffect extends Effect {
                     dmg = heal;
                 }
                 case INVISIBILITY, INVULNERABILITY, STUN, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH,
-                     LOWER_ACCURACY -> {
+                     LOWER_ACCURACY, BLEED -> {
                     aoeTarget.getPersistentEffects().add(new PersistentEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
                 case BUFF_HEALTH -> {

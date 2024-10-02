@@ -239,6 +239,11 @@ public class CharacterInBattle implements Describable {
     }
 
     public void endTurn() {
+        for (final PersistentEffect effect : persistentEffects) {
+            if (effect.getEffectType() == EffectType.BLEED) {
+                takeDamage(effect.getMaxPower());
+            }
+        }
         final Attack usedAttack = battle.getSelectedAttack();
         if (usedAttack == null) {
             return;

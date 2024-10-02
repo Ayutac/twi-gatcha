@@ -185,6 +185,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case DEBUFF_SPEED -> String.format("%s debuffed the speed of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case LOWER_ACCURACY -> String.format("%s lowered the accuracy of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case RESIST_DEATH -> String.format("%s increased the death resistance of %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case BLEED -> String.format("%s made %s bleed.\n", attacker.getName(), defenderString(attacker, defender));
             case HEALING -> String.format("%s healed %s for %d damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
