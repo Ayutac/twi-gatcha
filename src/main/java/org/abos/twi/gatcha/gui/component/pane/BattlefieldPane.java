@@ -16,7 +16,6 @@ import org.abos.twi.gatcha.core.battle.Battle;
 import org.abos.twi.gatcha.core.battle.BattlePhase;
 import org.abos.twi.gatcha.core.battle.BattleUi;
 import org.abos.twi.gatcha.core.battle.CharacterInBattle;
-import org.abos.twi.gatcha.core.battle.TerrainType;
 import org.abos.twi.gatcha.core.effect.ApplicableEffect;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.gui.component.CharacterView;
@@ -71,12 +70,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
                     // place player character
                     if (battle.isPlayerSpawnAt(position) && !battle.getPlacementParty().isEmpty() && !battle.isCharacterAt(position)) {
                         CharacterModified character = battle.getPlacementParty().poll();
-                        final CharacterInBattle cib = battle.placePlayerCharacterAt(character, position);
-                        final CharacterView characterView = new CharacterView(character.getBase(), true, 2*radius);
-                        characterView.setX(hexagon.get().getLeftUpperCorner().x());
-                        characterView.setY(hexagon.get().getLeftUpperCorner().y());
-                        BattlefieldPane.this.characterViews.put(cib, characterView);
-                        BattlefieldPane.this.getChildren().add(characterView);
+                        battle.placePlayerCharacterAt(character, position);
                         screen.update();
                     }
                     if (battle.getPlacementParty().isEmpty() || battle.noFreeSpawns()) {
@@ -90,9 +84,6 @@ public class BattlefieldPane extends Pane implements BattleUi {
                         final Vec2i oldPosition = battle.getCurrentCharacter().getPosition();
                         battle.getCurrentCharacter().setMoved((int) Math.round(battle.getPossiblePlayerFields().get(position)));
                         battle.getCurrentCharacter().setPosition(position);
-                        final CharacterView characterView = characterViews.get(battle.getCurrentCharacter());
-                        characterView.setX(hexagon.get().getLeftUpperCorner().x());
-                        characterView.setY(hexagon.get().getLeftUpperCorner().y());
                         characterMoved(battle.getCurrentCharacter(), oldPosition, battle.getCurrentCharacter().getPosition());
                         playerMoving = false;
                         playerAttacking = true;
@@ -141,22 +132,35 @@ public class BattlefieldPane extends Pane implements BattleUi {
 
     @Override
     public void characterPlaced(final @NotNull CharacterInBattle character, final @NotNull Vec2i position) {
-        final String msg = String.format("%s appeared at (%d,%d).\n", character.getName(), position.x(), position.y());
-        screen.getBattleLog().appendText(msg);
-        Platform.runLater(screen::update);
+        Platform.runLater(() -> {
+            final String msg = String.format("%s appeared at (%d,%d).\n", character.getName(), position.x(), position.y());
+            screen.getBattleLog().appendText(msg);
+            final CharacterView characterView = new CharacterView(character.getModified().getBase(), true, 2 * radius);
+            final Hexagon hexagon = hexagons.get(position);
+            characterView.setX(hexagon.getLeftUpperCorner().x());
+            characterView.setY(hexagon.getLeftUpperCorner().y());
+            BattlefieldPane.this.characterViews.put(character, characterView);
+            BattlefieldPane.this.getChildren().add(characterView);
+            screen.update();
+        });
     }
 
     @Override
     public void characterMoved(final @NotNull CharacterInBattle character, final @NotNull Vec2i from, final @NotNull Vec2i to) {
-        final String msg;
-        if (!from.equals(to)) {
-            msg = String.format("%s moved from (%d,%d) to (%d,%d).\n", character.getName(), from.x(), from.y(), to.x(), to.y());
-        }
-        else {
-            msg = String.format("%s remained on (%d,%d).\n", character.getName(), from.x(), from.y());
-        }
-        screen.getBattleLog().appendText(msg);
-        Platform.runLater(screen::update);
+        Platform.runLater(() -> {
+            final String msg;
+            if (!from.equals(to)) {
+                msg = String.format("%s moved from (%d,%d) to (%d,%d).\n", character.getName(), from.x(), from.y(), to.x(), to.y());
+            } else {
+                msg = String.format("%s remained on (%d,%d).\n", character.getName(), from.x(), from.y());
+            }
+            screen.getBattleLog().appendText(msg);
+            final CharacterView characterView = characterViews.get(character);
+            final Hexagon hexagon = hexagons.get(to);
+            characterView.setX(hexagon.getLeftUpperCorner().x());
+            characterView.setY(hexagon.getLeftUpperCorner().y());
+            screen.update();
+        });
     }
 
     private String defenderString(final @NotNull CharacterInBattle attacker, final @Nullable CharacterInBattle defender) {
