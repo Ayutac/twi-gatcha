@@ -194,6 +194,7 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
             case STUN -> String.format("%s stunned %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case ANNOY -> String.format("%s annoyed %s.\n", attacker.getName(), defenderString(attacker, defender));
             case TURN_FRIENDLY -> String.format("%s made %s friendly.\n", attacker.getName(), defenderString(attacker, defender));
             case SUMMON -> String.format("%s summoned something.\n", attacker.getName());
             default -> throw new AssertionError("Unknown effect effectType encountered!\n"); // shouldn't happen

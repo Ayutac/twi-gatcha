@@ -20,6 +20,7 @@ public enum EffectType {
     INVISIBILITY,
     INVULNERABILITY,
     STUN,
+    ANNOY,
     SUMMON,
     TURN_FRIENDLY
 
