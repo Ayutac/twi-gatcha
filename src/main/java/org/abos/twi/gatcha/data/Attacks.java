@@ -197,7 +197,19 @@ public interface Attacks {
             "[Invisibility]",
             "Become invisible.",
             0, 0, 5,
-            List.of(new ApplicableEffect(EffectType.INVISIBILITY, 0, 3, 0, 0, 1d, null, null, null)));
+            List.of(new ApplicableEffect(EffectType.INVISIBILITY, 0, 4, 0, 0, 1d, null, null, null)));
+
+    Attack HIDE = new Attack(
+            "Hide",
+            "Hide if you can.",
+            0, 0, 5,
+            List.of(new ApplicableEffect(EffectType.INVISIBILITY, 0, 2, 0, 0, 0.5d, null, null, null)));
+
+    Attack COMPLAIN = new Attack(
+            "Complain",
+            "Complain in battle.",
+            0, 0, 2,
+            List.of(new ApplicableEffect(EffectType.ANNOY, 0, 3, 1, 0, 1d, null, null, null)));
 
     Attack TURN_SKELETON = new Attack(
             "Turn Skeleton",

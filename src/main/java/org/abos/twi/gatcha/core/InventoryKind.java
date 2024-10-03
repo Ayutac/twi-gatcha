@@ -21,6 +21,7 @@ public enum InventoryKind implements Describable {
     TOKEN_YVLON("Yvlon Byres Token", "Token for Yvlon Byres."),
     TOKEN_YVLON_CRELER("Yvlon Byres, [Silversteel Armsmistress] Token", "Token for Yvlon Byres, [Silversteel Armsmistress]."),
     TOKEN_RYOKA("Ryoka Griffin Token", "Token for Ryoka Griffin."),
+    TOKEN_TROYDEL("Troydel Token", "Token for Troydel."),
     ;
 
     private final String name;

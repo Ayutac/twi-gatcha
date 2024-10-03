@@ -132,6 +132,18 @@ public interface Characters {
             InventoryKind.TOKEN_RYOKA,
             "ryoka_1.png");
 
+    CharacterBase TROYDEL = new CharacterBase("troydel",
+            "Troydel",
+            "Prime member of the UGH.",
+            "he", "him",
+            new CharacterStats(8, 4, 4, 3),
+            new CharacterStats(80, 6, 24, 18),
+            new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.COMPLAIN, Attacks.HIDE),
+            List.of(),
+            Rarity.COMMON,
+            InventoryKind.TOKEN_TROYDEL,
+            "placeholder.png");
+
     CharacterBase ZOMBIE = new CharacterBase("zombie",
             "Zombie",
             "This was once a person…",
