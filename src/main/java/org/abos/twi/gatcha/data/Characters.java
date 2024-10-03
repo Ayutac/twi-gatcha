@@ -42,7 +42,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.DEATH_BOLT, Attacks.TURN_SKELETON, Attacks.CONSTANT_FOE_UNDEAD),
             List.of(),
             Rarity.SUPER_RARE,
-            "placeholder.png");
+            "placeholder_gold.png");
 
     CharacterBase CERIA = new CharacterBase("ceria_pre",
             "Ceria Springwalker",
@@ -64,7 +64,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.ICE_SPRAY, Attacks.ICE_SPIKE, Attacks.BATTLEFIELD_OF_THE_FROZEN_WORLD),
             List.of(),
             Rarity.SUPER_RARE,
-            "placeholder.png");
+            "placeholder_gold.png");
 
     CharacterBase KSMVR = new CharacterBase("ksmvr_pre",
             "Ksmvr",
@@ -86,7 +86,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.FAST_RELOADING_CROSSBOW_SHOT, Attacks.THREEFOLD_SHOT, Attacks.KNUCKLES_OF_IRON),
             List.of(),
             Rarity.SUPER_RARE,
-            "placeholder.png");
+            "placeholder_gold.png");
 
     CharacterBase YVLON = new CharacterBase("yvlon_pre",
             "Yvlon Byres",

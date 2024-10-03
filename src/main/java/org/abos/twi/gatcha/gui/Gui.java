@@ -83,8 +83,15 @@ public final class Gui extends Application {
         try {
             for (final Field characterField : Characters.class.getFields()) {
                 final CharacterBase character = (CharacterBase) characterField.get(null);
-                imageMap.put(character, new Image("/textures/characters/" + character.imageName()));
-                imageHexMap.put(character, new Image("/textures/hexagons/" + character.imageName()));
+                final String characterPath = "/textures/characters/" + character.imageName();
+                final String hexPath = "/textures/hexagons/" + character.imageName();
+                if (Gui.class.getClassLoader().getResource(characterPath.substring(1)) != null) {
+                    imageMap.put(character, new Image(characterPath));
+                }
+                else {
+                    imageMap.put(character, new Image(hexPath));
+                }
+                imageHexMap.put(character, new Image(hexPath));
             }
         }
         catch (IllegalAccessException ex) {
