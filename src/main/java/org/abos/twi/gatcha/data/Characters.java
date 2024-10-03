@@ -99,6 +99,17 @@ public interface Characters {
             Rarity.RARE,
             "yvlon_pre.png");
 
+    CharacterBase YVLON_CRELER = new CharacterBase("yvlon_post",
+            "Yvlon Byres",
+            "The young daughter of House Byres, wielding silver and bland conversations against evil.",
+            "she", "her",
+            new CharacterStats(18, 5, 10, 20),
+            new CharacterStats(180, 7, 60, 120),
+            new CharacterAttacks(Attacks.AF_DUELIST, Attacks.AF_TELESCOPING, Attacks.AF_RAZORKIND),
+            List.of(),
+            Rarity.RARE,
+            "placeholder_gold.png");
+
     CharacterBase RYOKA = new CharacterBase("ryoka_1",
             "Ryoka Griffin",
             "An aspiring City Runner from another world.",

@@ -135,6 +135,25 @@ public interface Attacks {
             0, 0, 5,
             List.of(new ApplicableEffect(EffectType.BUFF_ATTACK, 5, 3, 0, 0, 1d, null, null, null)));
 
+    Attack AF_DUELIST = new Attack(
+            "Armform (Duelist)",
+            "Transforms the arms into blades and attacks with it.",
+            1, 1, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 2, 0, 0, 0, 1d, null, null, null)));
+
+    Attack AF_TELESCOPING = new Attack(
+            "Armform (Telescoping Flesh)",
+            "Elongates an arm to pierce an opponent.",
+            1, 3, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
+
+    Attack AF_RAZORKIND = new Attack(
+            "Armform (Razorkind)",
+            "Makes one arm extra sharp to inflict bleeding damage.",
+            1, 1, 4,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 4, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.BLEED, 3, 4, 0, 0, 1d, null, null, null)));
+
     Attack KARATE_KICK = new Attack(
             "Karate Kick",
             "Delivers a powerful kick aimed at taking down a target.",
