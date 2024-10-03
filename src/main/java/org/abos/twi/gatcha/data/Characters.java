@@ -3,6 +3,7 @@ package org.abos.twi.gatcha.data;
 import org.abos.twi.gatcha.core.CharacterAttacks;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterStats;
+import org.abos.twi.gatcha.core.InventoryKind;
 import org.abos.twi.gatcha.core.Rarity;
 import org.abos.twi.gatcha.core.effect.EffectType;
 import org.abos.twi.gatcha.core.effect.PersistentEffect;
@@ -20,6 +21,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.MINOTAUR_PUNCH, Attacks.UNERRING_KNIFE_THROW, Attacks.PASTA),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_ERIN,
             "erin_1.png");
 
     CharacterBase PISCES = new CharacterBase("pisces_pre",
@@ -31,6 +33,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.BONE_DART, Attacks.INVISIBILITY, Attacks.BONE_FRACTURE),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_PISCES,
             "pisces_pre.png");
 
     CharacterBase PISCES_CRELER = new CharacterBase("pisces_post",
@@ -42,6 +45,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.DEATH_BOLT, Attacks.TURN_SKELETON, Attacks.CONSTANT_FOE_UNDEAD),
             List.of(),
             Rarity.SUPER_RARE,
+            InventoryKind.TOKEN_PISCES_CRELER,
             "placeholder_gold.png");
 
     CharacterBase CERIA = new CharacterBase("ceria_pre",
@@ -53,6 +57,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.ICE_SHARD, Attacks.FROST_ARMOR, Attacks.FROZEN_WIND),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_CERIA,
             "ceria_pre.png");
 
     CharacterBase CERIA_CRELER = new CharacterBase("ceria_post",
@@ -64,6 +69,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.ICE_SPRAY, Attacks.ICE_SPIKE, Attacks.BATTLEFIELD_OF_THE_FROZEN_WORLD),
             List.of(),
             Rarity.SUPER_RARE,
+            InventoryKind.TOKEN_CERIA_CRELER,
             "placeholder_gold.png");
 
     CharacterBase KSMVR = new CharacterBase("ksmvr_pre",
@@ -75,10 +81,11 @@ public interface Characters {
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.QUICK_MOVEMENT, Attacks.SIDE_STEP),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_KSMVR,
             "ksmvr_pre.png");
 
     CharacterBase KSMVR_CRELER = new CharacterBase("ksvmr_post",
-            "Ksmvr – [Skirmisher]",
+            "Ksmvr, [Skirmisher]",
             "Former Prognugator of the Free Hive. He would give anything for his team.",
             "he", "him",
             new CharacterStats(10, 18, 11, 13),
@@ -86,6 +93,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.FAST_RELOADING_CROSSBOW_SHOT, Attacks.THREEFOLD_SHOT, Attacks.KNUCKLES_OF_IRON),
             List.of(),
             Rarity.SUPER_RARE,
+            InventoryKind.TOKEN_KSMVR_CRELER,
             "placeholder_gold.png");
 
     CharacterBase YVLON = new CharacterBase("yvlon_pre",
@@ -97,10 +105,11 @@ public interface Characters {
             new CharacterAttacks(Attacks.QUICK_SLASH, Attacks.KEEN_EDGE, Attacks.IGNORE_PAIN),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_YVLON,
             "yvlon_pre.png");
 
     CharacterBase YVLON_CRELER = new CharacterBase("yvlon_post",
-            "Yvlon Byres",
+            "Yvlon Byres, [Silversteel Armsmistress]",
             "The young daughter of House Byres, wielding silver and bland conversations against evil.",
             "she", "her",
             new CharacterStats(18, 5, 10, 20),
@@ -108,6 +117,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.AF_DUELIST, Attacks.AF_TELESCOPING, Attacks.AF_RAZORKIND),
             List.of(),
             Rarity.RARE,
+            InventoryKind.TOKEN_YVLON_CRELER,
             "placeholder_gold.png");
 
     CharacterBase RYOKA = new CharacterBase("ryoka_1",
@@ -119,6 +129,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.KARATE_KICK, Attacks.FLASHBANG, Attacks.TRIPVINE_BAG),
             List.of(),
             Rarity.COMMON,
+            InventoryKind.TOKEN_RYOKA,
             "ryoka_1.png");
 
     CharacterBase ZOMBIE = new CharacterBase("zombie",
@@ -130,6 +141,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.MEDIUM_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
+            null,
             "zombie.png");
 
     CharacterBase SKELETON = new CharacterBase("skeleton",
@@ -141,6 +153,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.QUICK_SLASH, Attacks.UNDEAD_BITE),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
+            null,
             "skeleton.png");
 
     CharacterBase SKELETON_ARCHER = new CharacterBase("skeleton_archer",
@@ -152,6 +165,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
+            null,
             "skeleton.png");
 
 }

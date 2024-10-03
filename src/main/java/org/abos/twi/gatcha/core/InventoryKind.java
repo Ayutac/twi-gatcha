@@ -9,7 +9,19 @@ public enum InventoryKind implements Describable {
 
     GOLD("Gold", "It's gold."),
     MAGICORE("Magicore", "Stones filled with and made up from magic"),
-    FAERIE_FLOWERS("Faerie Flowers", "Faerie Flower", "Flowers from another land.");
+    FAERIE_FLOWERS("Faerie Flowers", "Faerie Flower", "Flowers from another land."),
+
+    TOKEN_ERIN("Erin Solstice Token", "Token for Erin Solstice."),
+    TOKEN_PISCES("Pisces Token", "Token for Pisces."),
+    TOKEN_PISCES_CRELER("Pisces Jealnet, [Deathbane Necromancer] Token", "Token for Pisces Jealnet, [Deathbane Necromancer]."),
+    TOKEN_CERIA("Ceria Springwalker Token", "Token for Ceria Springwalker."),
+    TOKEN_CERIA_CRELER("Ceria Springwalker, [Arctic Cyromancer] Token", "Token for Ceria Springwalker, [Arctic Cyromancer]."),
+    TOKEN_KSMVR("Ksmvr Token", "Token for Ksmvr."),
+    TOKEN_KSMVR_CRELER("Ksmvr, [Skirmisher] Token", "Token for Ksmvr, [Skirmisher]."),
+    TOKEN_YVLON("Yvlon Byres Token", "Token for Yvlon Byres."),
+    TOKEN_YVLON_CRELER("Yvlon Byres, [Silversteel Armsmistress] Token", "Token for Yvlon Byres, [Silversteel Armsmistress]."),
+    TOKEN_RYOKA("Ryoka Griffin Token", "Token for Ryoka Griffin."),
+    ;
 
     private final String name;
     private final String nameOne;

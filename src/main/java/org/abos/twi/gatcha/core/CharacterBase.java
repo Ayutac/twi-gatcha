@@ -14,7 +14,8 @@ import java.util.Objects;
  * Character bases are immutable during a running game and are only changed during updates.
  */
 public record CharacterBase(String id, String name, String description, String pronoun, String genitive,
-                            CharacterStats startStats, CharacterStats endStats, CharacterAttacks attacks, List<PersistentEffect> effects, Rarity rarity, String imageName) implements Describable, Registerable<CharacterBase> {
+                            CharacterStats startStats, CharacterStats endStats, CharacterAttacks attacks,
+                            List<PersistentEffect> effects, Rarity rarity, InventoryKind token, String imageName) implements Describable, Registerable<CharacterBase> {
 
     public CharacterBase {
         Objects.requireNonNull(id);
@@ -27,6 +28,7 @@ public record CharacterBase(String id, String name, String description, String p
         Objects.requireNonNull(attacks);
         Objects.requireNonNull(effects);
         Objects.requireNonNull(rarity);
+        // token can be null
         Objects.requireNonNull(imageName);
     }
 
