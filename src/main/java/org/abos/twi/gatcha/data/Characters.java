@@ -119,7 +119,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.MEDIUM_PUNCH, Attacks.UNDEAD_CLAW, Attacks.UNDEAD_BITE),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
-            "placeholder.png");
+            "zombie.png");
 
     CharacterBase SKELETON = new CharacterBase("skeleton",
             "Skeleton",
@@ -130,7 +130,7 @@ public interface Characters {
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.QUICK_SLASH, Attacks.UNDEAD_BITE),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
-            "placeholder.png");
+            "skeleton.png");
 
     CharacterBase SKELETON_ARCHER = new CharacterBase("skeleton_archer",
             "Skeleton Archer",
@@ -141,6 +141,6 @@ public interface Characters {
             new CharacterAttacks(Attacks.WEAK_PUNCH, Attacks.UNDEAD_BITE, Attacks.ARROW),
             List.of(new PersistentEffect(EffectType.RESIST_DEATH, 100, Integer.MAX_VALUE, null)),
             Rarity.COMMON,
-            "placeholder.png");
+            "skeleton.png");
 
 }
