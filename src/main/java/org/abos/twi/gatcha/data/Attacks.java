@@ -248,6 +248,26 @@ public interface Attacks {
             List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 4, 0, 0, 0, 1d, null, null, null),
                     new ApplicableEffect(EffectType.DISPEL, 0, 0, 0, 0, 0.8, null, null, null)));
 
+    Attack ANTI_MAGIC_CLAW = new Attack(
+            "Anti-magic Claw",
+            "A magic disrupting claw strike.",
+            1, 1, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 3, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.DISPEL, 0, 0, 0, 0, 0.8, null, null, null)));
+
+    Attack TAIL_SLAP = new Attack(
+            "Tail Slap",
+            "Slap the enemy in the face with a tail, stunning them for a moment.",
+            1, 1, 3,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 1, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.STUN, 0, 2, 0, 0, 1d, null, null, null)));
+
+    Attack TIDEBREAKER = new Attack(
+            "Tidebreaker",
+            "Increases the defense of nearby allies.",
+            0, 0, 5,
+            List.of(new ApplicableEffect(EffectType.BUFF_DEFENSE, 5, 3, 3, 0, 1d, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY))));
+
     Attack TURN_SKELETON = new Attack(
             "Turn Skeleton",
             "Turn a skeleton friendly.",

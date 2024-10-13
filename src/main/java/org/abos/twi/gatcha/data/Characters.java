@@ -144,6 +144,18 @@ public interface Characters {
             InventoryKind.TOKEN_KLBKCH,
             "klbkch.png");
 
+    CharacterBase ZEL = new CharacterBase("zel",
+            "Zel",
+            "The legendary Tidebreaker himself.",
+            "he", "him",
+            new CharacterStats(15, 12, 15, 18),
+            new CharacterStats(150, 14, 90, 108),
+            new CharacterAttacks(Attacks.ANTI_MAGIC_CLAW, Attacks.TAIL_SLAP, Attacks.TIDEBREAKER),
+            List.of(),
+            Rarity.ULTRA_RARE,
+            InventoryKind.TOKEN_ZEL,
+            "zel.png");
+
     CharacterBase RYOKA = new CharacterBase("ryoka_1",
             "Ryoka Griffin",
             "An aspiring City Runner from another world.",
