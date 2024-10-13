@@ -116,9 +116,21 @@ public interface Characters {
             new CharacterStats(180, 7, 60, 120),
             new CharacterAttacks(Attacks.AF_DUELIST, Attacks.AF_TELESCOPING, Attacks.AF_RAZORKIND),
             List.of(),
-            Rarity.RARE,
+            Rarity.SUPER_RARE,
             InventoryKind.TOKEN_YVLON_CRELER,
             "placeholder_gold.png");
+
+    CharacterBase RELC = new CharacterBase("relc",
+            "Relc",
+            "A senior guardsman in Liscor.",
+            "he", "him",
+            new CharacterStats(12, 20, 12, 17),
+            new CharacterStats(120, 22, 72, 102),
+            new CharacterAttacks(Attacks.RELC_PUNCH, Attacks.RELC_HEADBUTT, Attacks.TRIPLE_THRUST),
+            List.of(),
+            Rarity.SUPER_RARE,
+            InventoryKind.TOKEN_RELC,
+            "relc.png");
 
     CharacterBase RYOKA = new CharacterBase("ryoka_1",
             "Ryoka Griffin",

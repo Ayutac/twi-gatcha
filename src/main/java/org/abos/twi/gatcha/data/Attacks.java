@@ -211,6 +211,24 @@ public interface Attacks {
             0, 0, 2,
             List.of(new ApplicableEffect(EffectType.ANNOY, 0, 3, 1, 0, 1d, null, null, null)));
 
+    Attack RELC_PUNCH = new Attack(
+            "[Relc Punch]",
+            "Punch like a Relc.",
+            1, 1, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 2, 0, 0, 0, 1d, null, null, null)));
+
+    Attack RELC_HEADBUTT = new Attack(
+            "[Relc Headbutt]",
+            "Headbutt like a Relc.",
+            1, 1, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 4, 0, 0, 0, 1d, null, null, null)));
+
+    Attack TRIPLE_THRUST = new Attack(
+            "[Triple Thrust]",
+            "Attack three times in a row.",
+            1, 2, 3,
+            Collections.nCopies(3, new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
+
     Attack TURN_SKELETON = new Attack(
             "Turn Skeleton",
             "Turn a skeleton friendly.",
