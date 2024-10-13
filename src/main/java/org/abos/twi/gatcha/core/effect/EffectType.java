@@ -5,6 +5,7 @@ public enum EffectType {
     DAMAGE_BLUNT,
     DAMAGE_SLASH,
     DAMAGE_PIERCE,
+    DAMAGE_ARMOR_PIERCE,
     DAMAGE_DEATH,
     DAMAGE_SOUND,
     DAMAGE_FROST,
@@ -20,6 +21,7 @@ public enum EffectType {
     INVISIBILITY,
     INVULNERABILITY,
     STUN,
+    DISPEL,
     ANNOY,
     SUMMON,
     TURN_FRIENDLY

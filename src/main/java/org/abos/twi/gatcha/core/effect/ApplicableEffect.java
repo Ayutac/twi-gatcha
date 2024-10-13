@@ -124,6 +124,10 @@ public class ApplicableEffect extends Effect {
                     dmg = Math.max(1, from.getAttack(aoeTarget) - aoeTarget.getDefense(from) + maxPower) * 2;
                     aoeTarget.takeDamage(dmg);
                 }
+                case DAMAGE_ARMOR_PIERCE -> {
+                    dmg = Math.max(1, from.getAttack(aoeTarget) - aoeTarget.getDefense(from)/3 + maxPower) * 2;
+                    aoeTarget.takeDamage(dmg);
+                }
                 case DAMAGE_DEATH -> {
                     int resistance = 0;
                     for (final PersistentEffect effect : aoeTarget.getPersistentEffects()) {
@@ -153,6 +157,9 @@ public class ApplicableEffect extends Effect {
                 }
                 case BUFF_HEALTH -> {
                     aoeTarget.getPersistentEffects().add(new DeterioratingEffect(effectType, maxPower, maxDuration, affectedGroupId));
+                }
+                case DISPEL -> {
+                    aoeTarget.getPersistentEffects().clear();
                 }
                 case SUMMON -> throw new IllegalStateException(String.format("Use %s for summon effects!", SummonEffect.class.getSimpleName()));
                 default -> throw new AssertionError("An unknown effect type has been associated with this " + ApplicableEffect.class.getSimpleName() + "!"); // shouldn't happen
