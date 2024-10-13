@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.abos.twi.gatcha.core.Booster;
 import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.CharacterModified;
+import org.abos.twi.gatcha.core.InventoryKind;
 import org.abos.twi.gatcha.core.Party;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.core.battle.Battle;
@@ -177,19 +178,20 @@ public final class Gui extends Application {
         newPlayer.addToRooster(Characters.ERIN);
         newPlayer.addParty(new Party("First Party", List.of(
                 newPlayer.getCharacter(Characters.ERIN))));
+        newPlayer.getInventory().add(InventoryKind.MAGICORE, 200);
         setPlayer(newPlayer);
         showHomeScreen();
 
         // Test code
-        for (int i = 0; i < 30; i++) {
-            newPlayer.getCharacter(Characters.ERIN).increaseLevel(newPlayer.getStats());
-        }
-        player.addToRooster(Characters.CERIA);
-        player.addToRooster(Characters.PISCES);
-        player.addToRooster(Characters.PISCES_CRELER);
-        player.addToRooster(Characters.KSMVR);
-        player.addToRooster(Characters.YVLON);
-        player.addToRooster(Characters.RYOKA);
+//        for (int i = 0; i < 30; i++) {
+//            newPlayer.getCharacter(Characters.ERIN).increaseLevel(newPlayer.getStats());
+//        }
+//        player.addToRooster(Characters.CERIA);
+//        player.addToRooster(Characters.PISCES);
+//        player.addToRooster(Characters.PISCES_CRELER);
+//        player.addToRooster(Characters.KSMVR);
+//        player.addToRooster(Characters.YVLON);
+//        player.addToRooster(Characters.RYOKA);
     }
 
     public void saveGame() {
