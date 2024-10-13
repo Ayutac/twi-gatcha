@@ -2,6 +2,7 @@ package org.abos.twi.gatcha.gui.component.pane;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.abos.common.Named;
 import org.abos.twi.gatcha.core.Booster;
+import org.abos.twi.gatcha.core.CharacterBase;
 import org.abos.twi.gatcha.core.Player;
 import org.abos.twi.gatcha.data.Lookups;
 import org.abos.twi.gatcha.gui.Gui;
@@ -47,11 +49,39 @@ public final class BoosterScreen extends AbstractScreen {
                 boosterPriceLabel.setText(booster.get().price().toString());
             }
         });
-        buyBtn.setOnMouseClicked(mouseEvent -> Gui.showNotImplemented());
+        buyBtn.setOnMouseClicked(this::pull);
         final HBox bottomBox = new HBox(new Label("Select Summoning Circle:"), comboBox, buyBtn);
         bottomBox.setAlignment(Pos.CENTER);
         bottomBox.setSpacing(2d);
         setBottom(bottomBox);
+    }
+
+    private void pull(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() != MouseButton.PRIMARY) {
+            return;
+        }
+        final Player player = gui.getPlayer();
+        if (player == null) {
+            return;
+        }
+        final Optional<Booster> booster = Gui.getBoosterByName(comboBox.getSelectionModel().getSelectedItem());
+        if (booster.isEmpty()) {
+            return;
+        }
+        if (player.getInventory().canSubtract(booster.get().price())) {
+            player.getInventory().subtractAll(booster.get().price());
+            final CharacterBase pull = booster.get().pull();
+            if (player.hasCharacter(pull)) {
+                player.getInventory().add(pull.token(), 1);
+            }
+            else {
+                player.addToRooster(pull);
+            }
+            final Alert info = new Alert(Alert.AlertType.INFORMATION);
+            info.setTitle("Summoning successful!");
+            info.setContentText(String.format("You pulled %s!", pull.getName()));
+            info.showAndWait();
+        }
     }
 
     public void update() {
