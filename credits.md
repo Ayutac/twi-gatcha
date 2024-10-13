@@ -5,7 +5,6 @@
 
 ## Game Designers
 * Ayutac
-* Bookwhyrm
 * Ceburi
 * Congra
 * MarkTechv7
@@ -24,5 +23,6 @@
 
 ## Special Thanks To
 * Ainz
+* Bookwhyrm
 * Chalyon
 * Ziondiac
