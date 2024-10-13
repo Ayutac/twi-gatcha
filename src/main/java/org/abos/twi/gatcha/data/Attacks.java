@@ -229,6 +229,25 @@ public interface Attacks {
             1, 2, 3,
             Collections.nCopies(3, new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
 
+    Attack WIDE_SWEEP = new Attack(
+            "Wide Sweep",
+            "Attacks all enemies in range.",
+            0, 0, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 2, 0, 1, 0, 1d, null, null, List.of(TeamKind.ENEMY))));
+
+    Attack ARMOR_PIERCING_BLOW = new Attack(
+            "Armor Piercing Blow",
+            "A quick and deliberate low strike aimed at bypassing heavy defenses.",
+            1, 1, 3,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_ARMOR_PIERCE, 3, 0, 0, 0, 1d, null, null, null)));
+
+    Attack ANTI_MAGIC_SLASH = new Attack(
+            "Anti-magic Slash",
+            "A precise strike that disrupts magic.",
+            1, 1, 4,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 4, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.DISPEL, 0, 0, 0, 0, 0.8, null, null, null)));
+
     Attack TURN_SKELETON = new Attack(
             "Turn Skeleton",
             "Turn a skeleton friendly.",

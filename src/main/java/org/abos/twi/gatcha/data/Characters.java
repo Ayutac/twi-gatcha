@@ -132,6 +132,18 @@ public interface Characters {
             InventoryKind.TOKEN_RELC,
             "relc.png");
 
+    CharacterBase KLBKCH = new CharacterBase("klbkch",
+            "Klbkch",
+            "A senior guardsman in Liscor.",
+            "he", "him",
+            new CharacterStats(10, 17, 14, 11),
+            new CharacterStats(100, 19, 84, 66),
+            new CharacterAttacks(Attacks.WIDE_SWEEP, Attacks.ARMOR_PIERCING_BLOW, Attacks.ANTI_MAGIC_SLASH),
+            List.of(),
+            Rarity.SUPER_RARE,
+            InventoryKind.TOKEN_KLBKCH,
+            "klbkch.png");
+
     CharacterBase RYOKA = new CharacterBase("ryoka_1",
             "Ryoka Griffin",
             "An aspiring City Runner from another world.",
