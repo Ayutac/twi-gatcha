@@ -16,11 +16,13 @@
 * Ayutac
 
 ## Art
-* Pontastic: Erin 1, Horns Pre Creler
+* Pontastic
 
 ## Game Tester
+* Butts
 * Ceburi
 
 ## Special Thanks To
+* Ainz
 * Chalyon
 * Ziondiac
