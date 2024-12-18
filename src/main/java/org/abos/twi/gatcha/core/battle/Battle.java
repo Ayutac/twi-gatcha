@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  */
 public class Battle {
 
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(1);
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(512);
 
     /**
      * @see #getLevelId()
@@ -475,7 +475,11 @@ public class Battle {
         EXECUTOR.submit(() -> {
             int turnNr = 0;
             while (!checkDone()) {
-                turn(++turnNr);
+                try {
+                    turn(++turnNr);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
@@ -497,7 +501,7 @@ public class Battle {
         }
     }
 
-    protected void turn(final @Range(from = 1, to = Integer.MAX_VALUE) int turn) {
+    protected void turn(final @Range(from = 1, to = Integer.MAX_VALUE) int turn) throws InterruptedException {
         currentCharacter = characterOrder.getFirst();
         while (currentCharacter != null && !checkDone()) {
             currentCharacter.startTurn();
@@ -609,7 +613,12 @@ public class Battle {
         final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(currentCharacter.position);
         for (final Vec2i position : moveGraph.vertexSet()) {
             double weight = paths.getWeight(position);
-            if (weight <= currentCharacter.getMovement()) {
+            double movement = currentCharacter.getMovement();
+            if (currentCharacter.getPersistentEffects().stream().anyMatch(e -> e.getEffectType() == EffectType.ROOT)){
+                movement = 0;
+            }
+            if (weight <= movement) {
+
                 possiblePlayerFields.put(position, weight);
             }
         }

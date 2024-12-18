@@ -97,6 +97,11 @@ public class CharacterInBattle implements Describable {
                 if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
                     attack += effect.getMaxPower();
                 }
+            } else if (effect.getEffectType() == EffectType.DEBUFF_ATTACK) {
+                final Optional<Group> affectedGroup = effect.getAffectedGroup();
+                if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
+                    attack -= effect.getMaxPower();
+                }
             }
         }
         return attack;
@@ -109,6 +114,12 @@ public class CharacterInBattle implements Describable {
                 final Optional<Group> affectedGroup = effect.getAffectedGroup();
                 if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
                     defense += effect.getMaxPower();
+                }
+            }
+            else if (effect.getEffectType() == EffectType.LOWER_DEFENSE) {
+                final Optional<Group> affectedGroup = effect.getAffectedGroup();
+                if (affectedGroup.isEmpty() || affectedGroup.get().characters().contains(against.getModified().getBase())) {
+                    defense -= effect.getMaxPower();
                 }
             }
         }
@@ -234,13 +245,13 @@ public class CharacterInBattle implements Describable {
         attacksCoolDown();
     }
 
-    public void turn() {
+    public void turn() throws InterruptedException {
         // intentionally left empty
     }
 
     public void endTurn() {
         for (final PersistentEffect effect : persistentEffects) {
-            if (effect.getEffectType() == EffectType.BLEED) {
+            if ((effect.getEffectType() == EffectType.BLEED) || (effect.getEffectType() == EffectType.POISON)) {
                 takeDamage(effect.getMaxPower());
             }
         }

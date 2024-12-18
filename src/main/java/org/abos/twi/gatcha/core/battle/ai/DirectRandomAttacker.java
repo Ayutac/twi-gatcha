@@ -28,7 +28,7 @@ public class DirectRandomAttacker extends AiCharacter {
     }
 
     @Override
-    public void turn() {
+    public void turn() throws InterruptedException {
         // get all visible enemies on the map
         final List<Vec2i> enemyPositions = battle.getCharacterOrder().stream()
                 .filter(character -> team.attacks(character.getTeam()) && !character.isInvisible())
@@ -81,7 +81,7 @@ public class DirectRandomAttacker extends AiCharacter {
         battle.setSelectedAttack(chosenAttack);
         final Vec2i chosenTarget = CollectionUtil.getRandomEntry(possibleTargets.get(chosenAttack), random);
         for (final ApplicableEffect effect : chosenAttack.effects()) {
-            effect.apply(battle.getCurrentCharacter(), chosenTarget, battle);
+            effect.apply(battle.getCurrentCharacter(), chosenTarget, battle, false);
         }
     }
 }

@@ -20,7 +20,7 @@ public interface Levels {
     Level ZERO_ONE = new Level("0-1", 3, 2,
             List.of(),
             Set.of(new Wave(0, List.of(
-                    new WaveUnit(new CharacterModified(Characters.SKELETON), new Vec2i(2, 1), SlowWanderer::new)))),
+                    new WaveUnit(new CharacterModified(Characters.BABY_CRELER), new Vec2i(2, 1), DirectRandomAttacker::new)))),
             Set.of(new Vec2i(0, 0)),
             new InventoryMap(InventoryKind.GOLD, 1),
             1,
@@ -29,7 +29,7 @@ public interface Levels {
     Level ZERO_TWO = new Level("0-2", 3, 2,
             List.of(),
             Set.of(new Wave(0, List.of(
-                    new WaveUnit(new CharacterModified(Characters.ZOMBIE), new Vec2i(2, 1), DirectRandomAttacker::new)))),
+                    new WaveUnit(new CharacterModified(Characters.JUNIOR_CRELER), new Vec2i(2, 1), DirectRandomAttacker::new)))),
             Set.of(new Vec2i(0, 0)),
             new InventoryMap(InventoryKind.GOLD, 5),
             5,

@@ -82,6 +82,7 @@ public class ApplicableEffect extends Effect {
                     if (effect.getEffectType() == EffectType.LOWER_ACCURACY) {
                         lowerAcc -= effect.maxPower;
                     }
+
                 }
                 // if hit, return the character
                 if (Math.max(0, 100-lowerAcc) / 100d > battle.getRandom().nextDouble()) {
@@ -107,12 +108,17 @@ public class ApplicableEffect extends Effect {
                 .toList();
     }
 
-    public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle) {
+    public void apply(final CharacterInBattle from, final Vec2i target, final Battle battle, boolean ... test) throws InterruptedException {
         List<CharacterInBattle> aoeTargets = getApplicableTargets(from, target, battle);
+        boolean flag = test.length > 0 ? test[0] : false;  // default to false
+
         for (final CharacterInBattle aoeTarget : aoeTargets) {
             // applicable chance is tested for each target
             if (applicableChance < battle.getRandom().nextDouble()) {
                 continue;
+            }
+            if (flag == true) {
+                Thread.sleep(1000 * 15);
             }
             int dmg = 0;
             switch (effectType) {
@@ -152,7 +158,7 @@ public class ApplicableEffect extends Effect {
                     dmg = heal;
                 }
                 case INVISIBILITY, INVULNERABILITY, STUN, TURN_FRIENDLY, BUFF_ATTACK, BUFF_DEFENSE, BUFF_SPEED, DEBUFF_SPEED, RESIST_DEATH,
-                     LOWER_ACCURACY, BLEED, ANNOY -> {
+                     LOWER_ACCURACY, BLEED, ANNOY, POISON, ROOT -> {
                     aoeTarget.getPersistentEffects().add(new PersistentEffect(effectType, maxPower, maxDuration, affectedGroupId));
                 }
                 case BUFF_HEALTH -> {
