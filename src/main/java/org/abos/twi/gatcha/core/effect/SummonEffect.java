@@ -24,7 +24,7 @@ public class SummonEffect extends ApplicableEffect {
     }
 
     @Override
-    public void apply(final @NotNull CharacterInBattle from, final @NotNull Vec2i target, final @NotNull Battle battle) {
+    public void apply(final @NotNull CharacterInBattle from, final @NotNull Vec2i target, final @NotNull Battle battle, boolean ... test) {
         if (battle.isCharacterAt(target)) {
             return;
         }

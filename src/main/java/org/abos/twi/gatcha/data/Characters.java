@@ -216,4 +216,38 @@ public interface Characters {
             null,
             "skeleton.png");
 
+    CharacterBase BABY_CRELER = new CharacterBase("baby_creler",
+            "Baby Creler",
+            "Small but vicious, a Baby Creler can still be a dangerous threat if not handled carefully.",
+            "it", "it",
+            new CharacterStats(5, 5, 7, 4),
+            new CharacterStats(30, 30, 35, 24),
+            new CharacterAttacks(Attacks.CRELER_BITE, Attacks.CHITIN_CHARGE, Attacks.ADHESIVE_SPRAY),
+            List.of(),
+            Rarity.COMMON,
+            null,
+            "baby_creler.png");
+    CharacterBase JUNIOR_CRELER = new CharacterBase("junior_creler",
+            "Junior Creler",
+            "The Juvenile Creler is a dangerous adversary, with more developed weapons and aggressive instincts.",
+            "it", "it",
+            new CharacterStats(9, 15, 12, 8),
+            new CharacterStats(36, 60, 48, 32),
+            new CharacterAttacks(Attacks.MANDIBLE_CRUSH, Attacks.CARAPACE_BASH, Attacks.WEB_TRAP),
+            List.of(),
+            Rarity.COMMON,
+            null,
+            "young_creler.png");
+//
+    CharacterBase ADULT_CRELER = new CharacterBase("adult_creler",
+            "Adult Creler",
+            "The Adult Creler is a nightmarish creature, combining deadly offense with monstrous resilience.",
+            "it", "it",
+            new CharacterStats(20, 13, 16, 15),
+            new CharacterStats(60, 39, 48, 45),
+            new CharacterAttacks(Attacks.REND_AND_TEAR, Attacks.ARMOR_SHRED, Attacks.HORRIFIC_ROAR),
+            List.of(),
+            Rarity.COMMON,
+            null,
+            "adult_creler.png");
 }

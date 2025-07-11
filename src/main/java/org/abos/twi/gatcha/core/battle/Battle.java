@@ -18,6 +18,7 @@ import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +41,7 @@ import java.util.logging.Logger;
  */
 public class Battle {
 
-    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(1);
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(512);
 
     /**
      * @see #getLevelId()
@@ -414,8 +415,11 @@ public class Battle {
             stats.increaseCharacterDeployed(character);
         }
         if (ui != null) {
-            ui.characterPlaced(cib, cib.getPosition());
-        }
+            if (ui != null) {
+                Platform.runLater(() -> {
+                    ui.characterPlaced(cib, cib.getPosition());
+                });
+            }        }
         return cib;
     }
 
@@ -475,7 +479,11 @@ public class Battle {
         EXECUTOR.submit(() -> {
             int turnNr = 0;
             while (!checkDone()) {
-                turn(++turnNr);
+                try {
+                    turn(++turnNr);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
@@ -497,7 +505,7 @@ public class Battle {
         }
     }
 
-    protected void turn(final @Range(from = 1, to = Integer.MAX_VALUE) int turn) {
+    protected void turn(final @Range(from = 1, to = Integer.MAX_VALUE) int turn) throws InterruptedException {
         currentCharacter = characterOrder.getFirst();
         while (currentCharacter != null && !checkDone()) {
             currentCharacter.startTurn();
@@ -579,8 +587,11 @@ public class Battle {
         // actually set the character on the board
         characters.add(character);
         if (ui != null) {
-            ui.characterPlaced(character, character.getPosition());
-        }
+            if (ui != null) {
+                Platform.runLater(() -> {
+                    ui.characterPlaced(character, character.getPosition());
+                });
+            }        }
         // add character to the turn order
         addCharacterToOrder(character);
         return true;
@@ -609,7 +620,12 @@ public class Battle {
         final var paths = new BellmanFordShortestPath<>(moveGraph).getPaths(currentCharacter.position);
         for (final Vec2i position : moveGraph.vertexSet()) {
             double weight = paths.getWeight(position);
-            if (weight <= currentCharacter.getMovement()) {
+            double movement = currentCharacter.getMovement();
+            if (currentCharacter.getPersistentEffects().stream().anyMatch(e -> e.getEffectType() == EffectType.ROOT)){
+                movement = 0;
+            }
+            if (weight <= movement) {
+
                 possiblePlayerFields.put(position, weight);
             }
         }
@@ -629,15 +645,17 @@ public class Battle {
         if (allPlayersDefeated || allEnemiesDefeated) {
             phase = BattlePhase.DONE;
             if (ui != null) {
-                if (allPlayersDefeated && allEnemiesDefeated) {
-                    ui.hasTied();
-                }
-                else if (allPlayersDefeated) {
-                    ui.hasLost();
-                }
-                else {
-                    ui.hasWon();
-                }
+                Platform.runLater(() -> {
+                    if (allPlayersDefeated && allEnemiesDefeated) {
+                        ui.hasTied();
+                    }
+                    else if (allPlayersDefeated) {
+                        ui.hasLost();
+                    }
+                    else {
+                        ui.hasWon();
+                    }
+                });
             }
         }
         return phase == BattlePhase.DONE;

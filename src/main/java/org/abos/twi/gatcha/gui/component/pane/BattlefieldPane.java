@@ -92,7 +92,11 @@ public class BattlefieldPane extends Pane implements BattleUi {
                     // attack with the player character
                     else if (isPlayerAttacking() && battle.getCurrentCharacter() != null && battle.getSelectedAttack() != null && battle.getPossibleAttackFields().contains(position)) {
                         for (final ApplicableEffect effect : battle.getSelectedAttack().effects()) {
-                            effect.apply(battle.getCurrentCharacter(), position, battle);
+                            try {
+                                effect.apply(battle.getCurrentCharacter(), position, battle);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         playerAttacking = false;
                         if (playerDone != null) {
@@ -191,10 +195,12 @@ public class BattlefieldPane extends Pane implements BattleUi {
             case LOWER_ACCURACY -> String.format("%s lowered the accuracy of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case RESIST_DEATH -> String.format("%s increased the death resistance of %s.\n", attacker.getName(), defenderString(attacker, defender));
             case BLEED -> String.format("%s made %s bleed.\n", attacker.getName(), defenderString(attacker, defender));
+            case POISON -> String.format("%s poisoned %s.\n", attacker.getName(), defenderString(attacker, defender));
             case HEALING -> String.format("%s healed %s for %d damage.\n", attacker.getName(), defenderString(attacker, defender), damage);
             case INVISIBILITY -> String.format("%s made %s invisible.\n", attacker.getName(), defenderString(attacker, defender));
             case INVULNERABILITY -> String.format("%s made %s invulnerable.\n", attacker.getName(), defenderString(attacker, defender));
             case STUN -> String.format("%s stunned %s.\n", attacker.getName(), defenderString(attacker, defender));
+            case ROOT -> String.format("%s rooted %s.\n", attacker.getName(), defenderString(attacker, defender));
             case DISPEL -> String.format("%s dispelled %s.\n", attacker.getName(), defenderString(attacker, defender));
             case ANNOY -> String.format("%s annoyed %s.\n", attacker.getName(), defenderString(attacker, defender));
             case TURN_FRIENDLY -> String.format("%s made %s friendly.\n", attacker.getName(), defenderString(attacker, defender));

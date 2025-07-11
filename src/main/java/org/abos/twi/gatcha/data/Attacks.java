@@ -267,7 +267,62 @@ public interface Attacks {
             "Increases the defense of nearby allies.",
             0, 0, 5,
             List.of(new ApplicableEffect(EffectType.BUFF_DEFENSE, 5, 3, 3, 0, 1d, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY))));
+    Attack CRELER_BITE = new Attack(
+            "Creler Bite",
+            "A poisonous bite.",
+            1, 1, 1,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 1, 0, 0, 0, 1d, null, null, null)
 
+                    ,  new ApplicableEffect(EffectType.POISON, 1, 2, 0, 0, 0.3d, null, null, null)
+            ));
+    Attack CHITIN_CHARGE = new Attack(
+            "Chitin Charge",
+            "The Baby Creler charges and scrapes its sharp chitinous legs against a target, leaving painful scratches.",
+            1, 2, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 2, 0, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.LOWER_DEFENSE, 2, 2, 0, 0, 0.5, null, null, null)));
+    Attack ADHESIVE_SPRAY = new Attack(
+            "Adhesive Spray",
+            "The Baby Creler spits a sticky substance, slowing down enemies.",
+            1, 3, 3,
+            List.of(new ApplicableEffect(EffectType.DEBUFF_SPEED, 1, 2, 0, 0, 1d, null, null, null)));
+    Attack MANDIBLE_CRUSH = new Attack(
+            "Mandible Crush",
+            "The Juvenile Creler attempts to crush its opponent with its powerful mandibles.",
+            1, 2, 2,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 2, 0, 0, 1d, null, null, null),
+            new ApplicableEffect(EffectType.STUN, 0, 1, 0, 0, 0.3, null, null, null)));
+    Attack CARAPACE_BASH = new Attack(
+            "Carapace Bash",
+            "The Juvenile Creler uses its hardened body to bash into an enemy, attempting to knock them off balance.",
+            1, 2, 3,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_BLUNT, 2, 2, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.DEBUFF_SPEED, 0, 1, 0, 0, 1d, null, null, null)));
+    Attack WEB_TRAP = new Attack(
+            "Web Trap",
+            "The Juvenile Creler releases a web to entangle foes, restricting their movement.",
+            1, 3, 4,
+            List.of(new ApplicableEffect(EffectType.ROOT, 3, 2, 0, 0, 1d, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY)),
+                    new ApplicableEffect(EffectType.DAMAGE_BLUNT, 1, 1, 0, 0, 0.3, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY))));
+    Attack REND_AND_TEAR = new Attack(
+            "Rend and Tear",
+            "The Adult Creler uses its multiple legs to slash at its opponent with vicious precision.",
+            1, 3, 3,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_SLASH, 4, 2, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.BLEED, 1, 3, 0, 0, 0.7, null, null, null)));
+    Attack ARMOR_SHRED = new Attack(
+            "Armor Shred",
+            "The Adult Creler focuses on destroying an enemy's defenses with a powerful, concentrated attack.",
+            1, 3, 4,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 3, 2, 0, 0, 1d, null, null, null),
+                    new ApplicableEffect(EffectType.LOWER_DEFENSE, 2, 30, 0, 0, 0.7, null, null, null)));
+    Attack HORRIFIC_ROAR = new Attack(
+            "Horrific Roar",
+            "TThe Adult Creler unleashes a deafening roar, striking fear into enemies.",
+            1, 3, 5,
+            List.of(new ApplicableEffect(EffectType.DAMAGE_PIERCE, 2, 2, 0, 0, 1d, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY)),
+                    new ApplicableEffect(EffectType.DEBUFF_SPEED, 2, 2, 0, 0, 0.7, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY)),
+                    new ApplicableEffect(EffectType.DEBUFF_ATTACK, 2, 2, 0, 0, 0.7, null, null, List.of(TeamKind.PLAYER, TeamKind.ALLY))));
     Attack TURN_SKELETON = new Attack(
             "Turn Skeleton",
             "Turn a skeleton friendly.",
